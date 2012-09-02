@@ -26,6 +26,7 @@ exports.init = function(dev_id) {
 				])
 		console.log(msg)		
 		dev.write(msg)
+		dev.write(msg)
 	}
 	
 	var universe = new Buffer(512)
@@ -42,9 +43,13 @@ exports.init = function(dev_id) {
 		}
 	}
 	
+	this.get = function(c) {
+		return universe[c];
+	}
+	
 	setInterval(function() {
 		send_universe(dev, universe);
-	}, 1000);
+	}, 30);
 	
 	return this;
 }
