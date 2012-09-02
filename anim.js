@@ -1,11 +1,12 @@
 var ease = require('./easing.js').ease
-var resolution = 30;
+var resolution = 25;
 
 exports.Anim = function(universe) {
 	this.universe = universe;
 	this.fx_stack = [];
 	this.add = function(to, duration, options) {
-		var options = options || {};
+		var options  = options  || {};
+		var duration = duration || resolution;
 		options['easing'] = options['easing'] || 'linear';
 		this.fx_stack.push({'to': to, 'duration': duration, 'options': options});
 		return this;

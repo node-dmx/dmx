@@ -49,7 +49,7 @@ exports.init = function(dev_id) {
 	
 	setInterval(function() {
 		send_universe(dev, universe);
-	}, 30);
+	}, 25);
 	
 	return this;
 }
