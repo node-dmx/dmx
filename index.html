@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>DMX Lichtschalter</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+	input[type=range] {
+		-webkit-appearance: slider-vertical;
+		height: 200px;
+		width: 60px;
+	}
+	.device {
+		clear: both;
+		padding-top: 1em;
+	}
+	.channel {
+		text-align: center;
+		float: left;
+	}
+	
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		function get_html_id(universe, channel) {
+			return 'channel_' + universe + '_' + channel;
+		}
+	
+		var socket = io.connect('http://localhost');
+		socket.on('init', function (msg) {
+			$('.container').empty();
+			setup = msg.setup
+			devices = msg.devices
+
+			for(var universe in setup.universes) {
+				html = "<div><h1>" + universe + "</h1>";
+				for(var device in setup.universes[universe].devices) {
+					var dev = setup.universes[universe].devices[device];
+					html += '<div class="device">'
+					for(var channel in devices[dev.type].channels) {
+						var channel_id = dev.address + Number(channel)
+						var html_id = get_html_id(universe, channel_id);
+						html += '<div class="channel">'
+						html += '<label for="' + html_id + '">' + devices[dev.type].channels[channel] + '</label>';
+						html += '<input  id="' + html_id + '" type="range" min="0" max="255">'
+						html += '</div>'
+					}
+					html += '</div>'
+				}
+				html += "</div>";
+				$(html).hide().appendTo('.container').fadeIn();	
+			}
+			$("input").live("change", function(e) {
+				var i = e.target.id.split('_');
+				var u = {};
+				u[i[2]] = e.target.value;
+				socket.emit('update', i[1], u);
+			});
+			socket.emit('request_refresh');
+		});
+		socket.on('update', function (universe, update) {
+			console.log(update)
+			for(var k in update) {
+				$('#' + get_html_id(universe, k)).val(update[k]);
+				console.log(get_html_id(universe, k))
+			}
+			
+		});
+	</script>
+</head>
+<body>
+<div class="container">
+
+</div>
+</body>
+</html>

@@ -24,7 +24,7 @@ exports.init = function(dev_id) {
 				universe,
 				Buffer([ENTTEC_PRO_END_OF_MSG])
 				])
-		console.log(msg)		
+		//console.log(msg)	
 		dev.write(msg)
 		dev.write(msg)
 	}

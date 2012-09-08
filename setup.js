@@ -8,11 +8,11 @@ exports.setup = {
 			'devices': [
 				{
 					'type': 'eurolite-led-bar',
-					'address': 1
+					'address': 0
 				},
 				{
 					'type': 'eurolite-led-bar',
-					'address': 13
+					'address': 15
 				}
 			]
 		}

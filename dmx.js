@@ -1,36 +1,25 @@
-var drv = require('./drivers/enttec-usb-dmx-pro.js');
-universe = new drv.init(0);
-universe.update({0: 1, 1: 0})
+var    events = require('events')
+	,     web = require('./web.js')
+	,   setup = require('./setup.js').setup
+	, devices = require('./devices.js').devices
+	;
+	
 
-function done() {console.log('DONE')}
+var dmx = new events.EventEmitter();
 
-var A = require('./anim.js').Anim;
-var x = new A(universe)
-	.add({1: 255, 6: 110, 7: 255, 8: 10}, 1200)
-	.delay(1000)
-	.add({1: 0}, 600)
-	.add({1: 255}, 600)
-	.add({5: 255, 6: 128}, 1000)
-	.add({1: 0}, 100)
-	.add({1: 255}, 100)
-	.add({1: 0}, 200)
-	.add({1: 255}, 200)
-	.add({1: 0}, 100)
-	.add({1: 255}, 100)
-	.add({1: 0})
-	.delay(50)
-	.add({1: 255})
-	.delay(50)
-	.add({1: 0})
-	.delay(50)
-	.add({1: 255})
-	.delay(50)
-	.add({1: 0})
-	.delay(50)
-	.add({1: 255})
-	.delay(50)
-	.add({1: 0})
-	.run(done);
-var y = new A(universe)
-	.add({9: 255}, 10000)
-	.run(done);
+dmx.setup   = setup;
+dmx.devices = devices;
+dmx.drivers = {};
+
+
+dmx.update = function(universe, update) {
+	dmx.drivers[universe].update(update);
+	dmx.emit('update', universe, update);
+}
+	
+for(var universe in setup.universes) {
+	dmx.drivers[universe] = require('./drivers/' + setup.universes[universe].output.driver + '.js').init(setup.universes[universe].output.device);
+}
+
+
+web.init(dmx);

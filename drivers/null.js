@@ -3,11 +3,17 @@ exports.init = function(dev_id) {
 	universe.fill(0)
 	
 	this.update = function(u) {
-		console.log(u);
+		for(var k in u) {
+			universe[k] = u[k]
+		}
 	}
 
 	this.get = function(k) {
 		return universe[k];
 	}
+
+	setInterval(function() {
+		console.log(universe);
+	}, 1000);
 	return this;
 }
