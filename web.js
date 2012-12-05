@@ -49,7 +49,15 @@ exports.init = function(dmx) {
 
 
 	var app = http.createServer(handler)
-	app.listen(8080, '::');
+	app.listen(setup.port, '::', null, function() {
+		try {
+			process.setuid(setup.uid);
+			process.setgid(setup.gid);
+		} catch (err) {
+			console.log(err);
+			process.exit(1);
+		}
+	});
 
 	io.listen(app).sockets.on('connection', function (socket) {
 		socket.emit('init', {'devices': dmx.devices, 'setup': dmx.setup});
