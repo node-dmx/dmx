@@ -1,4 +1,5 @@
 var    events = require('events')
+	,  config = require('./config.js')
 	,     web = require('./web.js')
 	,   setup = require('./setup.js').setup
 	, devices = require('./devices.js').devices
@@ -7,6 +8,7 @@ var    events = require('events')
 
 var dmx = new events.EventEmitter();
 
+dmx.config  = config;
 dmx.setup   = setup;
 dmx.devices = devices;
 dmx.drivers = {};
