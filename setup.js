@@ -17,7 +17,7 @@ exports.setup = {
 			values: {
 				'office': { 0:16,  1:130,  2:0,  3:255,  4: 165,  5:0, 15: 1, 16:255, 17:0, 18:255, 19: 190, 20:140, 21:0, 22: 0, 23:0, 24:255, 25: 190, 26:140 }
 			}
-		}
+		},
 		{
 			label: 'Chill',
 			values: {
@@ -53,11 +53,11 @@ exports.setup = {
 				{
 					'type': 'stairville-led-par-56',
 					'address': 64
-				}
+				},
 				{
 					'type': 'stairville-led-par-56',
 					'address': 70
-				}
+				},
 				{
 					'type': 'stairville-led-par-56',
 					'address': 76
