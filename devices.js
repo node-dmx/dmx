@@ -30,5 +30,22 @@ exports.devices = {
 				'max': 255
 			}
 		}
+	},
+	'showtec-multidim2': {
+		channels: ['1', '2', '3', '4']
+	},
+	'stairville-led-par-56': {
+		channels: ['ctrl', 'red', 'green', 'blue', 'speed'],
+		ranges: {
+			'ctrl': {
+				'type': 'option',
+				'options': [
+					{'value': 0,   'label': 'RGB Control'},
+					{'value': 64,  'label': '7 color fade'},
+					{'value': 128, 'label': '7 color change'},
+					{'value': 192, 'label': '3 color change'}
+				]
+			}
+		}
 	}
 }
