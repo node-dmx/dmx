@@ -1,7 +1,8 @@
 var http  = require('http'),
 	path = require('path'),
 	io   = require('socket.io'),
-	fs   = require('fs')
+	fs   = require('fs'),
+	A = require('./anim.js').Anim
 	;
 
 exports.init = function(dmx) {
@@ -13,7 +14,34 @@ exports.init = function(dmx) {
 		});
 		
 		request.on("end", function () {
-			var filePath = '.' + request.url;
+			var urlData = require('url').parse(request.url);
+			
+			if(urlData.pathname == '/foursquare_checkin') {
+				response.end();
+				
+				// save old states
+				var universe = 'office', old = {}, black = {};
+				for(var i = 0; i < 256; i++) {
+					old[i] = dmx.drivers[universe].get(i);
+				}
+				for(var i = 0; i < 256; i++) {
+					black[i] = 0;
+				}
+				
+				var x = new A(dmx.drivers[universe])
+					.add(black, 1000)
+					.delay(2000)
+					.add({ 0:16,  1:255,  2:0,  3:255,  4: 39,  5:0, 15: 1, 16:255, 17:0, 18:255, 19: 255, 20:0, 21:0, 22: 0, 23:0, 24:128, 25: 0, 26:255, 31:255, 32: 60 }, 1000)
+					.delay(2000)
+					.add(black, 1000)
+					.delay(2000)
+					.add(old, 1000)
+					
+				x.run(function () {});
+				return;
+			}
+			
+			var filePath = '.' + urlData.pathname;
 			if (filePath == './')
 				filePath = './index.html';
 
