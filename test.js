@@ -43,7 +43,7 @@ green_water(universe, [3+15, 6+15, 9+15], 4000);
 
 return;
 
-var x = new A(universe)
+var x = new A()
 	.add({1: 255, 6: 110, 7: 255, 8: 10}, 1200)
 	.delay(1000)
 	.add({1: 0}, 600)
@@ -71,8 +71,8 @@ var x = new A(universe)
 	.delay(200)
 	.add({2: 0});
 
-var y = new A(universe)
+var y = new A()
 	.add({9: 255}, 10000);
 
-x.run(done);
-y.run(done);
+x.run(universe, done);
+y.run(universe, done);
