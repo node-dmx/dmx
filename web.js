@@ -81,8 +81,8 @@ exports.init = function(dmx) {
 	var app = http.createServer(handler)
 	app.listen(dmx.config.port, '::', null, function() {
 		try {
-			//process.setgid(dmx.config.gid);
-			//process.setuid(dmx.config.uid);
+			process.setgid(dmx.config.gid);
+			process.setuid(dmx.config.uid);
 		} catch (err) {
 			console.log(err);
 			process.exit(1);
