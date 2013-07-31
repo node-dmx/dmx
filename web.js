@@ -14,30 +14,32 @@ exports.init = function(dmx) {
 		});
 		
 		request.on("end", function () {
-			var urlData = require('url').parse(request.url);
+			var urlData = require('url').parse(request.url), 
+				urlPath = urlData.pathname.split('/');
 			
-			if(urlData.pathname == '/foursquare_checkin') {
+			if(urlPath.length == 3 && urlPath[1] == 'animation') {
+				try {
+					// save old states
+					var universe = dmx.drivers[urlPath[2]], old = {}, black = {};
+					for(var i = 0; i < 256; i++) {
+						old[i] = universe.get(i);
+						black[i] = 0;
+					}
+
+					var jsonAnim = JSON.parse(reqBody), animation = new A();
+					for(var step in jsonAnim) {
+						animation.add(jsonAnim[step].to, jsonAnim[step].duration || 0, jsonAnim[step].options || {});
+					}
+				
+					animation.add(old, 0);
+					animation.run(universe);
+					response.write('{ "success": true }');
+				} catch(e) {
+					response.write('{ "error": "broken json" }');
+				}
+				
 				response.end();
 				
-				// save old states
-				var universe = 'office', old = {}, black = {};
-				for(var i = 0; i < 256; i++) {
-					old[i] = dmx.drivers[universe].get(i);
-				}
-				for(var i = 0; i < 256; i++) {
-					black[i] = 0;
-				}
-				
-				var x = new A(dmx.drivers[universe])
-					.add(black, 1000)
-					.delay(2000)
-					.add({ 0:16,  1:255,  2:0,  3:255,  4: 39,  5:0, 15: 1, 16:255, 17:0, 18:255, 19: 255, 20:0, 21:0, 22: 0, 23:0, 24:128, 25: 0, 26:255, 31:255, 32: 60 }, 1000)
-					.delay(2000)
-					.add(black, 1000)
-					.delay(2000)
-					.add(old, 1000)
-					
-				x.run(function () {});
 				return;
 			}
 			
@@ -79,8 +81,8 @@ exports.init = function(dmx) {
 	var app = http.createServer(handler)
 	app.listen(dmx.config.port, '::', null, function() {
 		try {
-			process.setgid(dmx.config.gid);
-			process.setuid(dmx.config.uid);
+			//process.setgid(dmx.config.gid);
+			//process.setuid(dmx.config.uid);
 		} catch (err) {
 			console.log(err);
 			process.exit(1);
