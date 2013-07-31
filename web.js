@@ -1,7 +1,8 @@
 var http  = require('http'),
 	path = require('path'),
 	io   = require('socket.io'),
-	fs   = require('fs')
+	fs   = require('fs'),
+	A = require('./anim.js').Anim
 	;
 
 exports.init = function(dmx) {
@@ -13,7 +14,36 @@ exports.init = function(dmx) {
 		});
 		
 		request.on("end", function () {
-			var filePath = '.' + request.url;
+			var urlData = require('url').parse(request.url), 
+				urlPath = urlData.pathname.split('/');
+			
+			if(urlPath.length == 3 && urlPath[1] == 'animation') {
+				try {
+					// save old states
+					var universe = dmx.drivers[urlPath[2]], old = {}, black = {};
+					for(var i = 0; i < 256; i++) {
+						old[i] = universe.get(i);
+						black[i] = 0;
+					}
+
+					var jsonAnim = JSON.parse(reqBody), animation = new A();
+					for(var step in jsonAnim) {
+						animation.add(jsonAnim[step].to, jsonAnim[step].duration || 0, jsonAnim[step].options || {});
+					}
+				
+					animation.add(old, 0);
+					animation.run(universe);
+					response.write('{ "success": true }');
+				} catch(e) {
+					response.write('{ "error": "broken json" }');
+				}
+				
+				response.end();
+				
+				return;
+			}
+			
+			var filePath = '.' + urlData.pathname;
 			if (filePath == './')
 				filePath = './index.html';
 
