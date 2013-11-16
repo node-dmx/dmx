@@ -1,0 +1,26 @@
+{
+        "name":        "dmx",
+        "version":     "0.0.1",
+        "author":      "Sebastian Wiedenroth <wiedi@frubar.net>",
+        "description": "DMX library and webservice",
+        "url":         "https://github.com/wiedi/node-dmx",
+        "main":        "dmx.js",
+        "repository": {
+                "type": "git",
+                "url": "https://github.com/wiedi/node-dmx.git"
+        },
+        "keywords": [
+                "DMX",
+                "light control"
+        ],
+        "dependencies": {
+                "ftdi":      "1.0.x",
+                "socket.io": "0.9.x"
+        },
+        "licenses": [
+                {
+                        "name": "MIT",
+                        "url": "http://www.opensource.org/licenses/mit-license.php"
+                }
+        ]
+}

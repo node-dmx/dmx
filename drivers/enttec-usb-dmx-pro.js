@@ -1,5 +1,4 @@
-var Ftdi = require('./node-ftdi/index');
-
+var FTDI = require('ftdi')
 
 var	  ENTTEC_PRO_DMX_STARTCODE = 0x00
 	, ENTTEC_PRO_START_OF_MSG  = 0x7e
@@ -24,19 +23,22 @@ exports.init = function(dev_id) {
 				universe,
 				Buffer([ENTTEC_PRO_END_OF_MSG])
 				])
-		//console.log(msg)	
-		dev.write(msg)
 		dev.write(msg)
 	}
 	
 	var universe = new Buffer(512)
 	universe.fill(0)
 	
-	var dev = new Ftdi({'index': dev_id});
-	dev.open();
-	dev.setBaudrate(250000);
-	dev.setLineProperty(Ftdi.BITS_8, Ftdi.STOP_BIT_2, Ftdi.NONE);
-	
+	var dev = new FTDI.FtdiDevice(dev_id)
+	dev.open({
+		'baudrate': 250000,
+		'databits': 8,
+		'stopbits': 2,
+		'parity': 'none'
+	}, function(err) {
+		console.log(err)
+	})
+
 	this.update = function(u) {
 		for(var k in u) {
 			universe[k] = u[k]
@@ -44,12 +46,12 @@ exports.init = function(dev_id) {
 	}
 	
 	this.get = function(c) {
-		return universe[c];
+		return universe[c]
 	}
 	
 	setInterval(function() {
 		send_universe(dev, universe);
-	}, 25);
+	}, 25)
 	
 	return this;
 }
