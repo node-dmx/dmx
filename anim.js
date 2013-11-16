@@ -1,8 +1,7 @@
 var ease = require('./easing.js').ease
 var resolution = 25;
 
-exports.Anim = function(universe) {
-	this.universe = universe;
+exports.Anim = function() {
 	this.fx_stack = [];
 	this.add = function(to, duration, options) {
 		var options  = options  || {};
@@ -14,7 +13,7 @@ exports.Anim = function(universe) {
 	this.delay = function(duration) {
 		return this.add({}, duration);
 	}
-	this.run = function(onFinish) {
+	this.run = function(universe, onFinish) {
 		var   config = {}
 			, t = 0
 			, d = 0
