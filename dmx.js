@@ -21,7 +21,7 @@ DMX.prototype.registerDriver = function(name, module) {
 }
 
 DMX.prototype.addUniverse = function(name, driver, device_id) {
-	this.universes[name] = new this.drivers[driver](device_id)
+	return this.universes[name] = new this.drivers[driver](device_id)
 }
 
 DMX.prototype.update = function(universe, channels) {
