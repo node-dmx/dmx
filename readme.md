@@ -2,6 +2,10 @@
 
 DMX-512 controller library for node.js - also includes a Webinterface and HTTP API.
 
+## Install
+
+	npm install -g dmx
+
 ## Webinterface
 
 ### Configuration
@@ -138,13 +142,21 @@ The options Object takes an <code>easing</code> key which allows to set a easing
 - outBounce
 - inOutBounce
 
+Returns a Animation object with the animation step added.
+
+
 #### animation.delay(duration)
 
 - <code>duration</code> - Number, duration in ms
 
 Delay the next animation step for duration.
+Returns a Animation object with the delay step added.
+
 
 #### animation.run(universe, onFinish)
 
 - <code>universe</code> - Object, reference to the universe driver
 - <code>onFinish</code> - Function, called when the animation is done
+
+Run the Animation on the specified universe.
+
