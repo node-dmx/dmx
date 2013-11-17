@@ -6,11 +6,15 @@ var EventEmitter = require('events').EventEmitter
 function DMX() {
 	this.universes = {}
 	this.drivers   = {}
+
 	this.registerDriver('null',               require('./drivers/null'))
 	this.registerDriver('enttec-usb-dmx-pro', require('./drivers/enttec-usb-dmx-pro'))
 }
 
 util.inherits(DMX, EventEmitter)
+
+DMX.devices   = require('./devices')
+DMX.Animation = require('./anim')
 
 DMX.prototype.registerDriver = function(name, module) {
 	this.drivers[name] = module

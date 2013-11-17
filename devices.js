@@ -1,4 +1,10 @@
-exports.devices = {
+module.exports = {
+	'generic': {
+		channels: ['dimmer']
+	},
+	'showtec-multidim2': {
+		channels: ['1', '2', '3', '4']
+	},
 	'eurolite-led-bar': {
 		channels: ['ctrl', 'dimmer', 'strobe', 'red0', 'green0', 'blue0', 'red1', 'green1', 'blue1', 'red2', 'green2', 'blue2'],
 		ranges: {
@@ -30,9 +36,6 @@ exports.devices = {
 				'max': 255
 			}
 		}
-	},
-	'showtec-multidim2': {
-		channels: ['1', '2', '3', '4']
 	},
 	'stairville-led-par-56': {
 		channels: ['ctrl', 'red', 'green', 'blue', 'speed'],
