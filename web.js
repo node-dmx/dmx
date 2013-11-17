@@ -1,11 +1,20 @@
+"use strict"
+
 var http  = require('http'),
 	path = require('path'),
 	io   = require('socket.io'),
 	fs   = require('fs'),
 	A = require('./anim.js').Anim
-	;
+;
 
-exports.init = function(dmx) {
+var DMX = require('./dmx')
+var    config = require('./config.js')
+	,     web = require('./web.js')
+	,   setup = require('./setup.js').setup
+	, devices = require('./devices.js').devices
+
+
+function DMXWeb(dmx) {
 	function handler (request, response) {
 		var reqBody = '';
 	
@@ -79,10 +88,10 @@ exports.init = function(dmx) {
 
 
 	var app = http.createServer(handler)
-	app.listen(dmx.config.port, '::', null, function() {
+	app.listen(config.port, '::', null, function() {
 		try {
-			process.setgid(dmx.config.gid);
-			process.setuid(dmx.config.uid);
+			process.setgid(config.gid);
+			process.setuid(config.uid);
 		} catch (err) {
 			console.log(err);
 			process.exit(1);
@@ -90,12 +99,12 @@ exports.init = function(dmx) {
 	});
 
 	io.listen(app).sockets.on('connection', function (socket) {
-		socket.emit('init', {'devices': dmx.devices, 'setup': dmx.setup});
+		socket.emit('init', {'devices': devices, 'setup': setup});
 		socket.on('request_refresh', function() {
-			for(var universe in dmx.setup.universes) {
-				u = {}
+			for(var universe in setup.universes) {
+				var u = {}
 				for(var i = 0; i < 256; i++) {
-					u[i] = dmx.drivers[universe].get(i);
+					u[i] = dmx.universes[universe].get(i);
 				}
 				console.log('sending update...')
 				console.log(u)
@@ -113,8 +122,16 @@ exports.init = function(dmx) {
 	});
 }	
 
+var dmx = new DMX()
 
+for(var universe in setup.universes) {
+	dmx.addUniverse(
+		universe,
+		setup.universes[universe].output.driver,
+		setup.universes[universe].output.device
+	)
+}
 
-
+var web = new DMXWeb(dmx)
 
 

@@ -1,27 +1,28 @@
-var    events = require('events')
-	,  config = require('./config.js')
-	,     web = require('./web.js')
-	,   setup = require('./setup.js').setup
-	, devices = require('./devices.js').devices
-	;
-	
+"use strict"
 
-var dmx = new events.EventEmitter();
+var util = require('util')
+var EventEmitter = require('events').EventEmitter
 
-dmx.config  = config;
-dmx.setup   = setup;
-dmx.devices = devices;
-dmx.drivers = {};
-
-
-dmx.update = function(universe, update) {
-	dmx.drivers[universe].update(update);
-	dmx.emit('update', universe, update);
-}
-	
-for(var universe in setup.universes) {
-	dmx.drivers[universe] = require('./drivers/' + setup.universes[universe].output.driver + '.js').init(setup.universes[universe].output.device);
+function DMX() {
+	this.universes = {}
+	this.drivers   = {}
+	this.registerDriver('null',               require('./drivers/null'))
+	this.registerDriver('enttec-usb-dmx-pro', require('./drivers/enttec-usb-dmx-pro'))
 }
 
+util.inherits(DMX, EventEmitter)
 
-web.init(dmx);
+DMX.prototype.registerDriver = function(name, module) {
+	this.drivers[name] = module
+}
+
+DMX.prototype.addUniverse = function(name, driver, device_id) {
+	this.universes[name] = new this.drivers[driver](device_id)
+}
+
+DMX.prototype.update = function(universe, channels) {
+	this.universes[universe].update(channels)
+	this.emit('update', universe, channels)
+}
+
+module.exports = DMX

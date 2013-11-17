@@ -1,19 +1,21 @@
-exports.init = function(dev_id) {
-	var universe = new Buffer(512)
-	universe.fill(0)
-	
-	this.update = function(u) {
-		for(var k in u) {
-			universe[k] = u[k]
-		}
-	}
+"use strict"
 
-	this.get = function(k) {
-		return universe[k];
-	}
-
-	setInterval(function() {
-		console.log(universe);
-	}, 1000);
-	return this;
+function Null(device_id, cb) {
+	var self = this
+	cb = cb || function() {}
+	this.universe = new Buffer(512)
+	this.universe.fill(0)
 }
+
+Null.prototype.update = function(u) {
+	for(var c in u) {
+		this.universe[c] = u[c]
+	}
+	console.log(this.universe)
+}
+
+Null.prototype.get = function(c) {
+	return this.universe[c]
+}
+
+module.exports = Null

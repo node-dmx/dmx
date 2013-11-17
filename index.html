@@ -19,7 +19,7 @@
 		margin-bottom: 2em;
 	}
 
-	input[type=range]:after {
+	input[type=range]:before {
 		content: attr(value);
 		color: #eee;
 		font-family: monospace;
@@ -27,6 +27,8 @@
 		width: 60px;
 		display: block;
 		color: #fff;
+		position: absolute;
+		margin-bottom: 2em;
 	}
 	.device {
 		clear: both;
@@ -125,7 +127,7 @@
 	<ul class="nav" id="myTab">
 	  <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
 	  <li><a href="#sliders" data-toggle="tab">Sliders</a></li>
-	  <li><a href="#scripts" data-toggle="tab">Scripts</a></li>
+	  <!--<li><a href="#scripts" data-toggle="tab">Scripts</a></li>-->
 	</ul>
 	</div>
 	</div>
