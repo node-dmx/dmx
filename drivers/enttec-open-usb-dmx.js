@@ -8,7 +8,7 @@ var	ENTTEC_PRO_DMX_STARTCODE = 0x00
 	, ENTTEC_PRO_SEND_DMX_RQ   = 0x06
 	;
 
-function EnttecUSBDMXPRO(device_id, cb) {
+function EnttecOpenUsbDMX(device_id, cb) {
 	var self = this
 	cb = cb || function() {}
 	this.universe = new Buffer(512)
@@ -28,7 +28,7 @@ function EnttecUSBDMXPRO(device_id, cb) {
 	})
 }
 
-EnttecUSBDMXPRO.prototype.send_universe = function() {
+EnttecOpenUsbDMX.prototype.send_universe = function() {
 	var hdr = Buffer([
 		ENTTEC_PRO_START_OF_MSG,
 		ENTTEC_PRO_SEND_DMX_RQ,
@@ -46,15 +46,15 @@ EnttecUSBDMXPRO.prototype.send_universe = function() {
 	this.dev.write(msg)
 }
 
-EnttecUSBDMXPRO.prototype.update = function(u) {
+EnttecOpenUsbDMX.prototype.update = function(u) {
 	for(var c in u) {
 		this.universe[c] = u[c]
 	}
 	this.send_universe()
 }
 
-EnttecUSBDMXPRO.prototype.get = function(c) {
+EnttecOpenUsbDMX.prototype.get = function(c) {
 	return this.universe[c]
 }
 
-module.exports = EnttecUSBDMXPRO
+module.exports = EnttecOpenUsbDMX
