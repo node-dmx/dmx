@@ -14,6 +14,10 @@ Null.prototype.update = function(u) {
 	console.log(this.universe)
 }
 
+Null.prototype.updateAll = function(v){
+  // TODO
+}
+
 Null.prototype.get = function(c) {
 	return this.universe[c]
 }
