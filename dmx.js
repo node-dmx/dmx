@@ -30,4 +30,9 @@ DMX.prototype.update = function(universe, channels) {
 	this.emit('update', universe, channels)
 }
 
+DMX.prototype.updateAll = function(universe, value) {
+  this.universes[universe].updateAll(value)
+  this.emit('updateAll', universe, value)
+}
+
 module.exports = DMX

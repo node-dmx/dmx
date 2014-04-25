@@ -53,6 +53,10 @@ EnttecUSBDMXPRO.prototype.update = function(u) {
 	this.send_universe()
 }
 
+EnttecUSBDMXPRO.prototype.updateAll = function(v){
+  // TODO
+}
+
 EnttecUSBDMXPRO.prototype.get = function(c) {
 	return this.universe[c]
 }
