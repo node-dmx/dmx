@@ -1,32 +1,33 @@
 {
-		"name":		   "dmx",
-		"version":	   "0.0.1",
-		"author":	   "Sebastian Wiedenroth <wiedi@frubar.net>",
-		"description": "DMX library and webservice",
-		"url":		   "https://github.com/wiedi/node-dmx",
-		"main":		   "dmx.js",
-		"bin": {
-						"dmx-web":	 "./dmx-web.js"
-		},
-		"repository": {
-				"type": "git",
-				"url": "https://github.com/wiedi/node-dmx.git"
-		},
-		"keywords": [
-				"DMX",
-				"light control"
-		],
-		"dependencies": {
-				"ftdi":		 "1.0.x",
-				"socket.io": "0.9.x",
-				"connect":	 "2.11.x",
-				"express":	 "3.4.x",
-				"commander": "2.0.x"
-		},
-		"licenses": [
-				{
-						"name": "MIT",
-						"url": "http://www.opensource.org/licenses/mit-license.php"
-				}
-		]
+  "name": "dmx",
+  "version": "0.0.1",
+  "author": "Sebastian Wiedenroth <wiedi@frubar.net>",
+  "description": "DMX library and webservice",
+  "url": "https://github.com/wiedi/node-dmx",
+  "main": "dmx.js",
+  "bin": {
+    "dmx-web": "./dmx-web.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wiedi/node-dmx.git"
+  },
+  "keywords": [
+    "DMX",
+    "light control"
+  ],
+  "dependencies": {
+    "commander": "2.0.x",
+    "connect": "2.11.x",
+    "edge": "0.9.3",
+    "express": "3.4.x",
+    "ftdi": "1.0.x",
+    "socket.io": "0.9.x"
+  },
+  "licenses": [
+    {
+      "name": "MIT",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    }
+  ]
 }
