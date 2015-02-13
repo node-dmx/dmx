@@ -1,4 +1,4 @@
-﻿//Linked2 Software (www.Linked2Software.com) Building Lighting Control Systems
+﻿﻿//Linked2 Software (www.Linked2Software.com) Building Lighting Control Systems
 //DMX-512 Test Application Visual Studio 2012 C#
 //Written by Richard A. Blackwell with example source provided by Enttec.com
 //Changed by Fabian Bach for use with node.js module edge
