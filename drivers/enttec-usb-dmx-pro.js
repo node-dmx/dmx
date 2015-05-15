@@ -46,6 +46,13 @@ EnttecUSBDMXPRO.prototype.send_universe = function() {
 	this.dev.write(msg)
 }
 
+EnttecUSBDMXPRO.prototype.start = function() {}
+EnttecUSBDMXPRO.prototype.stop = function() {}
+
+EnttecUSBDMXPRO.prototype.close = function(cb) {
+	this.dev.close(cb)
+}
+
 EnttecUSBDMXPRO.prototype.update = function(u) {
 	for(var c in u) {
 		this.universe[c] = u[c]
@@ -54,7 +61,9 @@ EnttecUSBDMXPRO.prototype.update = function(u) {
 }
 
 EnttecUSBDMXPRO.prototype.updateAll = function(v){
-  // TODO
+	for(var i = 0; i < 512; i++) {
+		this.universe[i] = v
+	}
 }
 
 EnttecUSBDMXPRO.prototype.get = function(c) {

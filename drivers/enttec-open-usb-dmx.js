@@ -2,77 +2,61 @@
 
 var FTDI = require('ftdi')
 
-function EnttecOpenUsbDMX(locationId, cb) {
-  var self = this;
+function EnttecOpenUsbDMX(device_id, cb) {
+	var self = this
 
-  cb = cb || function() {}
-  self.universe = Array(513);
-  self.universe[0] = 0;
-  self.updateAll(0);
-  self.sleepTime = 24; 
-  self.timeout;
-  self.dev = new FTDI.FtdiDevice(locationId)
-  self.dev.open({
-    'baudrate': 115200 / 2,
-    'databits': 8,
-    'stopbits': 2,
-    'parity': 'none'
-  }, function(err) {
-    cb(err, locationId)
-    if(!err) {
-      self.loopUniverse()
-    }
-  })
+	cb = cb || function() {}
+	this.universe = new Buffer(512)
+	this.universe.fill(0)
+
+	self.sleepTime = 24
+	self.timeout
+
+	self.dev = new FTDI.FtdiDevice(device_id)
+	self.dev.open({
+		'baudrate': 57600,
+		'databits': 8,
+		'stopbits': 2,
+		'parity': 'none'
+	}, function(err) {
+		cb(err, device_id)
+		if(!err) {
+			self.start()
+		}
+	})
 }
 
-EnttecOpenUsbDMX.prototype.loopUniverse = function(){
-  var self = this;
-  clearTimeout(self.timeout);
-
-  self.dev.write(self.universe);
-
-  self.timeout = setTimeout(function(){
-    self.loopUniverse();
-  }, self.sleepTime)
+EnttecOpenUsbDMX.prototype.send_universe = function() {
+	this.dev.write(this.universe)
 }
 
-EnttecOpenUsbDMX.prototype.pause = function(){
-  var self = this;
-
-  clearTimeout(self.timeout);
+EnttecOpenUsbDMX.prototype.start = function() {
+	this.timeout = setInterval(this.send_universe.bind(this), this.sleepTime)
 }
 
-EnttecOpenUsbDMX.prototype.close = function(cb){
-  var self = this;
+EnttecOpenUsbDMX.prototype.stop = function() {
+	clearInterval(this.timeout)
+}
 
-  self.pause();
-  self.dev.close(function(err){
-    cb(err)
-  })
+EnttecOpenUsbDMX.prototype.close = function(cb) {
+	this.stop()
+	this.dev.close(cb)
 }
 
 EnttecOpenUsbDMX.prototype.update = function(u) {
-  var self = this;
-
-  for(var c in u) {
-    self.universe[(c + 1)] = u[c];
-  }
+	for(var c in u) {
+		this.universe[c] = u[c]
+	}
 }
 
 EnttecOpenUsbDMX.prototype.updateAll = function(v) {
-  var self = this;
-
-  var i = 1;
-  while(i < self.universe.length){
-    self.universe[i] = v;
-    i++;
-  }
+	for(var i = 0; i < 512; i++) {
+		this.universe[i] = v
+	}
 }
 
 EnttecOpenUsbDMX.prototype.get = function(c) {
-  var self = this;
-
-  return self.universe[(c + 1)];
+	return this.universe[c]
 }
 
 module.exports = EnttecOpenUsbDMX
