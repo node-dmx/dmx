@@ -3,9 +3,10 @@
 var util = require('util')
 var EventEmitter = require('events').EventEmitter
 
-function DMX() {
+function DMX(devices) {
 	this.universes = {}
-	this.drivers   = {}
+	this.drivers  = {}
+	this.devices = devices
 
 	this.registerDriver('null',                require('./drivers/null'))
 	this.registerDriver('enttec-usb-dmx-pro',  require('./drivers/enttec-usb-dmx-pro'))
@@ -14,7 +15,6 @@ function DMX() {
 
 util.inherits(DMX, EventEmitter)
 
-DMX.devices   = require('./devices')
 DMX.Animation = require('./anim')
 
 DMX.prototype.registerDriver = function(name, module) {
