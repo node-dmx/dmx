@@ -4,7 +4,7 @@ var DMX = require('./dmx');
 var A = DMX.Animation;
 
 var dmx = new DMX();
-// var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', 0)
+// var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
 var universe = dmx.addUniverse('demo', 'null')
 
 var on = false;

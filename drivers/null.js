@@ -1,8 +1,8 @@
 "use strict"
 
-function Null(device_id, cb) {
+function Null(device_id, options) {
 	var self = this
-	cb = cb || function() {}
+	options = options || {}
 	this.universe = new Buffer(512)
 	this.universe.fill(0)
 	self.start()

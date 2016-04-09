@@ -1,6 +1,6 @@
 "use strict"
 
-var FTDI = require('ftdi')
+var SerialPort = require("serialport").SerialPort
 
 var	  ENTTEC_PRO_DMX_STARTCODE = 0x00
 	, ENTTEC_PRO_START_OF_MSG  = 0x7e
@@ -9,20 +9,18 @@ var	  ENTTEC_PRO_DMX_STARTCODE = 0x00
 	, ENTTEC_PRO_RECV_DMX_PKT  = 0x05
 	;
 
-function EnttecUSBDMXPRO(device_id, cb) {
+function EnttecUSBDMXPRO(device_id, options) {
 	var self = this
-	cb = cb || function() {}
+	options = options || {}
 	this.universe = new Buffer(512)
 	this.universe.fill(0)
 	
-	this.dev = new FTDI.FtdiDevice(device_id)
-	this.dev.open({
+	this.dev = new SerialPort(device_id, {
 		'baudrate': 250000,
 		'databits': 8,
 		'stopbits': 2,
 		'parity': 'none'
-	}, function(err) {
-		cb(err, device_id)
+	}, true, function(err) {
 		if(!err) {
 			self.send_universe()
 		}
@@ -30,6 +28,9 @@ function EnttecUSBDMXPRO(device_id, cb) {
 }
 
 EnttecUSBDMXPRO.prototype.send_universe = function() {
+	if(!this.dev.isOpen()) {
+		return
+	}
 	var hdr = Buffer([
 		ENTTEC_PRO_START_OF_MSG,
 		ENTTEC_PRO_SEND_DMX_RQ,

@@ -1,25 +1,22 @@
 "use strict"
 
-var FTDI = require('ftdi')
+var SerialPort = require("serialport").SerialPort
 
-function EnttecOpenUsbDMX(device_id, cb) {
+function EnttecOpenUsbDMX(device_id, options) {
 	var self = this
+	options = options || {}
 
-	cb = cb || function() {}
 	this.universe = new Buffer(512)
 	this.universe.fill(0)
 
-	self.sleepTime = 24
-	self.timeout
+	self.interval = 23
 
-	self.dev = new FTDI.FtdiDevice(device_id)
-	self.dev.open({
+	this.dev = new SerialPort(device_id, {
 		'baudrate': 57600,
 		'databits': 8,
 		'stopbits': 2,
 		'parity': 'none'
-	}, function(err) {
-		cb(err, device_id)
+	}, true, function(err) {
 		if(!err) {
 			self.start()
 		}
@@ -27,15 +24,24 @@ function EnttecOpenUsbDMX(device_id, cb) {
 }
 
 EnttecOpenUsbDMX.prototype.send_universe = function() {
+	if(!this.dev.isOpen()) {
+		return
+	}
+
 	this.dev.write(this.universe)
+
+	// toggle break
+	this.dev.set({brk: true}, function(err, r) {
+		this.dev.set({brk: false})
+	})
 }
 
 EnttecOpenUsbDMX.prototype.start = function() {
-	this.timeout = setInterval(this.send_universe.bind(this), this.sleepTime)
+	this.interval = setInterval(this.send_universe.bind(this), this.sleepTime)
 }
 
 EnttecOpenUsbDMX.prototype.stop = function() {
-	clearInterval(this.timeout)
+	clearInterval(this.interval)
 }
 
 EnttecOpenUsbDMX.prototype.close = function(cb) {

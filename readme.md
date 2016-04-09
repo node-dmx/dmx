@@ -4,9 +4,6 @@ DMX-512 controller library for node.js - also includes a Webinterface and HTTP A
 
 ## Install
 
-	# ftdi module requires ftd2xx headers provided by libftdxx1
-	# install info here: https://github.com/KABA-CCEAC/node-ftdi#prerequisites
-	# install script here: https://github.com/KABA-CCEAC/node-ftdi/blob/master/install.sh
 	npm install -g dmx
 
 ## Webinterface
