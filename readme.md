@@ -62,10 +62,12 @@ Create a new DMX instance. This class is used to tie multiple universes together
 
 
 Register a new DMX Driver module by its name.
-Two Drivers are currently registered by default:
+These drivers are currently registered by default:
 
 - null: a development driver that prints the universe to stdout
-- enttec-usb-dmx-pro: a driver for devices using a Enttec USB DMX Pro chip like the "DMXKing ultraDMX Micro". This driver requires the ftdi module (<https://github.com/KABA-CCEAC/node-ftdi>)
+- enttec-usb-dmx-pro: a driver for devices using a Enttec USB DMX Pro chip like the "DMXKing ultraDMX Micro".
+- enttec-open-usb-dmx: driver for "Enttec Open DMX USB". This driver has not received enough testing and the hardware has known limitations. (If possible better obtain a device with the "pro" chip)
+- artnet: driver for EnttecODE
 
 #### dmx.addUniverse(name, driver, device_id)
 
@@ -74,6 +76,7 @@ Two Drivers are currently registered by default:
 - <code>device_id</code> - Number or Object
 
 Add a new DMX Universe with a name, driver and an optional device_id used by the driver to identify the device.
+For enttec-usb-dmx-pro and enttec-open-usb-dmx device_id is the path the the serial device. For artnet it is the target ip.
 
 #### dmx.update(universe, channels)
 
