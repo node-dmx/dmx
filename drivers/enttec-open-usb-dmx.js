@@ -37,11 +37,11 @@ EnttecOpenUsbDMX.prototype.send_universe = function() {
 }
 
 EnttecOpenUsbDMX.prototype.start = function() {
-	this.interval = setInterval(this.send_universe.bind(this), this.sleepTime)
+	this.intervalhandle = setInterval(this.send_universe.bind(this), this.interval)
 }
 
 EnttecOpenUsbDMX.prototype.stop = function() {
-	clearInterval(this.interval)
+	clearInterval(this.intervalhandle)
 }
 
 EnttecOpenUsbDMX.prototype.close = function(cb) {
