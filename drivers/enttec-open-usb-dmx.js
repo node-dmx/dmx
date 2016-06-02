@@ -24,6 +24,7 @@ function EnttecOpenUsbDMX(device_id, options) {
 }
 
 EnttecOpenUsbDMX.prototype.send_universe = function() {
+	var self = this
 	if(!this.dev.isOpen()) {
 		return
 	}
@@ -31,8 +32,8 @@ EnttecOpenUsbDMX.prototype.send_universe = function() {
 	this.dev.write(this.universe)
 
 	// toggle break
-	this.dev.set({brk: true}, function(err, r) {
-		this.dev.set({brk: false})
+	self.dev.set({brk: true}, function(err, r) {
+		self.dev.set({brk: false})
 	})
 }
 
