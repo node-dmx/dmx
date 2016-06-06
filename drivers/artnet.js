@@ -30,7 +30,7 @@ EnttecODE.prototype.send_universe = function() {
 		this.universe
 	])
 
-	this.dev.send(pkg, 0, pkg.length, self.port, self.host)
+	this.dev.send(pkg, 0, pkg.length, this.port, this.host)
 }
 
 EnttecODE.prototype.start = function() {
