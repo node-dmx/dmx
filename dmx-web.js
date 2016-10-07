@@ -77,6 +77,22 @@ function DMXWeb() {
 		}
 		res.json({"state": u})
 	})
+	
+	app.post('/state/:universe', function(req, res) {
+		if(!(req.params.universe in dmx.universes)) {
+			res.status(404).json({"error": "universe not found"})
+			return
+		}
+
+		dmx.update(req.params.universe, req.body)
+
+		var universe = dmx.universes[req.params.universe]
+		var u = {}
+		for(var i = 0; i < 256; i++) {
+			u[i] = universe.get(i)
+		}
+		res.json({"state": u})
+	})
 
 	app.post('/animation/:universe', function(req, res) {
 		try {
