@@ -56,11 +56,36 @@ function DMXWeb() {
 		res.sendfile(__dirname + '/index.html')
 	})
 
+	app.get('/config', function(req, res) {
+		var response = {"devices": DMX.devices, "universes": {}}
+		Object.keys(config.universes).forEach(function(key) {
+			response.universes[key] = config.universes[key].devices
+		})
+
+		res.json(response)
+	})
+
 	app.get('/state/:universe', function(req, res) {
 		if(!(req.params.universe in dmx.universes)) {
 			res.status(404).json({"error": "universe not found"})
 			return
 		}
+		var universe = dmx.universes[req.params.universe]
+		var u = {}
+		for(var i = 0; i < 256; i++) {
+			u[i] = universe.get(i)
+		}
+		res.json({"state": u})
+	})
+	
+	app.post('/state/:universe', function(req, res) {
+		if(!(req.params.universe in dmx.universes)) {
+			res.status(404).json({"error": "universe not found"})
+			return
+		}
+
+		dmx.update(req.params.universe, req.body)
+
 		var universe = dmx.universes[req.params.universe]
 		var u = {}
 		for(var i = 0; i < 256; i++) {
