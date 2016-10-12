@@ -9,10 +9,10 @@ function EnttecOpenUsbDMX(device_id, options) {
 	this.universe = new Buffer(512)
 	this.universe.fill(0)
 
-	self.interval = 23
+	self.interval = 46
 
 	this.dev = new SerialPort(device_id, {
-		'baudrate': 57600,
+		'baudrate': 250000,
 		'databits': 8,
 		'stopbits': 2,
 		'parity': 'none'
@@ -29,11 +29,15 @@ EnttecOpenUsbDMX.prototype.send_universe = function() {
 		return
 	}
 
-	this.dev.write(this.universe)
-
 	// toggle break
 	self.dev.set({brk: true}, function(err, r) {
-		self.dev.set({brk: false})
+		setTimeout(function() {
+			self.dev.set({brk: false}, function(err, r) {
+				setTimeout(function() {
+					self.dev.write(Buffer.concat([Buffer([0]), self.universe]))
+				}, 1)
+			})
+		}, 1)
 	})
 }
 
