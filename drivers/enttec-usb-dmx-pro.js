@@ -65,6 +65,7 @@ EnttecUSBDMXPRO.prototype.updateAll = function(v){
 	for(var i = 0; i < 512; i++) {
 		this.universe[i] = v
 	}
+	this.send_universe()
 }
 
 EnttecUSBDMXPRO.prototype.get = function(c) {
