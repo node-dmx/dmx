@@ -17,9 +17,11 @@ function EnttecOpenUsbDMX(device_id, options) {
 		'stopbits': 2,
 		'parity': 'none'
 	}, true, function(err) {
-		if(!err) {
-			self.start()
+		if(err) {
+			console.log(err)
+			return
 		}
+		self.start()
 	})
 }
 
