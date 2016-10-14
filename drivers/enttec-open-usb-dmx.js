@@ -1,6 +1,6 @@
 "use strict"
 
-var SerialPort = require("serialport").SerialPort
+var SerialPort = require("serialport")
 
 function EnttecOpenUsbDMX(device_id, options) {
 	var self = this
@@ -16,7 +16,7 @@ function EnttecOpenUsbDMX(device_id, options) {
 		'databits': 8,
 		'stopbits': 2,
 		'parity': 'none'
-	}, true, function(err) {
+	}, function(err) {
 		if(err) {
 			console.log(err)
 			return

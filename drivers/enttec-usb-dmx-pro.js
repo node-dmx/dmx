@@ -1,6 +1,6 @@
 "use strict"
 
-var SerialPort = require("serialport").SerialPort
+var SerialPort = require("serialport")
 
 var	  ENTTEC_PRO_DMX_STARTCODE = 0x00
 	, ENTTEC_PRO_START_OF_MSG  = 0x7e
@@ -20,7 +20,7 @@ function EnttecUSBDMXPRO(device_id, options) {
 		'databits': 8,
 		'stopbits': 2,
 		'parity': 'none'
-	}, true, function(err) {
+	}, function(err) {
 		if(!err) {
 			self.send_universe()
 		}
