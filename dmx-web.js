@@ -70,12 +70,8 @@ function DMXWeb() {
 			res.status(404).json({"error": "universe not found"})
 			return
 		}
-		var universe = dmx.universes[req.params.universe]
-		var u = {}
-		for(var i = 0; i < 256; i++) {
-			u[i] = universe.get(i)
-		}
-		res.json({"state": u})
+
+		res.json({"state": dmx.universeAsObject(req.params.universe)})
 	})
 	
 	app.post('/state/:universe', function(req, res) {
@@ -85,13 +81,7 @@ function DMXWeb() {
 		}
 
 		dmx.update(req.params.universe, req.body)
-
-		var universe = dmx.universes[req.params.universe]
-		var u = {}
-		for(var i = 0; i < 256; i++) {
-			u[i] = universe.get(i)
-		}
-		res.json({"state": u})
+		res.json({"state": dmx.universeAsObject(req.params.universe)})
 	})
 
 	app.post('/animation/:universe', function(req, res) {
@@ -99,10 +89,7 @@ function DMXWeb() {
 			var universe = dmx.universes[req.params.universe]
 
 			// preserve old states
-			var old = {}
-			for(var i = 0; i < 256; i++) {
-				old[i] = universe.get(i)
-			}
+			var old = dmx.universeAsObject(req.params.universe)
 
 			var animation = new A()
 			for(var step in req.body) {
@@ -126,11 +113,7 @@ function DMXWeb() {
 
 		socket.on('request_refresh', function() {
 			for(var universe in config.universes) {
-				var u = {}
-				for(var i = 0; i < 256; i++) {
-					u[i] = dmx.universes[universe].get(i)
-				}
-				socket.emit('update', universe, u)
+				socket.emit('update', universe, dmx.universeAsObject(req.params.universe))
 			}
 		})
 
