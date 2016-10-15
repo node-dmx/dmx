@@ -34,8 +34,6 @@ DMX.prototype.update = function(universe, channels) {
 }
 
 DMX.prototype.updateAll = function(universe, value) {
-  this.universes[universe].updateAll(value)
-  this.emit('updateAll', universe, value)
 	this.universes[universe].updateAll(value)
 	this.emit('updateAll', universe, value)
 }
