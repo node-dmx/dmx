@@ -113,7 +113,7 @@ function DMXWeb() {
 
 		socket.on('request_refresh', function() {
 			for(var universe in config.universes) {
-				socket.emit('update', universe, dmx.universeAsObject(universe))
+				socket.emit('update', universe, dmx.universeToObject(universe))
 			}
 		})
 
