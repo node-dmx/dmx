@@ -65,8 +65,9 @@ Register a new DMX Driver module by its name.
 These drivers are currently registered by default:
 
 - null: a development driver that prints the universe to stdout
+- dmx4all: driver for DMX4ALL devices like the "NanoDMX USB Interface"
 - enttec-usb-dmx-pro: a driver for devices using a Enttec USB DMX Pro chip like the "DMXKing ultraDMX Micro".
-- enttec-open-usb-dmx: driver for "Enttec Open DMX USB". This driver has not received enough testing and the hardware has known limitations. (If possible better obtain a device with the "pro" chip)
+- enttec-open-usb-dmx: driver for "Enttec Open DMX USB". This device is NOT recommended, there are known hardware limitations and this driver is not very stable. (If possible better obtain a device with the "pro" chip)
 - artnet: driver for EnttecODE
 
 #### dmx.addUniverse(name, driver, device_id)
