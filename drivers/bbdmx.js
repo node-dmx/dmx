@@ -15,10 +15,10 @@ function BBDMX(device_id, options) {
 }
 
 BBDMX.prototype.send_universe = function() {
-	let messageBuffer = new Buffer(`${this.universe.length} `);
+	let messageBuffer = new Buffer(this.universe.length + ' ');
 
 	for (let i = 0; i < this.universe.length; i++) {
-		const channel = new Buffer(`${this.universe[i]} `);
+		const channel = new Buffer(this.universe[i] + ' ');
 		const length = channel.length + messageBuffer.length;
 		messageBuffer = Buffer.concat([messageBuffer, channel], length);
 	}
