@@ -71,7 +71,7 @@ function DMXWeb() {
 			return
 		}
 
-		res.json({"state": dmx.universeAsObject(req.params.universe)})
+		res.json({"state": dmx.universeToObject(req.params.universe)})
 	})
 	
 	app.post('/state/:universe', function(req, res) {
@@ -81,7 +81,7 @@ function DMXWeb() {
 		}
 
 		dmx.update(req.params.universe, req.body)
-		res.json({"state": dmx.universeAsObject(req.params.universe)})
+		res.json({"state": dmx.universeToObject(req.params.universe)})
 	})
 
 	app.post('/animation/:universe', function(req, res) {
@@ -89,7 +89,7 @@ function DMXWeb() {
 			var universe = dmx.universes[req.params.universe]
 
 			// preserve old states
-			var old = dmx.universeAsObject(req.params.universe)
+			var old = dmx.universeToObject(req.params.universe)
 
 			var animation = new A()
 			for(var step in req.body) {
