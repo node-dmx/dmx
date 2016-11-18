@@ -8,11 +8,7 @@ function BBDMX(device_id, options) {
 	self.universe = new Buffer(512);
 	self.universe.fill(0);
 	self.host = device_id || '127.0.0.1';
-	if (typeof options === 'undefined') {
-		self.port = 9930;
-	} else {
-		self.port = options.port || 9930;
-	}
+	self.port = self.options.port || 9930;
 	self.dev = dgram.createSocket('udp4');
 	self.sleepTime = 24;
 	self.start();
