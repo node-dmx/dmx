@@ -43,7 +43,7 @@ DMX.prototype.updateAll = function(universe, value) {
 DMX.prototype.universeToObject = function(universe) {
 	var universe = this.universes[universe]
 	var u = {}
-	for(var i = 0; i < universe.length; i++) {
+	for(var i = 0; i < 512; i++) {
 		u[i] = universe.get(i)
 	}
 	return u
