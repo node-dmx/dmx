@@ -28,6 +28,10 @@ A example configuration is in the repository by the name <code>dmx-web-example.c
 
 	dmx-web [-c <full-path to config file>]
 
+### Run as a service
+
+On MacOS you can run dmx-web as a service by adding a launch script to /Library/LaunchDaemons. See the example file.
+
 ### Animation HTTP API
 
 A List of Channel Transistions can be POSTed to <code>/animation/&lt;universe&gt;</code>. Each transistion is a JSON Object with at least the <code>to</code> property present. The Value of which also has to be an Object describing the channel end-states.
@@ -70,12 +74,14 @@ These drivers are currently registered by default:
 - dmx4all: driver for DMX4ALL devices like the "NanoDMX USB Interface"
 - enttec-usb-dmx-pro: a driver for devices using a Enttec USB DMX Pro chip like the "DMXKing ultraDMX Micro".
 - enttec-open-usb-dmx: driver for "Enttec Open DMX USB". This device is NOT recommended, there are known hardware limitations and this driver is not very stable. (If possible better obtain a device with the "pro" chip)
+- dmxking-utra-dmx-pro: driver for the DMXKing Ultra DMX pro interface. This driver support multiple universe specify the options with Port = A or B
 
-#### dmx.addUniverse(name, driver, device_id)
+#### dmx.addUniverse(name, driver, device_id, options)
 
 - <code>name</code> - String
 - <code>driver</code> - String, referring a registered driver
 - <code>device_id</code> - Number or Object
+- <code>options</code> - Object, driver specific options
 
 Add a new DMX Universe with a name, driver and an optional device_id used by the driver to identify the device.
 For enttec-usb-dmx-pro and enttec-open-usb-dmx device_id is the path the the serial device. For artnet it is the target ip.
