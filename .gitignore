@@ -13,3 +13,5 @@ results
 .DS_Store
 
 node_modules
+.project
+.com.greenworldsoft.syncfolderspro

@@ -28,7 +28,8 @@ function DMXWeb() {
 		dmx.addUniverse(
 			universe,
 			config.universes[universe].output.driver,
-			config.universes[universe].output.device
+			config.universes[universe].output.device,
+			config.universes[universe].output.options
 		)
 	}
 

@@ -9,12 +9,13 @@ function DMX(options) {
 	this.drivers   = {}
 	this.devices   = options.devices || require('./devices')
 
-	this.registerDriver('null',                require('./drivers/null'))
-	this.registerDriver('dmx4all',             require('./drivers/dmx4all'))
-	this.registerDriver('enttec-usb-dmx-pro',  require('./drivers/enttec-usb-dmx-pro'))
-	this.registerDriver('enttec-open-usb-dmx', require('./drivers/enttec-open-usb-dmx'))
-	this.registerDriver('artnet',              require('./drivers/artnet'))
-	this.registerDriver('bbdmx',               require('./drivers/bbdmx'))
+	this.registerDriver('null',                   require('./drivers/null'))
+	this.registerDriver('dmx4all',                require('./drivers/dmx4all'))
+	this.registerDriver('enttec-usb-dmx-pro',     require('./drivers/enttec-usb-dmx-pro'))
+	this.registerDriver('enttec-open-usb-dmx',    require('./drivers/enttec-open-usb-dmx'))
+	this.registerDriver('dmxking-ultra-dmx-pro',  require('./drivers/dmxking-ultra-dmx-pro'))
+	this.registerDriver('artnet',                 require('./drivers/artnet'))
+	this.registerDriver('bbdmx',                  require('./drivers/bbdmx'))
 }
 
 util.inherits(DMX, EventEmitter)
@@ -26,8 +27,8 @@ DMX.prototype.registerDriver = function(name, module) {
 	this.drivers[name] = module
 }
 
-DMX.prototype.addUniverse = function(name, driver, device_id) {
-	return this.universes[name] = new this.drivers[driver](device_id)
+DMX.prototype.addUniverse = function(name, driver, device_id, options) {
+	return this.universes[name] = new this.drivers[driver](device_id, options)
 }
 
 DMX.prototype.update = function(universe, channels) {
