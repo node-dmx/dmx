@@ -16,9 +16,10 @@
 	}
 	input[type=range] {
 		-webkit-appearance: slider-vertical;
-		height: 200px;
+		height: 100px;
 		width: 60px;
 		margin-bottom: 2em;
+		margin-top: 3em;
 	}
 
 	input[type=range]:before {
@@ -30,13 +31,14 @@
 		display: block;
 		color: #fff;
 		position: absolute;
-		margin-bottom: 2em;
+		top: 2em;
 	}
 	.device {
 		clear: both;
 		padding-top: 1em;
 	}
 	.channel {
+		position: relative;
 		text-align: center;
 		float: left;
 	}
@@ -99,7 +101,7 @@
 						var html_id = get_html_id(universe, channel_id);
 						html += '<div class="channel">'
 						html += '<label for="' + html_id + '">' + devices[dev.type].channels[channel] + '</label>';
-						html += '<input  id="' + html_id + '" type="range" min="0" value="0" max="255">'
+						html += '<input  id="' + html_id + '" type="range" min="0" value="0" max="255" orient="vertical">'
 						html += '</div>'
 					}
 					html += '</div>'
