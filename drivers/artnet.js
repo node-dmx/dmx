@@ -11,7 +11,7 @@ function EnttecODE(device_id, options) {
 	self.universe_id = new Buffer([0x00, 0x00])
 	self.length      = new Buffer([0x02, 0x00])
 
-	self.universe = new Buffer(512)
+	self.universe = new Buffer(513)
 	self.universe.fill(0)
 
 	self.sleepTime = 24
@@ -31,7 +31,7 @@ EnttecODE.prototype.send_universe = function() {
 		this.physical,
 		this.universe_id,
 		this.length,
-		this.universe
+		this.universe.slice(1)
 	])
 
 	this.dev.send(pkg, 0, pkg.length, this.port, this.host)
@@ -57,7 +57,7 @@ EnttecODE.prototype.update = function(u) {
 }
 
 EnttecODE.prototype.updateAll = function(v) {
-	for (var i = 0; i < 512; i++) {
+	for (var i = 1; i <= 512; i++) {
 		this.universe[i] = v
 	}
 }

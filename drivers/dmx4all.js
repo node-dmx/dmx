@@ -2,10 +2,12 @@
 
 var SerialPort = require("serialport")
 
+var UNIVERSE_LEN = 512
+
 function DMX4ALL(device_id, options) {
 	var self = this
 	options = options || {}
-	this.universe = new Buffer(512)
+	this.universe = new Buffer(UNIVERSE_LEN + 1)
 	this.universe.fill(0)
 
 	this.dev = new SerialPort(device_id, {
@@ -28,11 +30,11 @@ DMX4ALL.prototype.send_universe = function() {
 		return
 	}
 
-	var msg = Buffer(this.universe.length * 3)
-	for(var i = 0; i < this.universe.length; i++) {
+	var msg = Buffer(UNIVERSE_LEN * 3)
+	for(var i = 0; i < UNIVERSE_LEN; i++) {
 		msg[i * 3 + 0] = (i < 256) ? 0xE2 : 0xE3
 		msg[i * 3 + 1] = i
-		msg[i * 3 + 2] = this.universe[i]
+		msg[i * 3 + 2] = this.universe[i + 1]
 	}
 	this.dev.write(msg)
 }
@@ -52,7 +54,7 @@ DMX4ALL.prototype.update = function(u) {
 }
 
 DMX4ALL.prototype.updateAll = function(v){
-	for(var i = 0; i < 512; i++) {
+	for(var i = 1; i <= 512; i++) {
 		this.universe[i] = v
 	}
 	this.send_universe()

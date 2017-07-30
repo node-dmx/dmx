@@ -2,10 +2,12 @@
 
 var dgram = require('dgram')
 
+var UNIVERSE_LEN = 512
+
 function BBDMX(device_id, options) {
 	var self = this
 	self.options = options || {}
-	self.universe = new Buffer(512)
+	self.universe = new Buffer(UNIVERSE_LEN + 1)
 	self.universe.fill(0)
 	self.host = device_id || '127.0.0.1'
 	self.port = self.options.port || 9930
@@ -16,9 +18,9 @@ function BBDMX(device_id, options) {
 
 BBDMX.prototype.send_universe = function() {
 	var channel
-	var messageBuffer = new Buffer(this.universe.length.toString())
+	var messageBuffer = new Buffer(UNIVERSE_LEN.toString())
 
-	for (var i = 0; i < this.universe.length; i++) {
+	for (var i = 1; i <= UNIVERSE_LEN; i++) {
 		channel = new Buffer(' ' + this.universe[i])
 		messageBuffer = Buffer.concat([messageBuffer, channel])
 	}
@@ -45,7 +47,7 @@ BBDMX.prototype.update = function(u) {
 }
 
 BBDMX.prototype.updateAll = function(v) {
-	for (var i = 0; i < 512; i++) {
+	for (var i = 1; i <= UNIVERSE_LEN; i++) {
 		this.universe[i] = v
 	}
 }

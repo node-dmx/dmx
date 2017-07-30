@@ -3,7 +3,7 @@
 function Null(device_id, options) {
 	var self = this
 	options = options || {}
-	this.universe = new Buffer(512)
+	this.universe = new Buffer(513)
 	this.universe.fill(0)
 	self.start()
 }
@@ -27,11 +27,11 @@ Null.prototype.update = function(u) {
 	for(var c in u) {
 		this.universe[c] = u[c]
 	}
-	console.log(this.universe)
+	console.log(this.universe.slice(1))
 }
 
 Null.prototype.updateAll = function(v){
-	for(var i = 0; i < 512; i++) {
+	for(var i = 1; i <= 512; i++) {
 		this.universe[i] = v
 	}
 }

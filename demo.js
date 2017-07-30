@@ -9,8 +9,8 @@ var dmx = new DMX()
 // var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
 var universe = dmx.addUniverse('demo', 'null')
 
-universe.update({0: 1, 1: 0})
-universe.update({15: 1, 16: 255})
+universe.update({1: 1, 2: 0})
+universe.update({16: 1, 17: 255})
 universe.update({1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0})
 
 function done() {console.log('DONE')}
