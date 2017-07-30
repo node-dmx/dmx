@@ -52,13 +52,49 @@ module.exports = {
 		}
 	},
 	'ultra-pro-24ch-rdm': {
-      channels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24' ],
-      ranges: {
-         'dimmer': {
-            'type': 'slider',
-            'min': 0,
-            'max': 255
-         }
-      }
+		channels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24' ]
+	},
+	'oppsk-cob-uv-par': {
+		channels: ['dimmer', 'strobe', 'program-speed', 'sound-activity']
+	},
+	'lixda-par12-led': {
+		channels: ['ctrl', 'static-color', 'speed', 'dimmer', 'red', 'green', 'blue', 'white'],
+		ranges: {
+			'ctrl': {
+				'type': 'option',
+				'options': [
+					{'value': 0,   'label': 'Off'},
+					{'value': 11,  'label': 'Static Color'},
+					{'value': 51,  'label': 'Jump'},
+					{'value': 101, 'label': 'Gradual'},
+					{'value': 151, 'label': 'Sound Activate'},
+					{'value': 200, 'label': 'Strobe'}
+				]
+			},
+			'static-color': {
+				'type': 'option',
+				'options': [
+					{'value': 0,   'label': 'All Color'},
+					{'value': 40,  'label': 'Red'},
+					{'value': 50,  'label': 'Green'},
+					{'value': 60,  'label': 'Blue'},
+					{'value': 70,  'label': 'Yellow'},
+					{'value': 80,  'label': 'Cyan'},
+					{'value': 90,  'label': 'Purple'},
+					{'value': 100, 'label': 'White'},
+					{'value': 110, 'label': 'Red + Green'},
+					{'value': 120, 'label': 'Red + Blue'},
+					{'value': 130, 'label': 'Red + White'},
+					{'value': 140, 'label': 'Green + Blue'},
+					{'value': 150, 'label': 'Green + White'},
+					{'value': 160, 'label': 'Blue + White'},
+					{'value': 170, 'label': 'Red + Green + White'},
+					{'value': 180, 'label': 'Red + Blue + White'},
+					{'value': 190, 'label': 'Green + Blue + White'},
+					{'value': 200, 'label': 'Red + Green + Blue'},
+					{'value': 210, 'label': 'Red + Green + Blue + White'}
+				]
+			}
+		}
 	}
 }
