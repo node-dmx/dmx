@@ -55,14 +55,14 @@ const EnttecUSBDMXPRO = class EnttecUSBDMXPRO {
 	}
 
 	update(u) {
-		for(const c in u) {
+		for(let c in u) {
 			this.universe[c] = u[c];
 		}
 		this.send_universe();
 	}
 
 	updateAll(v) {
-		for(const i = 0; i < 512; i++) {
+		for(let i = 0; i < 512; i++) {
 			this.universe[i] = v;
 		}
 		this.send_universe();
