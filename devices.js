@@ -5,6 +5,25 @@ module.exports = {
 	'showtec-multidim2': {
 		channels: ['1', '2', '3', '4']
 	},
+	'led-wall-tri-4c-1': {
+		channels: ['dimmer', 'red', 'green', 'blue'],
+		ranges: {
+			ctrl: {
+				type: 'option',
+				'options': [
+					{'value': 0, 'label': 'Dimmer'},
+					{'value': 0, 'label': 'Red'},
+					{'value': 0, 'label': 'Green'},
+					{'value': 0, 'label': 'Blue'},
+				]
+			},
+			'dimmer': {
+				'type': 'slider',
+				'min': 0,
+				'max': 255
+			}
+		}
+	},
 	'eurolite-led-bar': {
 		channels: ['ctrl', 'dimmer', 'strobe', 'red0', 'green0', 'blue0', 'red1', 'green1', 'blue1', 'red2', 'green2', 'blue2'],
 		ranges: {

@@ -1,0 +1,28 @@
+{
+	"server": {
+		"listen_port": 8080,
+		"listen_host": "::"
+	},
+	"presets": [
+		{
+			"label": "White",
+			"values": {
+				"office": { "1": 16, "2": 255, "3": 0, "4": 255, "5": 255, "6": 255, "16": 16, "17": 255, "18": 0, "19": 255, "20": 255, "21": 255 }
+			}
+		}
+	],
+	"universes": {
+		"office": {
+			"output": {
+				"driver": "enttec-usb-dmx-pro",
+				"device": "/dev/cu.usbserial-EN216442"
+			},
+			"devices": [
+				{
+					"type": "led-wall-tri-4c-1",
+					"address": 0
+				}
+			]
+		}
+	}
+}

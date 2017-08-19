@@ -8,6 +8,7 @@ var express  = require('express')
 var socketio = require('socket.io')
 var program  = require('commander')
 var DMX      = require('./dmx')
+var pliabAnim = require('./pliabAnim')
 var A        = DMX.Animation
 
 program
@@ -93,10 +94,16 @@ function DMXWeb() {
 			// preserve old states
 			var old = dmx.universeToObject(req.params.universe)
 
-			var animation = new A()
-			for(var step in req.body) {
+			var animation = new A()			
+			for(var step in req.body) {	
+				let stepTo = req.body[step].to;
+				
+				if (stepTo.hasOwnProperty('color') && stepTo.hasOwnProperty('opacity')) {
+					stepTo = pliabAnim.convertToDMX(stepTo);	
+				}
+				
 				animation.add(
-					req.body[step].to,
+					stepTo,
 					req.body[step].duration || 0,
 					req.body[step].options  || {}
 				)
