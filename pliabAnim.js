@@ -4,8 +4,18 @@ module.exports = class plibAnim {
   static convertToDMX(body) {
     // {"0": 255, "1": 0, "2": 244, "3": 255}
     // Channel 4c-1
-    const convertedColor = this._convertHexToRgb(body.color);
-    const convertedOpacity = this._convertOpacity(body.opacity);
+    let convertedOpacity, convertedColor;
+
+    if (body.opacity === 0) {
+      convertedOpacity = 0;
+      convertedColor = [0, 0, 0];
+    } else {
+      convertedColor = this._convertHexToRgb(body.color);
+      convertedOpacity = this._convertOpacity(body.opacity);
+    }
+
+    console.log('convertedOpacity', convertedOpacity);
+    console.log('convertedColor', convertedColor);
 
     return {
       "0": convertedOpacity,
