@@ -96,5 +96,11 @@ module.exports = {
 				]
 			}
 		}
-	}
+	},
+	'eurolite-led-tha-120PC': {
+		channels: ['red', 'green', 'blue', 'white', 'dimmer', 'strobe', 'effect']
+	},
+	'briteq-bt-theatre-60FC': {
+		channels: ['dimmer', 'strobe', 'effect', 'red', 'green', 'blue', 'white']
+	},
 }
