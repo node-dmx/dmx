@@ -49,14 +49,9 @@ function DMXWeb() {
 			}
 		}
 	})
-	io.set('log level', 1)
-
-	app.configure(function() {
-		app.use(connect.json())
-	})
 
 	app.get('/', function(req, res) {
-		res.sendfile(__dirname + '/index.html')
+		res.sendFile(__dirname + '/index.html')
 	})
 
 	app.get('/config', function(req, res) {
