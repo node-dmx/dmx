@@ -55,8 +55,7 @@
 		function get_html_id(universe, channel) {
 			return 'channel_' + universe + '_' + channel;
 		}
-
-		var socket = io.connect();
+		var socket = io();
 		socket.on('init', function (msg) {
 			$('#presets').empty();
 			$('#sliders').empty();
@@ -73,7 +72,6 @@
 						socket.emit('update', universe, values[universe]);
 					}
 				};}(setup.presets[preset].values));
-				console.log(html);
 			}
 			
 			/* blackout button */
@@ -95,16 +93,20 @@
 				var html = "<div><h1>" + universe + "</h1>";
 				for(var device in setup.universes[universe].devices) {
 					var dev = setup.universes[universe].devices[device];
-					html += '<div class="device">'
-					for(var channel in devices[dev.type].channels) {
-						var channel_id = dev.address + Number(channel)
-						var html_id = get_html_id(universe, channel_id);
-						html += '<div class="channel">'
-						html += '<label for="' + html_id + '">' + devices[dev.type].channels[channel] + '</label>';
-						html += '<input  id="' + html_id + '" type="range" min="0" value="0" max="255" orient="vertical">'
+					if (devices[dev.type]) {
+						html += '<div class="device">'						
+						for(var channel in devices[dev.type].channels) {
+							var channel_id = dev.address + Number(channel)
+							var html_id = get_html_id(universe, channel_id);
+							html += '<div class="channel">'
+							html += '<label for="' + html_id + '">' + devices[dev.type].channels[channel] + '</label>';
+							html += '<input  id="' + html_id + '" type="range" min="0" value="0" max="255" orient="vertical">'
+							html += '</div>'
+						}
 						html += '</div>'
+					} else {
+						console.log("[WARNING] Device " + dev.type + " is unknown and cannot be displayed in sliders overview!")
 					}
-					html += '</div>'
 				}
 				html += "</div>";
 				$(html).hide().appendTo('#sliders').fadeIn();

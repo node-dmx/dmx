@@ -11,7 +11,7 @@ function DMX4ALL(device_id, options) {
 	this.universe.fill(0)
 
 	this.dev = new SerialPort(device_id, {
-		'baudrate': 38400,
+		'baudRate': 38400,
 		'databits': 8,
 		'stopbits': 1,
 		'parity': 'none'
@@ -26,7 +26,7 @@ function DMX4ALL(device_id, options) {
 }
 
 DMX4ALL.prototype.send_universe = function() {
-	if(!this.dev.isOpen()) {
+	if(!this.dev.writable) {
 		return
 	}
 
