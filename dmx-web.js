@@ -3,7 +3,7 @@
 
 var fs       = require('fs')
 var http     = require('http')
-var connect  = require('connect')
+var body     = require('body-parser')
 var express  = require('express')
 var socketio = require('socket.io')
 var program  = require('commander')
@@ -48,14 +48,11 @@ function DMXWeb() {
 			}
 		}
 	})
-	io.set('log level', 1)
 
-	app.configure(function() {
-		app.use(connect.json())
-	})
+	app.use(body.json())
 
 	app.get('/', function(req, res) {
-		res.sendfile(__dirname + '/index.html')
+		res.sendFile(__dirname + '/index.html')
 	})
 
 	app.get('/config', function(req, res) {
@@ -75,7 +72,7 @@ function DMXWeb() {
 
 		res.json({"state": dmx.universeToObject(req.params.universe)})
 	})
-	
+
 	app.post('/state/:universe', function(req, res) {
 		if(!(req.params.universe in dmx.universes)) {
 			res.status(404).json({"error": "universe not found"})
