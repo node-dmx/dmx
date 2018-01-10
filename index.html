@@ -56,7 +56,7 @@
 			return 'channel_' + universe + '_' + channel;
 		}
 
-		var socket = io.connect();
+		var socket = io();
 		socket.on('init', function (msg) {
 			$('#presets').empty();
 			$('#sliders').empty();

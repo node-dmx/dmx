@@ -25,7 +25,7 @@ function DMXKingUltraDMXPro(device_id, options) {
 	}
 	
 	this.dev = new SerialPort(device_id, {
-		'baudrate': 250000,
+		'baudRate': 250000,
 		'databits': 8,
 		'stopbits': 2,
 		'parity': 'none'
@@ -37,7 +37,7 @@ function DMXKingUltraDMXPro(device_id, options) {
 }
 
 DMXKingUltraDMXPro.prototype.send_universe = function() {
-	if(!this.dev.isOpen()) {
+	if(!this.dev.writable) {
 		return
 	}
 	var hdr = Buffer([

@@ -16,7 +16,7 @@ function EnttecUSBDMXPRO(device_id, options) {
 	this.universe.fill(0)
 	
 	this.dev = new SerialPort(device_id, {
-		'baudrate': 250000,
+		'baudRate': 250000,
 		'databits': 8,
 		'stopbits': 2,
 		'parity': 'none'
@@ -28,7 +28,7 @@ function EnttecUSBDMXPRO(device_id, options) {
 }
 
 EnttecUSBDMXPRO.prototype.send_universe = function() {
-	if(!this.dev.isOpen()) {
+	if(!this.dev.writable) {
 		return
 	}
 	var hdr = Buffer([
