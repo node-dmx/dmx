@@ -5,6 +5,7 @@ var resolution = 25
 
 function Anim() {
 	this.fx_stack = []
+	this.interval = null
 }
 
 Anim.prototype.add = function(to, duration, options) {
@@ -17,6 +18,13 @@ Anim.prototype.add = function(to, duration, options) {
 
 Anim.prototype.delay = function(duration) {
 	return this.add({}, duration)
+}
+
+Anim.prototype.stop = function () {
+	if(this.interval) {
+		clearInterval(this.interval)
+	}
+	this.fx_stack = []
 }
 
 Anim.prototype.run = function(universe, onFinish) {
@@ -56,7 +64,7 @@ Anim.prototype.run = function(universe, onFinish) {
 	}
 
 	ani_setup()
-	var iid = setInterval(ani_step, resolution)
+	var iid = this.interval = setInterval(ani_step, resolution)
 }
 
 module.exports = Anim
