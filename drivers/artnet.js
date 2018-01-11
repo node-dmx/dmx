@@ -21,6 +21,9 @@ function EnttecODE(device_id, options) {
 	self.host = device_id || '127.0.0.1'
 	self.port = options.port || 6454
 	self.dev = dgram.createSocket('udp4')
+	self.dev.bind(function() {
+		self.dev.setBroadcast(true)
+	})
 	self.start()
 }
 
