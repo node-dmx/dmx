@@ -17,7 +17,7 @@ function EnttecODE(device_id, options) {
 	self.sleepTime = 24
 
 	options = options || {}
-	self.universe_id.writeInt16BE(options.universe || 0, 0)
+	self.universe_id.writeInt16LE(options.universe || 0, 0)
 	self.host = device_id || '127.0.0.1'
 	self.port = options.port || 6454
 	self.dev = dgram.createSocket('udp4')
