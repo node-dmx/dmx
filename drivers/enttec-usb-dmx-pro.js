@@ -14,11 +14,11 @@ function EnttecUSBDMXPRO(device_id, options) {
 	options = options || {}
 	this.universe = new Buffer(513)
 	this.universe.fill(0)
-	
+
 	this.dev = new SerialPort(device_id, {
 		'baudRate': 250000,
-		'databits': 8,
-		'stopbits': 2,
+		'dataBits': 8,
+		'stopBits': 2,
 		'parity': 'none'
 	}, function(err) {
 		if(!err) {
