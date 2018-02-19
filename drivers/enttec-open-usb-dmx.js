@@ -13,8 +13,8 @@ function EnttecOpenUsbDMX(device_id, options) {
 
 	this.dev = new SerialPort(device_id, {
 		'baudRate': 250000,
-		'databits': 8,
-		'stopbits': 2,
+		'dataBits': 8,
+		'stopBits': 2,
 		'parity': 'none'
 	}, function(err) {
 		if(err) {

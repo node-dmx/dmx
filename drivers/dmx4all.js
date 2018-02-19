@@ -12,8 +12,8 @@ function DMX4ALL(device_id, options) {
 
 	this.dev = new SerialPort(device_id, {
 		'baudRate': 38400,
-		'databits': 8,
-		'stopbits': 1,
+		'dataBits': 8,
+		'stopBits': 1,
 		'parity': 'none'
 	}, function(err) {
 		if(!err) {
