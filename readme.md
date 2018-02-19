@@ -171,3 +171,7 @@ Returns a Animation object with the delay step added.
 
 Run the Animation on the specified universe.
 
+
+## Community
+
+We're happy to help. Chat with us on IRC in #node-dmx on freenode.
