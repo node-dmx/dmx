@@ -56,7 +56,7 @@ module.exports = {
 	},
 	'ultra-pro-6rgbch-rdm': {
 		channels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24' ],
-		channelgoups: ['1', '2', '3', '4', '5', '6']
+		channelgroups: ['1', '2', '3', '4', '5', '6']
 	},
 	'oppsk-cob-uv-par': {
 		channels: ['dimmer', 'strobe', 'program-speed', 'sound-activity']
