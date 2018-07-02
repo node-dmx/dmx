@@ -12,8 +12,29 @@ var	  ENTTEC_PRO_DMX_STARTCODE = 0x00
 function EnttecUSBDMXPRO(device_id, options) {
 	var self = this
 	options = options || {}
-	this.universe = new Buffer(513)
-	this.universe.fill(0)
+	if(Buffer.alloc !== undefined) {
+		this.universe = Buffer.alloc(513, 0);
+		this.header = Buffer.from([
+			ENTTEC_PRO_START_OF_MSG,
+			ENTTEC_PRO_SEND_DMX_RQ,
+			 (this.universe.length)       & 0xff,
+			((this.universe.length) >> 8) & 0xff,
+			ENTTEC_PRO_DMX_STARTCODE
+		]);
+		this.tail = Buffer.from([ENTTEC_PRO_END_OF_MSG]);
+	}
+	else {
+		this.universe = new Buffer(513);
+		this.universe.fill(0);
+		this.header = Buffer([
+			ENTTEC_PRO_START_OF_MSG,
+			ENTTEC_PRO_SEND_DMX_RQ,
+			 (this.universe.length)       & 0xff,
+			((this.universe.length) >> 8) & 0xff,
+			ENTTEC_PRO_DMX_STARTCODE
+		]);
+		this.tail = Buffer.from([ENTTEC_PRO_END_OF_MSG]);
+	}
 
 	this.dev = new SerialPort(device_id, {
 		'baudRate': 250000,
@@ -29,21 +50,12 @@ function EnttecUSBDMXPRO(device_id, options) {
 
 EnttecUSBDMXPRO.prototype.send_universe = function() {
 	if(!this.dev.writable) {
-		return
+		return;
 	}
-	var hdr = Buffer([
-		ENTTEC_PRO_START_OF_MSG,
-		ENTTEC_PRO_SEND_DMX_RQ,
-		 (this.universe.length)       & 0xff,
-		((this.universe.length) >> 8) & 0xff,
-		ENTTEC_PRO_DMX_STARTCODE
-	])
-
 	var msg = Buffer.concat([
-		hdr,
+		this.header,
 		this.universe.slice(1),
-		Buffer([ENTTEC_PRO_END_OF_MSG])
-	])
+		this.tail]);
 	this.dev.write(msg)
 }
 
