@@ -60,6 +60,7 @@
 		socket.on('init', function (msg) {
 			$('#presets').empty();
 			$('#sliders').empty();
+			$('#anim').empty();
 			setup = msg.setup
 			devices = msg.devices
 			
@@ -73,7 +74,6 @@
 						socket.emit('update', universe, values[universe]);
 					}
 				};}(setup.presets[preset].values));
-				console.log(html);
 			}
 			
 			/* blackout button */
@@ -109,6 +109,26 @@
 				html += "</div>";
 				$(html).hide().appendTo('#sliders').fadeIn();
 			}
+
+			/* animations */
+			for(var animation in setup.animPresets) {
+				var html = '<button class="span2 btn btn-info">' + setup.animPresets[animation].label + '</button>';
+				var e = $(html)
+				e.hide().appendTo('#anim').fadeIn();
+				e.click(function(values) { return function() {
+					for(var universe in values) {
+						$.ajax({
+							type: 'POST',
+							contentType: 'application/json',
+							data: JSON.stringify(values[universe]),
+							url: '/animation/'+universe,
+							processData: false,
+							dataType: 'json'
+						});
+					}
+				};}(setup.animPresets[animation].anim));
+			}
+
 			$("input").live("change", function(e) {
 				var i = e.target.id.split('_');
 				var u = {};
@@ -131,6 +151,7 @@
 	<ul class="nav" id="myTab">
 	  <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
 	  <li><a href="#sliders" data-toggle="tab">Sliders</a></li>
+	  <li><a href="#anim" data-toggle="tab">Animations</a></li>
 	  <!--<li><a href="#scripts" data-toggle="tab">Scripts</a></li>-->
 	</ul>
 	</div>
@@ -143,6 +164,9 @@
 	</div>
 </div>
 <div id="sliders" class="tab-pane">
+
+</div>
+<div id="anim"    class="tab-pane">
 
 </div>
 <div id="scripts"    class="tab-pane">
