@@ -2,6 +2,9 @@ module.exports = {
 	'generic': {
 		channels: ['dimmer']
 	},
+	'generic-rgb': {
+		channels: ['red', 'green', 'blue']
+	},
 	'showtec-multidim2': {
 		channels: ['1', '2', '3', '4']
 	},
@@ -107,4 +110,7 @@ module.exports = {
 	'briteq-bt-theatre-60FC': {
 		channels: ['dimmer', 'strobe', 'effect', 'red', 'green', 'blue', 'white']
 	},
+	'lalucenatz-led-4ch': {
+		channels: ['master', 'red', 'green', 'blue']
+        },
 }
