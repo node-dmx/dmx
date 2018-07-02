@@ -56,6 +56,30 @@
 			return 'channel_' + universe + '_' + channel;
 		}
 
+		function rgb_to_array(str) {
+			m = str.match(/^#([0-9a-f]{6})$/i)[1];
+			if(m) {
+				return [
+					parseInt(m.substr(0,2),16),
+				        parseInt(m.substr(2,2),16),
+				        parseInt(m.substr(4,2),16)
+			        ];
+			}
+		}
+
+		function decimalToHex(d, padding) {
+			var hex = Number(d).toString(16);
+			padding = typeof (padding) === "undefined" || padding === null ? padding = 2 : padding;
+			while (hex.length < padding) {
+				hex = "0" + hex;
+			}
+			return hex;
+		}
+
+		function array_to_rgb(arr) {
+			return '#'+decimalToHex(arr[0])+decimalToHex(arr[1])+decimalToHex(arr[2]);
+		}
+
 		var socket = io();
 		socket.on('init', function (msg) {
 			$('#presets').empty();
@@ -104,6 +128,11 @@
 						html += '<input  id="' + html_id + '" type="range" min="0" value="0" max="255" orient="vertical">'
 						html += '</div>'
 					}
+					if(devices[dev.type].channels.includes('red') && devices[dev.type].channels.includes('blue') && devices[dev.type].channels.includes('green')) {
+						var html_id = get_html_id(universe, dev.address);
+						html += '<input id="picker_'+html_id+'" type="color" data-red="'+devices[dev.type].channels.indexOf('red');
+						html += '" data-green="'+devices[dev.type].channels.indexOf('green')+'" data-blue="'+devices[dev.type].channels.indexOf('blue')+'"/>';
+					}
 					html += '</div>'
 				}
 				html += "</div>";
@@ -111,9 +140,20 @@
 			}
 			$("input").live("change", function(e) {
 				var i = e.target.id.split('_');
-				var u = {};
-				u[i[2]] = e.target.value;
-				socket.emit('update', i[1], u);
+				if(i[0] === 'picker') {
+					var u = {};
+					var tar = $(e.target);
+					var value = rgb_to_array(tar.val());
+					u[Number(i[3])+Number(tar.data('red'))] = value[0];
+					u[Number(i[3])+Number(tar.data('green'))] = value[1];
+					u[Number(i[3])+Number(tar.data('blue'))] = value[2];
+					socket.emit('update', i[2], u);
+				}
+				else {
+					var u = {};
+					u[i[2]] = e.target.value;
+					socket.emit('update', i[1], u);
+				}
 			});
 			socket.emit('request_refresh');
 		});
@@ -121,6 +161,33 @@
 			for(var k in update) {
 				$('#' + get_html_id(universe, k)).attr('value', update[k]);
 			}
+			$("[id^=picker_channel_"+universe+"]").each(function(index, value){
+				var self = $(this);
+				var id = self.attr('id').split('_');
+				var obj = self.data();
+				var arr = Object.keys(obj).map(function(key){return obj[key];});
+				var _id = Number(id[3]);
+				var min = _id;
+				var max = min;
+				min += Math.min.apply( null, arr );
+				max += Math.max.apply( null, arr );
+				for(var k in update) {
+					if(k >= min && k <= max) {
+						var values = rgb_to_array(self.val());
+						var address = k - _id;
+						if(address === Number(self.data('red'))) {
+							values[0] = update[k];
+						}
+						else if(address === Number(self.data('green'))) {
+							values[1] = update[k];
+						}
+						else if(address === Number(self.data('blue'))) {
+							values[2] = update[k];
+						}
+						self.val(array_to_rgb(values));
+					}
+				}
+			});
 			
 		});
 	</script>
