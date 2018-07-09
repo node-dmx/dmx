@@ -7,8 +7,13 @@ var UNIVERSE_LEN = 512
 function BBDMX(device_id, options) {
 	var self = this
 	self.options = options || {}
-	self.universe = new Buffer(UNIVERSE_LEN + 1)
-	self.universe.fill(0)
+	if(Buffer.alloc !== undefined) {
+		self.universe = Buffer.alloc(UNIVERSE_LEN + 1, 0);
+	}
+	else {
+		self.universe = new Buffer(UNIVERSE_LEN + 1)
+		self.universe.fill(0)
+	}
 	self.host = device_id || '127.0.0.1'
 	self.port = self.options.port || 9930
 	self.dev = dgram.createSocket('udp4')
