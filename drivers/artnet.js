@@ -5,25 +5,14 @@ var dgram = require('dgram')
 function EnttecODE(device_id, options) {
 	var self = this
 
-	if(buffer.alloc !== undefined) {
-		self.header = Buffer.from([65, 114, 116, 45, 78, 101, 116, 0, 0, 80, 0, 14]);
-		self.sequence = Buffer.from([0]);
-		self.physical = Buffer.from([0]);
-		self.universe_id = Buffer.from([0x00, 0x00]);
-		self.length = Buffer.from([0x02, 0x00]);
+	self.header = new Buffer([65, 114, 116, 45, 78, 101, 116, 0, 0, 80, 0, 14])
+	self.sequence    = new Buffer([0])
+	self.physical    = new Buffer([0])
+	self.universe_id = new Buffer([0x00, 0x00])
+	self.length      = new Buffer([0x02, 0x00])
 
-		self.universe = Buffer.alloc(513, 0);
-	}
-	else {
-		self.header = new Buffer([65, 114, 116, 45, 78, 101, 116, 0, 0, 80, 0, 14])
-		self.sequence    = new Buffer([0])
-		self.physical    = new Buffer([0])
-		self.universe_id = new Buffer([0x00, 0x00])
-		self.length      = new Buffer([0x02, 0x00])
-
-		self.universe = new Buffer(513)
-		self.universe.fill(0)
-	}
+	self.universe = new Buffer(513)
+	self.universe.fill(0)
 
 	self.sleepTime = 24
 

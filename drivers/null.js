@@ -3,13 +3,8 @@
 function Null(device_id, options) {
 	var self = this
 	options = options || {}
-	if(Buffer.alloc !== undefined) {
-		this.universe = Buffer.alloc(513, 0);
-	}
-	else {
-		this.universe = new Buffer(513)
-		this.universe.fill(0)
-	}
+	this.universe = new Buffer(513)
+	this.universe.fill(0)
 	self.start()
 }
 

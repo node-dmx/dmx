@@ -6,15 +6,8 @@ function EnttecOpenUsbDMX(device_id, options) {
 	var self = this
 	options = options || {}
 
-	if(Buffer.alloc !== undefined) {
-		this.universe = Buffer.alloc(513, 0);
-		this.start = Buffer.alloc(1, 0);
-	}
-	else {
-		this.universe = new Buffer(513);
-		this.universe.fill(0);
-		this.start = Buffer([0]);
-	}
+	this.universe = new Buffer(513)
+	this.universe.fill(0)
 
 	self.interval = 46
 
@@ -43,7 +36,7 @@ EnttecOpenUsbDMX.prototype.send_universe = function() {
 		setTimeout(function() {
 			self.dev.set({brk: false, rts: true}, function(err, r) {
 				setTimeout(function() {
-					self.dev.write(Buffer.concat([self.start, self.universe.slice(1)]))
+					self.dev.write(Buffer.concat([Buffer([0]), self.universe.slice(1)]))
 				}, 1)
 			})
 		}, 1)

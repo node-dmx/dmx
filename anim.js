@@ -6,7 +6,6 @@ var resolution = 25
 function Anim() {
 	this.fx_stack = []
 	this.interval = null
-	this.loop = false;
 }
 
 Anim.prototype.add = function(to, duration, options) {
@@ -33,12 +32,10 @@ Anim.prototype.run = function(universe, onFinish) {
 	var t = 0
 	var d = 0
 	var a
-	var currentFrame = 0;
 
 	var fx_stack = this.fx_stack;
-	var loop = this.loop;
 	var ani_setup = function() {
-		a = fx_stack[currentFrame++];
+		a = fx_stack.shift()
 		t = 0
 		d = a.duration
 		config = {}
@@ -57,11 +54,8 @@ Anim.prototype.run = function(universe, onFinish) {
 		t = t + resolution
 		universe.update(new_vals)
 		if(t > d) {
-			if(fx_stack.length > currentFrame) {
+			if(fx_stack.length > 0) {
 				ani_setup()
-			} else if (loop) {
-				currentFrame = 0;
-				ani_setup();
 			} else {
 				clearInterval(iid)
 				if(onFinish) onFinish()
