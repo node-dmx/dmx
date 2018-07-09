@@ -95,7 +95,10 @@
 				var html = "<div><h1>" + universe + "</h1>";
 				for(var device in setup.universes[universe].devices) {
 					var dev = setup.universes[universe].devices[device];
-					html += '<div class="device">'
+					html += '<div class="device">';
+					if(dev.name !== undefined) {
+						html += '<h4 class="name">'+dev.name+'</h4>'
+					}
 					for(var channel in devices[dev.type].channels) {
 						var channel_id = dev.address + Number(channel)
 						var html_id = get_html_id(universe, channel_id);
