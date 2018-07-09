@@ -62,6 +62,10 @@
 			$('#sliders').empty();
 			setup = msg.setup
 			devices = msg.devices
+
+			if(setup.title !== undefined) {
+				document.title = setup.title;
+			}
 			
 			/* preset buttons */
 			for(var preset in setup.presets) {
