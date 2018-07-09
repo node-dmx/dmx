@@ -89,17 +89,31 @@ function DMXWeb() {
 
 			// preserve old states
 			var old = dmx.universeToObject(req.params.universe)
+			var loop = false;
+
+			if(universe.currentAnimation !== undefined) {
+				universe.currentAnimation.stop();
+			}
 
 			var animation = new A()
 			for(var step in req.body) {
+				if(req.body[step] === 'loop') {
+					loop = true;
+				}
 				animation.add(
 					req.body[step].to,
 					req.body[step].duration || 0,
 					req.body[step].options  || {}
 				)
 			}
-			animation.add(old, 0)
+			if(loop) {
+				animation.loop = true;
+			}
+			else {
+				animation.add(old, 0)
+			}
 			animation.run(universe)
+			universe.currentAnimation = animation;
 			res.json({"success": true})
 		} catch(e) {
 			console.log(e)

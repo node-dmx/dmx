@@ -7,8 +7,13 @@ var UNIVERSE_LEN = 512
 function DMX4ALL(device_id, options) {
 	var self = this
 	options = options || {}
-	this.universe = new Buffer(UNIVERSE_LEN + 1)
-	this.universe.fill(0)
+	if(Buffer.alloc !== undefined) {
+		this.universe = Buffer.alloc(UNIVERSE_LEN + 1, 0);
+	}
+	else {
+		this.universe = new Buffer(UNIVERSE_LEN + 1)
+		this.universe.fill(0)
+	}
 
 	this.dev = new SerialPort(device_id, {
 		'baudRate': 38400,
@@ -29,8 +34,12 @@ DMX4ALL.prototype.send_universe = function() {
 	if(!this.dev.writable) {
 		return
 	}
-
-	var msg = Buffer(UNIVERSE_LEN * 3)
+	if(Buffer.alloc !== undefined) {
+		var msg = Buffer.alloc(UNIVERSE_LEN * 3);
+	}
+	else {
+		var msg = Buffer(UNIVERSE_LEN * 3);
+	}
 	for(var i = 0; i < UNIVERSE_LEN; i++) {
 		msg[i * 3 + 0] = (i < 256) ? 0xE2 : 0xE3
 		msg[i * 3 + 1] = i

@@ -14,14 +14,35 @@ var	  DMXKING_ULTRA_DMX_PRO_DMX_STARTCODE   = 0x00
 function DMXKingUltraDMXPro(device_id, options) {
 	var self = this
 	this.options = options || {}
-	this.universe = new Buffer(513)
-	this.universe.fill(0)
-
 	this.sendDMXReq = DMXKING_ULTRA_DMX_PRO_SEND_DMX_RQ
 	if (this.options.port === "A") {
 		this.sendDMXReq = DMXKING_ULTRA_DMX_PRO_SEND_DMX_A_RQ
 	} else if (this.options.port === "B") {
 		this.sendDMXReq = DMXKING_ULTRA_DMX_PRO_SEND_DMX_B_RQ
+	}
+
+	if(Buffer.alloc !== undefined) {
+		this.universe = Buffer.alloc(513, 0);
+		this.header = Buffer.from([
+			DMXKING_ULTRA_DMX_PRO_START_OF_MSG,
+			this.sendDMXReq,
+			 (this.universe.length)       & 0xff,
+			((this.universe.length) >> 8) & 0xff,
+			DMXKING_ULTRA_DMX_PRO_DMX_STARTCODE
+		]);
+		this.tail = Buffer.from([DMXKING_ULTRA_DMX_PRO_END_OF_MSG]);
+	}
+	else {
+		this.universe = new Buffer(513);
+		this.universe.fill(0);
+		this.header = Buffer([
+			DMXKING_ULTRA_DMX_PRO_START_OF_MSG,
+			this.sendDMXReq,
+			 (this.universe.length)       & 0xff,
+			((this.universe.length) >> 8) & 0xff,
+			DMXKING_ULTRA_DMX_PRO_DMX_STARTCODE
+		]);
+		this.tail = Buffer([DMXKING_ULTRA_DMX_PRO_END_OF_MSG]);
 	}
 
 	this.dev = new SerialPort(device_id, {
@@ -40,18 +61,11 @@ DMXKingUltraDMXPro.prototype.send_universe = function() {
 	if(!this.dev.writable) {
 		return
 	}
-	var hdr = Buffer([
-		DMXKING_ULTRA_DMX_PRO_START_OF_MSG,
-		this.sendDMXReq,
-		 (this.universe.length)       & 0xff,
-		((this.universe.length) >> 8) & 0xff,
-		DMXKING_ULTRA_DMX_PRO_DMX_STARTCODE
-	])
 
 	var msg = Buffer.concat([
-		hdr,
+		this.header,
 		this.universe.slice(1),
-		Buffer([DMXKING_ULTRA_DMX_PRO_END_OF_MSG])
+		this.tail
 	])
 	this.dev.write(msg)
 }
