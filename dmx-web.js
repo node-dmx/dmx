@@ -23,7 +23,7 @@ function DMXWeb() {
 	var server = http.createServer(app)
 	var io     = socketio.listen(server)
 
-	var dmx = new DMX()
+	var dmx = new DMX(config)
 
 	for(var universe in config.universes) {
 		dmx.addUniverse(
@@ -56,7 +56,7 @@ function DMXWeb() {
 	})
 
 	app.get('/config', function(req, res) {
-		var response = {"devices": DMX.devices, "universes": {}}
+		var response = {"devices": dmx.devices, "universes": {}}
 		Object.keys(config.universes).forEach(function(key) {
 			response.universes[key] = config.universes[key].devices
 		})
@@ -108,7 +108,7 @@ function DMXWeb() {
 	})
 
 	io.sockets.on('connection', function(socket) {
-		socket.emit('init', {'devices': DMX.devices, 'setup': config})
+		socket.emit('init', {'devices': dmx.devices, 'setup': config})
 
 		socket.on('request_refresh', function() {
 			for(var universe in config.universes) {

@@ -4,10 +4,12 @@ var util = require('util')
 var EventEmitter = require('events').EventEmitter
 
 function DMX(options) {
-	var options = options || {}
+    var options = options || {}
+    var devices = options.devices || {}
 	this.universes = {}
 	this.drivers   = {}
-	this.devices   = options.devices || require('./devices')
+    this.devices = Object.assign({}, require('./devices'), devices);
+    this.animation = require('./anim')
 
 	this.registerDriver('null',                   require('./drivers/null'))
 	this.registerDriver('dmx4all',                require('./drivers/dmx4all'))
