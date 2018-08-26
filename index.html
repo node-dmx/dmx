@@ -57,7 +57,11 @@
 		}
 
 		function rgb_to_array(str) {
-			m = str.match(/^#([0-9a-f]{6})$/i)[1];
+		    matches = str.match(/^#([0-9a-f]{6})$/i)
+			if (!matches) {
+		        return [0,0,0]
+			}
+			m = matches[1];
 			if(m) {
 				return [
 					parseInt(m.substr(0,2),16),
