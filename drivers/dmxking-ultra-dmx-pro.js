@@ -14,8 +14,7 @@ var	  DMXKING_ULTRA_DMX_PRO_DMX_STARTCODE   = 0x00
 function DMXKingUltraDMXPro(device_id, options) {
 	var self = this
 	this.options = options || {}
-	this.universe = new Buffer(513)
-	this.universe.fill(0)
+    this.universe = Buffer.alloc(513, 0);
 
 	this.sendDMXReq = DMXKING_ULTRA_DMX_PRO_SEND_DMX_RQ
 	if (this.options.port === "A") {
@@ -40,7 +39,7 @@ DMXKingUltraDMXPro.prototype.send_universe = function() {
 	if(!this.dev.writable) {
 		return
 	}
-	var hdr = Buffer([
+	var hdr = Buffer.from([
 		DMXKING_ULTRA_DMX_PRO_START_OF_MSG,
 		this.sendDMXReq,
 		 (this.universe.length)       & 0xff,
@@ -51,7 +50,7 @@ DMXKingUltraDMXPro.prototype.send_universe = function() {
 	var msg = Buffer.concat([
 		hdr,
 		this.universe.slice(1),
-		Buffer([DMXKING_ULTRA_DMX_PRO_END_OF_MSG])
+		Buffer.from([DMXKING_ULTRA_DMX_PRO_END_OF_MSG])
 	])
 	this.dev.write(msg)
 }
