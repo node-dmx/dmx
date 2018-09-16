@@ -14,7 +14,7 @@ var	  DMXKING_ULTRA_DMX_PRO_DMX_STARTCODE   = 0x00
 function DMXKingUltraDMXPro(device_id, options) {
 	var self = this
 	this.options = options || {}
-    this.universe = Buffer.alloc(513, 0);
+	this.universe = Buffer.alloc(513, 0);
 
 	this.sendDMXReq = DMXKING_ULTRA_DMX_PRO_SEND_DMX_RQ
 	if (this.options.port === "A") {
