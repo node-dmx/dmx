@@ -74,6 +74,8 @@ Anim.prototype.run = function(universe, onFinish) {
 
 	ani_setup()
 	var iid = this.interval = setInterval(ani_step, resolution)
+
+	return this
 }
 
 module.exports = Anim
