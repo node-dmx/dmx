@@ -12,8 +12,7 @@ var	  ENTTEC_PRO_DMX_STARTCODE = 0x00
 function EnttecUSBDMXPRO(device_id, options) {
 	var self = this
 	options = options || {}
-	this.universe = new Buffer(513)
-	this.universe.fill(0)
+	this.universe = Buffer.alloc(513, 0);
 
 	this.dev = new SerialPort(device_id, {
 		'baudRate': 250000,
@@ -31,7 +30,7 @@ EnttecUSBDMXPRO.prototype.send_universe = function() {
 	if(!this.dev.writable) {
 		return
 	}
-	var hdr = Buffer([
+	var hdr = Buffer.from([
 		ENTTEC_PRO_START_OF_MSG,
 		ENTTEC_PRO_SEND_DMX_RQ,
 		 (this.universe.length)       & 0xff,
@@ -42,7 +41,7 @@ EnttecUSBDMXPRO.prototype.send_universe = function() {
 	var msg = Buffer.concat([
 		hdr,
 		this.universe.slice(1),
-		Buffer([ENTTEC_PRO_END_OF_MSG])
+		Buffer.from([ENTTEC_PRO_END_OF_MSG])
 	])
 	this.dev.write(msg)
 }

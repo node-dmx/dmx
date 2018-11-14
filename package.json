@@ -28,5 +28,8 @@
 						"name": "MIT",
 						"url": "http://www.opensource.org/licenses/mit-license.php"
 				}
-		]
+		],
+		"engines": {
+			"node": ">=5.1.0"
+		}
 }
