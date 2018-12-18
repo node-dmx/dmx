@@ -1,9 +1,10 @@
 "use strict"
 
 var DMX = require('./dmx');
-var A = DMX.Animation;
 
 var dmx = new DMX();
+var A = dmx.animation;
+
 // var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
 var universe = dmx.addUniverse('demo', 'null')
 
