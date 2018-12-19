@@ -1,42 +1,42 @@
-"use strict"
+function Null(deviceId, options) {
+  const self = this;
 
-function Null(device_id, options) {
-	var self = this
-	options = options || {}
-	this.universe = Buffer.alloc(513, 0);
-	self.start()
+  options = options || {};
+  this.universe = Buffer.alloc(513, 0);
+  self.start();
 }
 
-Null.prototype.start = function() {
-	var self = this
-	self.timeout = setInterval(function() {
-		console.log(self.universe)
-	}, 1000)
-}
+Null.prototype.start = function () {
+  const self = this;
 
-Null.prototype.stop = function() {
-	clearInterval(this.timeout)
-}
+  self.timeout = setInterval(() => {
+    console.log(self.universe);
+  }, 1000);
+};
 
-Null.prototype.close = function(cb) {
-	cb(null)
-}
+Null.prototype.stop = function () {
+  clearInterval(this.timeout);
+};
 
-Null.prototype.update = function(u) {
-	for(var c in u) {
-		this.universe[c] = u[c]
-	}
-	console.log(this.universe.slice(1))
-}
+Null.prototype.close = cb => {
+  cb(null);
+};
 
-Null.prototype.updateAll = function(v){
-	for(var i = 1; i <= 512; i++) {
-		this.universe[i] = v
-	}
-}
+Null.prototype.update = function (u) {
+  for (const c in u) {
+    this.universe[c] = u[c];
+  }
+  console.log(this.universe.slice(1));
+};
 
-Null.prototype.get = function(c) {
-	return this.universe[c]
-}
+Null.prototype.updateAll = function (v) {
+  for (let i = 1; i <= 512; i++) {
+    this.universe[i] = v;
+  }
+};
 
-module.exports = Null
+Null.prototype.get = function (c) {
+  return this.universe[c];
+};
+
+module.exports = Null;
