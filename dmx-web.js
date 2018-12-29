@@ -1,129 +1,128 @@
 #!/usr/bin/env node
-"use strict"
-
-var fs       = require('fs')
-var http     = require('http')
-var body     = require('body-parser')
-var express  = require('express')
-var socketio = require('socket.io')
-var program  = require('commander')
-var DMX      = require('./dmx')
-var A        = DMX.Animation
+const fs = require('fs');
+const http = require('http');
+const body = require('body-parser');
+const express = require('express');
+const socketio = require('socket.io');
+const program = require('commander');
+const DMX = require('./dmx');
+const A = DMX.Animation;
 
 program
-	.version("0.0.1")
-	.option('-c, --config <file>', 'Read config from file [/etc/dmx-web.json]', '/etc/dmx-web.json')
-	.parse(process.argv)
+  .version('0.0.1')
+  .option('-c, --config <file>', 'Read config from file [/etc/dmx-web.json]', '/etc/dmx-web.json')
+  .parse(process.argv);
 
-
-var	config = JSON.parse(fs.readFileSync(program.config, 'utf8'))
+const	config = JSON.parse(fs.readFileSync(program.config, 'utf8'));
 
 function DMXWeb() {
-	var app    = express()
-	var server = http.createServer(app)
-	var io     = socketio.listen(server)
+  const app = express();
+  const server = http.createServer(app);
+  const io = socketio.listen(server);
 
-	var dmx = new DMX(config)
+  const dmx = new DMX(config);
 
-	for(var universe in config.universes) {
-		dmx.addUniverse(
-			universe,
-			config.universes[universe].output.driver,
-			config.universes[universe].output.device,
-			config.universes[universe].output.options
-		)
-	}
+  for (const universe in config.universes) {
+    dmx.addUniverse(
+      universe,
+      config.universes[universe].output.driver,
+      config.universes[universe].output.device,
+      config.universes[universe].output.options
+    );
+  }
 
-	var listen_port = config.server.listen_port || 8080
-	var listen_host = config.server.listen_host || '::'
+  const listenPort = config.server.listen_port || 8080;
+  const listenHost = config.server.listen_host || '::';
 
-	server.listen(listen_port, listen_host, null, function() {
-		if(config.server.uid && config.server.gid) {
-			try {
-				process.setuid(config.server.uid)
-				process.setgid(config.server.gid)
-			} catch (err) {
-				console.log(err)
-				process.exit(1)
-			}
-		}
-	})
+  server.listen(listenPort, listenHost, null, () => {
+    if (config.server.uid && config.server.gid) {
+      try {
+        process.setuid(config.server.uid);
+        process.setgid(config.server.gid);
+      } catch (err) {
+        console.log(err);
+        process.exit(1);
+      }
+    }
+  });
 
-	app.use(body.json())
+  app.use(body.json());
 
-	app.get('/', function(req, res) {
-		res.sendFile(__dirname + '/index.html')
-	})
+  app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+  });
 
-	app.get('/config', function(req, res) {
-		var response = {"devices": dmx.devices, "universes": {}}
-		Object.keys(config.universes).forEach(function(key) {
-			response.universes[key] = config.universes[key].devices
-		})
+  app.get('/config', (req, res) => {
+    const response = {'devices': dmx.devices, 'universes': {}};
 
-		res.json(response)
-	})
+    Object.keys(config.universes).forEach(key => {
+      response.universes[key] = config.universes[key].devices;
+    });
 
-	app.get('/state/:universe', function(req, res) {
-		if(!(req.params.universe in dmx.universes)) {
-			res.status(404).json({"error": "universe not found"})
-			return
-		}
+    res.json(response);
+  });
 
-		res.json({"state": dmx.universeToObject(req.params.universe)})
-	})
+  app.get('/state/:universe', (req, res) => {
+    if (!(req.params.universe in dmx.universes)) {
+      res.status(404).json({'error': 'universe not found'});
+      return;
+    }
 
-	app.post('/state/:universe', function(req, res) {
-		if(!(req.params.universe in dmx.universes)) {
-			res.status(404).json({"error": "universe not found"})
-			return
-		}
+    res.json({'state': dmx.universeToObject(req.params.universe)});
+  });
 
-		dmx.update(req.params.universe, req.body)
-		res.json({"state": dmx.universeToObject(req.params.universe)})
-	})
+  app.post('/state/:universe', (req, res) => {
+    if (!(req.params.universe in dmx.universes)) {
+      res.status(404).json({'error': 'universe not found'});
+      return;
+    }
 
-	app.post('/animation/:universe', function(req, res) {
-		try {
-			var universe = dmx.universes[req.params.universe]
+    dmx.update(req.params.universe, req.body);
+    res.json({'state': dmx.universeToObject(req.params.universe)});
+  });
 
-			// preserve old states
-			var old = dmx.universeToObject(req.params.universe)
+  app.post('/animation/:universe', (req, res) => {
+    try {
+      const universe = dmx.universes[req.params.universe];
 
-			var animation = new A()
-			for(var step in req.body) {
-				animation.add(
-					req.body[step].to,
-					req.body[step].duration || 0,
-					req.body[step].options  || {}
-				)
-			}
-			animation.add(old, 0)
-			animation.run(universe)
-			res.json({"success": true})
-		} catch(e) {
-			console.log(e)
-			res.json({"error": String(e)})
-		}
-	})
+      // preserve old states
+      const old = dmx.universeToObject(req.params.universe);
 
-	io.sockets.on('connection', function(socket) {
-		socket.emit('init', {'devices': dmx.devices, 'setup': config})
+      const animation = new A();
 
-		socket.on('request_refresh', function() {
-			for(var universe in config.universes) {
-				socket.emit('update', universe, dmx.universeToObject(universe))
-			}
-		})
+      for (const step in req.body) {
+        animation.add(
+          req.body[step].to,
+          req.body[step].duration || 0,
+          req.body[step].options || {}
+        );
+      }
+      animation.add(old, 0);
+      animation.run(universe);
+      res.json({'success': true});
+    } catch (e) {
+      console.log(e);
+      res.json({'error': String(e)});
+    }
+  });
 
-		socket.on('update', function(universe, update) {
-			dmx.update(universe, update)
-		})
+  io.sockets.on('connection', socket => {
+    socket.emit('init', {'devices': dmx.devices, 'setup': config});
 
-		dmx.on('update', function(universe, update) {
-			socket.emit('update', universe, update)
-		})
-	})
+    socket.on('request_refresh', () => {
+      for (const universe in config.universes) {
+        socket.emit('update', universe, dmx.universeToObject(universe));
+      }
+    });
+
+    socket.on('update', (universe, update) => {
+      dmx.update(universe, update);
+    });
+
+    dmx.on('update', (universe, update) => {
+      socket.emit('update', universe, update);
+    });
+  });
 }
 
-DMXWeb()
+DMXWeb();

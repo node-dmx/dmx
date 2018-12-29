@@ -15,3 +15,9 @@ results
 node_modules
 .project
 .com.greenworldsoft.syncfolderspro
+
+# Remove some common IDE working directories
+.idea
+.vscode
+
+.DS_Store

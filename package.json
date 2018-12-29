@@ -1,35 +1,36 @@
 {
-		"name":		   "dmx",
-		"version":	   "0.1.1",
-		"author":	   "Sebastian Wiedenroth <wiedi@frubar.net>",
-		"description": "DMX library and webservice",
-		"url":		   "https://github.com/wiedi/node-dmx",
-		"main":		   "dmx.js",
-		"bin": {
-						"dmx-web":	 "./dmx-web.js"
-		},
-		"repository": {
-				"type": "git",
-				"url": "https://github.com/wiedi/node-dmx.git"
-		},
-		"keywords": [
-				"DMX",
-				"light control"
-		],
-		"dependencies": {
-				"serialport": "^6.0.4",
-				"socket.io":  "^2.0.4",
-				"express":    "^4.16.2",
-				"body-parser": "^1.5.2",
-				"commander":  "^2.12.2"
-		},
-		"licenses": [
-				{
-						"name": "MIT",
-						"url": "http://www.opensource.org/licenses/mit-license.php"
-				}
-		],
-		"engines": {
-			"node": ">=5.1.0"
-		}
+  "name": "dmx",
+  "version": "0.2.0",
+  "author": "Sebastian Wiedenroth <wiedi@frubar.net>",
+  "description": "DMX library and webservice",
+  "url": "https://github.com/wiedi/node-dmx",
+  "bin": {
+    "dmx-web": "./dmx.js"
+  },
+  "scripts": {
+    "test": "node_modules/eslint/bin/eslint.js -c .eslintrc .; exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wiedi/node-dmx.git"
+  },
+  "keywords": [
+    "DMX",
+    "light control"
+  ],
+  "dependencies": {
+    "body-parser": "^1.5.2",
+    "commander": "^2.12.2",
+    "express": "^4.16.2",
+    "serialport": "^6.0.4",
+    "socket.io": "^2.0.4"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.0.1"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=10.0.0"
+  }
 }
