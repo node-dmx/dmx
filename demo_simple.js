@@ -1,4 +1,4 @@
-const DMX = require('./dmx');
+const DMX = require('./index');
 
 const dmx = new DMX();
 
