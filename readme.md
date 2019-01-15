@@ -129,6 +129,10 @@ Returns a Animation object with the delay step added.
 Run the Animation on the specified universe.
 
 
+## Webinterface
+
+Versions prior to 0.2 included a Webinterface. This has since been moved into its own repository at <https://github.com/node-dmx/dmx-web>
+
 ## Community
 
 We're happy to help. Chat with us on IRC in #node-dmx on freenode.
