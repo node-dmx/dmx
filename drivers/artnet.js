@@ -6,7 +6,7 @@ function ArtnetDriver(deviceId = '127.0.0.1', options = {}) {
   self.header = new Buffer([65, 114, 116, 45, 78, 101, 116, 0, 0, 80, 0, 14]);
   self.sequence = new Buffer([0]);
   self.physical = new Buffer([0]);
-  self.universeId = new Buffer([0x00, 0x00]);
+  self.universe_id = new Buffer([0x00, 0x00]);
   self.length = new Buffer([0x02, 0x00]);
 
   self.universe = new Buffer(513);
@@ -55,7 +55,7 @@ ArtnetDriver.prototype.update = function (u) {
 };
 
 ArtnetDriver.prototype.updateAll = function (v) {
-  for (const i = 1; i <= 512; i++) {
+  for (let i = 1; i <= 512; i++) {
     this.universe[i] = v;
   }
 };
