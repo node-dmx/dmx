@@ -12,7 +12,7 @@ function EnttecODE(deviceId = '127.0.0.1', options = {}) {
   self.universe = new Buffer(513);
   self.universe.fill(0);
 
-  self.sleepTime = 24;
+  self.sleepTime = !isNaN(options.dmx_speed) ? option.rate * 1000 : 24;
 
   self.universe_id.writeInt16LE(options.universe || 0, 0);
   self.host = deviceId;
