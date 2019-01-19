@@ -12,7 +12,11 @@ function ArtnetDriver(deviceId = '127.0.0.1', options = {}) {
   self.universe = Buffer.alloc(513);
   self.universe.fill(0);
 
-  self.sleepTime = !isNaN(options.dmx_speed) ? option.rate * 1000 : 24;
+  /**
+   * Allow artnet rate to be set and default to 44Hz 
+   * @type Number
+   */
+  self.sleepTime = !isNaN(options.dmx_speed) ? 1000 / options.dmx_speed : 24;
 
   self.universe_id.writeInt16LE(options.universe || 0, 0);
   self.host = deviceId;
