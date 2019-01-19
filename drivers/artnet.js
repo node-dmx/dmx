@@ -1,6 +1,6 @@
 const dgram = require('dgram');
 
-function EnttecODE(deviceId = '127.0.0.1', options = {}) {
+function ArtnetDriver(deviceId = '127.0.0.1', options = {}) {
   const self = this;
 
   self.header = new Buffer([65, 114, 116, 45, 78, 101, 116, 0, 0, 80, 0, 14]);
@@ -22,7 +22,7 @@ function EnttecODE(deviceId = '127.0.0.1', options = {}) {
   self.start();
 }
 
-EnttecODE.prototype.sendUniverse = function () {
+ArtnetDriver.prototype.sendUniverse = function () {
   const pkg = Buffer.concat([
     this.header,
     this.sequence,
@@ -35,33 +35,33 @@ EnttecODE.prototype.sendUniverse = function () {
   this.dev.send(pkg, 0, pkg.length, this.port, this.host);
 };
 
-EnttecODE.prototype.start = function () {
+ArtnetDriver.prototype.start = function () {
   this.timeout = setInterval(this.sendUniverse.bind(this), this.sleepTime);
 };
 
-EnttecODE.prototype.stop = function () {
+ArtnetDriver.prototype.stop = function () {
   clearInterval(this.timeout);
 };
 
-EnttecODE.prototype.close = function (cb) {
+ArtnetDriver.prototype.close = function (cb) {
   this.stop();
   cb(null);
 };
 
-EnttecODE.prototype.update = function (u) {
+ArtnetDriver.prototype.update = function (u) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
 };
 
-EnttecODE.prototype.updateAll = function (v) {
+ArtnetDriver.prototype.updateAll = function (v) {
   for (const i = 1; i <= 512; i++) {
     this.universe[i] = v;
   }
 };
 
-EnttecODE.prototype.get = function (c) {
+ArtnetDriver.prototype.get = function (c) {
   return this.universe[c];
 };
 
-module.exports = EnttecODE;
+module.exports = ArtnetDriver;
