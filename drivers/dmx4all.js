@@ -5,7 +5,7 @@ const UNIVERSE_LEN = 512;
 function DMX4ALL(deviceId, options = {}) {
   const self = this;
 
-  this.universe = new Buffer(UNIVERSE_LEN + 1);
+  this.universe = Buffer.alloc(UNIVERSE_LEN + 1);
   this.universe.fill(0);
 
   this.dev = new SerialPort(deviceId, {
@@ -28,7 +28,7 @@ DMX4ALL.prototype.sendUniverse = function () {
     return;
   }
 
-  const msg = Buffer(UNIVERSE_LEN * 3);
+  const msg = Buffer.alloc(UNIVERSE_LEN * 3);
 
   for (let i = 0; i < UNIVERSE_LEN; i++) {
     msg[i * 3 + 0] = (i < 256) ? 0xE2 : 0xE3;
