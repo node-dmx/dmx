@@ -86,7 +86,9 @@ class Anim {
 
   runRepeat(universe) {
     const doAnimation = () => {
-      this.run(universe, doAnimation)
+      this.run(universe, () => {
+        setImmediate(doAnimation)
+      })
     }
 
     doAnimation()
