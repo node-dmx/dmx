@@ -6,7 +6,6 @@ function DMX4ALL(deviceId, options = {}) {
   const self = this;
 
   this.universe = Buffer.alloc(UNIVERSE_LEN + 1);
-  this.universe.fill(0);
 
   this.dev = new SerialPort(deviceId, {
     'baudRate': 38400,

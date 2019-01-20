@@ -7,7 +7,6 @@ function BBDMX(deviceId = '127.0.0.1', options = {}) {
 
   self.options = options;
   self.universe = Buffer.alloc(UNIVERSE_LEN + 1);
-  self.universe.fill(0);
   self.host = deviceId;
   self.port = self.options.port || 9930;
   self.dev = dgram.createSocket('udp4');
@@ -17,10 +16,10 @@ function BBDMX(deviceId = '127.0.0.1', options = {}) {
 
 BBDMX.prototype.sendUniverse = function () {
   let channel;
-  let messageBuffer = Buffer.alloc(UNIVERSE_LEN.toString());
+  let messageBuffer = Buffer.from(UNIVERSE_LEN.toString());
 
   for (const i = 1; i <= UNIVERSE_LEN; i++) {
-    channel = Buffer.alloc(' ' + this.universe[i]);
+    channel = Buffer.from(' ' + this.universe[i]);
     messageBuffer = Buffer.concat([messageBuffer, channel]);
   }
   this.dev.send(messageBuffer, 0, messageBuffer.length, this.port, this.host);

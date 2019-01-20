@@ -6,7 +6,6 @@ function EnttecOpenUsbDMX(deviceId, options) {
   options = options || {};
 
   this.universe = Buffer.alloc(513);
-  this.universe.fill(0);
 
   self.interval = 46;
 
