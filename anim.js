@@ -78,6 +78,16 @@ class Anim {
 
     return this;
   }
+
+  runRepeat(universe) {
+    const doAnimation = () => {
+      this.run(universe, doAnimation)
+    }
+
+    doAnimation()
+
+    return this
+  }
 }
 
 module.exports = Anim;
