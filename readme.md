@@ -128,6 +128,25 @@ Returns a Animation object with the delay step added.
 
 Run the Animation on the specified universe.
 
+#### animation.runLoop(universe)
+
+- <code>universe</code> - Object, reference to the universe driver
+
+Runs an animation constantly until <code>animation.stop()</code> is called
+
+The example below shows a value being animated for 5 seconds:
+```
+const animation = new DMX.Animation().add({
+  1: 255,
+}, 100).add({
+  1: 0,
+}, 100).runLoop(universe)
+
+
+setTimeout(() => {
+  animation.stop()
+}, 5000)
+```
 
 ## Webinterface
 

@@ -1,5 +1,5 @@
 const ease = require('./easing.js').ease;
-const resolution = 25;
+const resolution = 1;
 
 class Anim {
   constructor() {
@@ -38,7 +38,12 @@ class Anim {
     const aniSetup = () => {
       animationStep = stack.shift();
       ticks = 0;
-      duration = animationStep.duration;
+
+      /**
+       * Set duration and force to be at least one
+       * @type Number
+       */
+      duration = !isNaN(animationStep.duration) && animationStep.duration < 1 ? 1 : animationStep.duration;
 
       config = {};
       for (const k in animationStep.to) {
@@ -77,6 +82,18 @@ class Anim {
     iid = this.interval = setInterval(aniStep, resolution);
 
     return this;
+  }
+
+  runLoop(universe) {
+    const doAnimation = () => {
+      this.run(universe, () => {
+        setImmediate(doAnimation)
+      })
+    }
+
+    doAnimation()
+
+    return this
   }
 }
 
