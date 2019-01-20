@@ -1,18 +1,22 @@
 const dgram = require('dgram');
 
-function EnttecODE(deviceId = '127.0.0.1', options = {}) {
+function ArtnetDriver(deviceId = '127.0.0.1', options = {}) {
   const self = this;
 
-  self.header = new Buffer([65, 114, 116, 45, 78, 101, 116, 0, 0, 80, 0, 14]);
-  self.sequence = new Buffer([0]);
-  self.physical = new Buffer([0]);
-  self.universe_id = new Buffer([0x00, 0x00]);
-  self.length = new Buffer([0x02, 0x00]);
+  self.header = Buffer.from([65, 114, 116, 45, 78, 101, 116, 0, 0, 80, 0, 14]);
+  self.sequence = Buffer.from([0]);
+  self.physical = Buffer.from([0]);
+  self.universe_id = Buffer.from([0x00, 0x00]);
+  self.length = Buffer.from([0x02, 0x00]);
 
-  self.universe = new Buffer(513);
+  self.universe = Buffer.alloc(513);
   self.universe.fill(0);
 
-  self.sleepTime = 24;
+  /**
+   * Allow artnet rate to be set and default to 44Hz 
+   * @type Number
+   */
+  self.sleepTime = !isNaN(options.dmx_speed) ? 1000 / options.dmx_speed : 24;
 
   self.universe_id.writeInt16LE(options.universe || 0, 0);
   self.host = deviceId;
@@ -22,7 +26,7 @@ function EnttecODE(deviceId = '127.0.0.1', options = {}) {
   self.start();
 }
 
-EnttecODE.prototype.sendUniverse = function () {
+ArtnetDriver.prototype.sendUniverse = function () {
   const pkg = Buffer.concat([
     this.header,
     this.sequence,
@@ -35,33 +39,33 @@ EnttecODE.prototype.sendUniverse = function () {
   this.dev.send(pkg, 0, pkg.length, this.port, this.host);
 };
 
-EnttecODE.prototype.start = function () {
+ArtnetDriver.prototype.start = function () {
   this.timeout = setInterval(this.sendUniverse.bind(this), this.sleepTime);
 };
 
-EnttecODE.prototype.stop = function () {
+ArtnetDriver.prototype.stop = function () {
   clearInterval(this.timeout);
 };
 
-EnttecODE.prototype.close = function (cb) {
+ArtnetDriver.prototype.close = function (cb) {
   this.stop();
   cb(null);
 };
 
-EnttecODE.prototype.update = function (u) {
+ArtnetDriver.prototype.update = function (u) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
 };
 
-EnttecODE.prototype.updateAll = function (v) {
+ArtnetDriver.prototype.updateAll = function (v) {
   for (let i = 1; i <= 512; i++) {
     this.universe[i] = v;
   }
 };
 
-EnttecODE.prototype.get = function (c) {
+ArtnetDriver.prototype.get = function (c) {
   return this.universe[c];
 };
 
-module.exports = EnttecODE;
+module.exports = ArtnetDriver;
