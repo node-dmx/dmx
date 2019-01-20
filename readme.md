@@ -128,7 +128,7 @@ Returns a Animation object with the delay step added.
 
 Run the Animation on the specified universe.
 
-#### animation.runRepeat(universe)
+#### animation.runLoop(universe)
 
 - <code>universe</code> - Object, reference to the universe driver
 
@@ -140,7 +140,7 @@ const animation = new DMX.Animation().add({
   1: 255,
 }, 100).add({
   1: 0,
-}, 100).runRepeat(universe)
+}, 100).runLoop(universe)
 
 
 setTimeout(() => {
