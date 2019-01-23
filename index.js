@@ -26,12 +26,16 @@ class DMX {
 
   addUniverse(name, driver, deviceId, options) {
     this.universes[name] = new this.drivers[driver](deviceId, options);
+
+    this.universes[name].on("update", (channels) => {
+      this.emit('update', name, channels);
+    })
+
     return this.universes[name];
   }
 
   update(universe, channels) {
     this.universes[universe].update(channels);
-    this.emit('update', universe, channels);
   }
 
   updateAll(universe, value) {

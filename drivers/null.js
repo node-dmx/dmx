@@ -1,4 +1,7 @@
-function Null(deviceId, options) {
+const util = require('util');
+const EventEmitter = require('events').EventEmitter;
+
+function NullDriver(deviceId, options) {
   const self = this;
 
   options = options || {};
@@ -6,7 +9,7 @@ function Null(deviceId, options) {
   self.start();
 }
 
-Null.prototype.start = function () {
+NullDriver.prototype.start = function () {
   const self = this;
 
   self.timeout = setInterval(() => {
@@ -14,29 +17,33 @@ Null.prototype.start = function () {
   }, 1000);
 };
 
-Null.prototype.stop = function () {
+NullDriver.prototype.stop = function () {
   clearInterval(this.timeout);
 };
 
-Null.prototype.close = cb => {
-  cb(null);
+NullDriver.prototype.close = cb => {
+  cb(nullDriver);
 };
 
-Null.prototype.update = function (u) {
+NullDriver.prototype.update = function (u) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
   console.log(this.universe.slice(1));
+
+  this.emit('update', u);
 };
 
-Null.prototype.updateAll = function (v) {
+NullDriver.prototype.updateAll = function (v) {
   for (let i = 1; i <= 512; i++) {
     this.universe[i] = v;
   }
 };
 
-Null.prototype.get = function (c) {
+NullDriver.prototype.get = function (c) {
   return this.universe[c];
 };
 
-module.exports = Null;
+util.inherits(NullDriver, EventEmitter);
+
+module.exports = NullDriver;

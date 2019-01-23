@@ -1,4 +1,6 @@
 const dgram = require('dgram');
+const util = require('util');
+const EventEmitter = require('events').EventEmitter;
 
 function ArtnetDriver(deviceId = '127.0.0.1', options = {}) {
   const self = this;
@@ -56,6 +58,8 @@ ArtnetDriver.prototype.update = function (u) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
+
+  this.emit('update', u);
 };
 
 ArtnetDriver.prototype.updateAll = function (v) {
@@ -67,5 +71,7 @@ ArtnetDriver.prototype.updateAll = function (v) {
 ArtnetDriver.prototype.get = function (c) {
   return this.universe[c];
 };
+
+util.inherits(ArtnetDriver, EventEmitter);
 
 module.exports = ArtnetDriver;

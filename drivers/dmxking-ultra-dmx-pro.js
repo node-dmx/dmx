@@ -1,4 +1,6 @@
 const SerialPort = require('serialport');
+const util = require('util');
+const EventEmitter = require('events').EventEmitter;
 
 const DMXKING_ULTRA_DMX_PRO_DMX_STARTCODE = 0x00;
 const DMXKING_ULTRA_DMX_PRO_START_OF_MSG = 0x7e;
@@ -66,6 +68,8 @@ DMXKingUltraDMXPro.prototype.update = function (u) {
     this.universe[c] = u[c];
   }
   this.sendUniverse();
+
+  this.emit('update', u);
 };
 
 DMXKingUltraDMXPro.prototype.updateAll = function (v) {
@@ -78,5 +82,7 @@ DMXKingUltraDMXPro.prototype.updateAll = function (v) {
 DMXKingUltraDMXPro.prototype.get = function (c) {
   return this.universe[c];
 };
+
+util.inherits(DMXKingUltraDMXPro, EventEmitter);
 
 module.exports = DMXKingUltraDMXPro;
