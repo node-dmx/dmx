@@ -1,4 +1,4 @@
-const ease = require('./easing.js').ease;
+const ease = require("./easing.js").ease;
 const resolution = 1;
 
 class Anim {
@@ -8,9 +8,9 @@ class Anim {
   }
 
   add(to, duration = resolution, options = {}) {
-    options.easing = options.easing || 'linear';
+    options.easing = options.easing || "linear";
 
-    this.fxStack.push({ 'to': to, 'duration': duration, 'options': options });
+    this.fxStack.push({ to: to, duration: duration, options: options });
     return this;
   }
 
@@ -33,7 +33,7 @@ class Anim {
     let animationStep;
     let iid = null;
 
-    const stack = [ ...this.fxStack ];
+    const stack = [...this.fxStack];
 
     const aniSetup = () => {
       animationStep = stack.shift();
@@ -43,14 +43,17 @@ class Anim {
        * Set duration and force to be at least one
        * @type Number
        */
-      duration = !isNaN(animationStep.duration) && animationStep.duration < 1 ? 1 : animationStep.duration;
+      duration =
+        !isNaN(animationStep.duration) && animationStep.duration < 1
+          ? 1
+          : animationStep.duration;
 
       config = {};
       for (const k in animationStep.to) {
         config[k] = {
-          'start': universe.get(k),
-          'end': animationStep.to[k],
-          'options': animationStep.options,
+          start: universe.get(k),
+          end: animationStep.to[k],
+          options: animationStep.options
         };
       }
     };
@@ -61,7 +64,10 @@ class Anim {
         const entry = config[k];
         const easing = ease[entry.options.easing];
 
-        newValues[k] = Math.round(entry.start + easing(ticks, 0, 1, duration) * (entry.end - entry.start));
+        newValues[k] = Math.round(
+          entry.start +
+            easing(ticks, 0, 1, duration) * (entry.end - entry.start)
+        );
       }
 
       ticks = ticks + resolution;
@@ -87,13 +93,13 @@ class Anim {
   runLoop(universe) {
     const doAnimation = () => {
       this.run(universe, () => {
-        setImmediate(doAnimation)
-      })
-    }
+        setImmediate(doAnimation);
+      });
+    };
 
-    doAnimation()
+    doAnimation();
 
-    return this
+    return this;
   }
 }
 

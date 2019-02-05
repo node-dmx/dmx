@@ -1,4 +1,4 @@
-const SerialPort = require('serialport');
+const SerialPort = require("serialport");
 
 function EnttecOpenUsbDMX(deviceId, options) {
   const self = this;
@@ -9,21 +9,25 @@ function EnttecOpenUsbDMX(deviceId, options) {
 
   self.interval = 46;
 
-  this.dev = new SerialPort(deviceId, {
-    'baudRate': 250000,
-    'dataBits': 8,
-    'stopBits': 2,
-    'parity': 'none',
-  }, err => {
-    if (err) {
-      console.log(err);
-      return;
+  this.dev = new SerialPort(
+    deviceId,
+    {
+      baudRate: 250000,
+      dataBits: 8,
+      stopBits: 2,
+      parity: "none"
+    },
+    err => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      self.start();
     }
-    self.start();
-  });
+  );
 }
 
-EnttecOpenUsbDMX.prototype.sendUniverse = function () {
+EnttecOpenUsbDMX.prototype.sendUniverse = function() {
   const self = this;
 
   if (!this.dev.writable) {
@@ -31,9 +35,9 @@ EnttecOpenUsbDMX.prototype.sendUniverse = function () {
   }
 
   // toggle break
-  self.dev.set({brk: true, rts: true}, (err, r) => {
+  self.dev.set({ brk: true, rts: true }, (err, r) => {
     setTimeout(() => {
-      self.dev.set({brk: false, rts: true}, (err, r) => {
+      self.dev.set({ brk: false, rts: true }, (err, r) => {
         setTimeout(() => {
           self.dev.write(Buffer.concat([Buffer([0]), self.universe.slice(1)]));
         }, 1);
@@ -42,32 +46,35 @@ EnttecOpenUsbDMX.prototype.sendUniverse = function () {
   });
 };
 
-EnttecOpenUsbDMX.prototype.start = function () {
-  this.intervalhandle = setInterval(this.sendUniverse.bind(this), this.interval);
+EnttecOpenUsbDMX.prototype.start = function() {
+  this.intervalhandle = setInterval(
+    this.sendUniverse.bind(this),
+    this.interval
+  );
 };
 
-EnttecOpenUsbDMX.prototype.stop = function () {
+EnttecOpenUsbDMX.prototype.stop = function() {
   clearInterval(this.intervalhandle);
 };
 
-EnttecOpenUsbDMX.prototype.close = function (cb) {
+EnttecOpenUsbDMX.prototype.close = function(cb) {
   this.stop();
   this.dev.close(cb);
 };
 
-EnttecOpenUsbDMX.prototype.update = function (u) {
+EnttecOpenUsbDMX.prototype.update = function(u) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
 };
 
-EnttecOpenUsbDMX.prototype.updateAll = function (v) {
+EnttecOpenUsbDMX.prototype.updateAll = function(v) {
   for (let i = 1; i <= 512; i++) {
     this.universe[i] = v;
   }
 };
 
-EnttecOpenUsbDMX.prototype.get = function (c) {
+EnttecOpenUsbDMX.prototype.get = function(c) {
   return this.universe[c];
 };
 
