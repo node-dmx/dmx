@@ -1,4 +1,6 @@
 const SerialPort = require('serialport');
+const util = require('util');
+const EventEmitter = require('events').EventEmitter;
 
 function EnttecOpenUsbDMX(deviceId, options) {
   const self = this;
@@ -59,6 +61,8 @@ EnttecOpenUsbDMX.prototype.update = function (u) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
+
+  this.emit('update', u);
 };
 
 EnttecOpenUsbDMX.prototype.updateAll = function (v) {
@@ -70,5 +74,7 @@ EnttecOpenUsbDMX.prototype.updateAll = function (v) {
 EnttecOpenUsbDMX.prototype.get = function (c) {
   return this.universe[c];
 };
+
+util.inherits(EnttecOpenUsbDMX, EventEmitter);
 
 module.exports = EnttecOpenUsbDMX;

@@ -1,4 +1,6 @@
 const SerialPort = require('serialport');
+const util = require('util');
+const EventEmitter = require('events').EventEmitter;
 
 const ENTTEC_PRO_DMX_STARTCODE = 0x00;
 const ENTTEC_PRO_START_OF_MSG = 0x7e;
@@ -56,6 +58,8 @@ EnttecUSBDMXPRO.prototype.update = function (u) {
     this.universe[c] = u[c];
   }
   this.sendUniverse();
+
+  this.emit('update', u);
 };
 
 EnttecUSBDMXPRO.prototype.updateAll = function (v) {
@@ -68,5 +72,7 @@ EnttecUSBDMXPRO.prototype.updateAll = function (v) {
 EnttecUSBDMXPRO.prototype.get = function (c) {
   return this.universe[c];
 };
+
+util.inherits(EnttecUSBDMXPRO, EventEmitter);
 
 module.exports = EnttecUSBDMXPRO;

@@ -1,4 +1,6 @@
 const dgram = require('dgram');
+const util = require('util');
+const EventEmitter = require('events').EventEmitter;
 
 const UNIVERSE_LEN = 512;
 
@@ -42,6 +44,8 @@ BBDMX.prototype.update = function (u) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
+
+  this.emit('update', u);
 };
 
 BBDMX.prototype.updateAll = function (v) {
@@ -53,5 +57,7 @@ BBDMX.prototype.updateAll = function (v) {
 BBDMX.prototype.get = function (c) {
   return this.universe[c];
 };
+
+util.inherits(BBDMX, EventEmitter);
 
 module.exports = BBDMX;

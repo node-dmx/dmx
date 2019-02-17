@@ -1,4 +1,6 @@
 const SerialPort = require('serialport');
+const util = require('util');
+const EventEmitter = require('events').EventEmitter;
 
 const UNIVERSE_LEN = 512;
 
@@ -49,6 +51,8 @@ DMX4ALL.prototype.update = function (u) {
     this.universe[c] = u[c];
   }
   this.sendUniverse();
+
+  this.emit('update', u);
 };
 
 DMX4ALL.prototype.updateAll = function (v) {
@@ -61,5 +65,7 @@ DMX4ALL.prototype.updateAll = function (v) {
 DMX4ALL.prototype.get = function (c) {
   return this.universe[c];
 };
+
+util.inherits(DMX4ALL, EventEmitter);
 
 module.exports = DMX4ALL;
