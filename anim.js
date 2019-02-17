@@ -87,13 +87,13 @@ class Anim {
   runLoop(universe) {
     const doAnimation = () => {
       this.run(universe, () => {
-        setImmediate(doAnimation)
-      })
-    }
+        setImmediate(doAnimation);
+      });
+    };
 
-    doAnimation()
+    doAnimation();
 
-    return this
+    return this;
   }
 }
 

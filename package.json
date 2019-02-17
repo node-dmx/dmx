@@ -5,7 +5,7 @@
   "description": "A nodejs DMX library",
   "url": "https://github.com/node-dmx/dmx",
   "scripts": {
-    "test": "node_modules/eslint/bin/eslint.js -c .eslintrc .; exit 0"
+    "test": "node_modules/eslint/bin/eslint.js -c .eslintrc ."
   },
   "repository": {
     "type": "git",

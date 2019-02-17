@@ -22,7 +22,7 @@ NullDriver.prototype.stop = function () {
 };
 
 NullDriver.prototype.close = cb => {
-  cb(nullDriver);
+  cb(null);
 };
 
 NullDriver.prototype.update = function (u) {
