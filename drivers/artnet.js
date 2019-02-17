@@ -6,19 +6,19 @@ function ArtnetDriver(deviceId = '127.0.0.1', options = {}) {
   self.header = Buffer.from([65, 114, 116, 45, 78, 101, 116, 0, 0, 80, 0, 14]);
   self.sequence = Buffer.from([0]);
   self.physical = Buffer.from([0]);
-  self.universe_id = Buffer.from([0x00, 0x00]);
+  self.universeId = Buffer.from([0x00, 0x00]);
   self.length = Buffer.from([0x02, 0x00]);
 
   self.universe = Buffer.alloc(513);
   self.universe.fill(0);
 
   /**
-   * Allow artnet rate to be set and default to 44Hz 
+   * Allow artnet rate to be set and default to 44Hz
    * @type Number
    */
   self.sleepTime = !isNaN(options.dmx_speed) ? 1000 / options.dmx_speed : 24;
 
-  self.universe_id.writeInt16LE(options.universe || 0, 0);
+  self.universeId.writeInt16LE(options.universe || 0, 0);
   self.host = deviceId;
   self.port = options.port || 6454;
   self.dev = dgram.createSocket('udp4');
@@ -31,7 +31,7 @@ ArtnetDriver.prototype.sendUniverse = function () {
     this.header,
     this.sequence,
     this.physical,
-    this.universe_id,
+    this.universeId,
     this.length,
     this.universe.slice(1),
   ]);
