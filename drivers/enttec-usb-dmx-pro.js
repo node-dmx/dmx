@@ -13,6 +13,8 @@ function EnttecUSBDMXPRO(deviceId, options = {}) {
 
   this.universe = Buffer.alloc(513, 0);
 
+  this.readyToWrite = true;
+
   this.dev = new SerialPort(deviceId, {
     'baudRate': 250000,
     'dataBits': 8,
@@ -43,7 +45,13 @@ EnttecUSBDMXPRO.prototype.sendUniverse = function () {
     Buffer.from([ENTTEC_PRO_END_OF_MSG]),
   ]);
 
-  this.dev.write(msg);
+  if (this.readyToWrite) {
+    this.dev.write(msg);
+    this.readyToWrite = false;
+  }
+  this.dev.drain(() => {
+    this.readyToWrite = true;
+  });
 };
 
 EnttecUSBDMXPRO.prototype.start = () => { };
