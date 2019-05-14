@@ -5,6 +5,7 @@ class Anim {
   constructor() {
     this.fxStack = [];
     this.interval = null;
+    this.lastFrameAt = 0;
   }
 
   add(to, duration = resolution, options = {}) {
@@ -32,6 +33,8 @@ class Anim {
     let duration = 0;
     let animationStep;
     let iid = null;
+
+    this.lastFrameAt = Date.now();
 
     const stack = [ ...this.fxStack ];
 
@@ -79,7 +82,8 @@ class Anim {
     };
 
     aniSetup();
-    iid = this.interval = setInterval(aniStep, resolution);
+    setTimeout(aniStep, 5);
+    // iid = this.interval = setInterval(aniStep, resolution);
 
     return this;
   }
