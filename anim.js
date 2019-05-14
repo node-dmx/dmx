@@ -4,7 +4,7 @@ class Anim {
   constructor({ targetFPS } = {}) {
     this.targetFPS = targetFPS || 1;
     this.fxStack = [];
-    this.interval = null;
+    this.timeout = null;
     this.lastFrameAt = 0;
   }
 
@@ -21,8 +21,8 @@ class Anim {
   }
 
   stop() {
-    if (this.interval) {
-      clearInterval(this.interval);
+    if (this.timeout) {
+      clearTimeout(this.timeout);
     }
     this.fxStack = [];
   }
@@ -32,12 +32,18 @@ class Anim {
     let elapsedTime = 0;
     let duration = 0;
     let animationStep;
-    let iid = null;
     let lastFrameTime;
 
     const stack = [ ...this.fxStack ];
 
-    const runNext = (callback) => {
+    const runNext = (animationStepFunction) => {
+      if (stack.length === 0) {
+        if (onFinish) {
+          onFinish();
+        }
+        return;
+      }
+
       animationStep = stack.shift();
       duration = animationStep.duration;
       elapsedTime = 0;
@@ -52,45 +58,40 @@ class Anim {
         };
       }
 
-      if (callback) {
-        callback();
-      }
+      animationStepFunction();
     };
 
     const aniStep = () => {
       const now = new Date();
       const frameElapsedTime = now - lastFrameTime;
 
+      this.timeout = setTimeout(aniStep, this.targetFPS);
       lastFrameTime = now;
-      iid = this.interval = setTimeout(aniStep, this.targetFPS);
 
-      const newValues = {};
+      if (elapsedTime >= duration) {
+        const newValues = {};
 
-      for (const k in config) {
-        const entry = config[k];
-        const easing = ease[entry.options.easing];
-
-        if (duration) {
-          newValues[k] = Math.round(
-            entry.start + easing(Math.min(elapsedTime, duration), 0, 1, duration) * (entry.end - entry.start)
-          );
-        } else {
-          newValues[k] = entry.end || 0;
+        for (const k in config) {
+          newValues[k] = config[k].end || 0;
         }
+        universe.update(newValues);
+
+        clearTimeout(this.timeout);
+        runNext(aniStep);
+      } else {
+        const newValues = {};
+
+        for (const k in config) {
+          const entry = config[k];
+          const easing = ease[entry.options.easing];
+          const offset = easing(Math.min(elapsedTime, duration), 0, 1, duration) * (entry.end - entry.start);
+
+          newValues[k] = Math.round(entry.start + offset);
+        }
+        universe.update(newValues, { skipIfBusy: true });
       }
 
       elapsedTime = elapsedTime + frameElapsedTime;
-      universe.update(newValues);
-      if (elapsedTime >= duration) {
-        clearTimeout(iid);
-        if (stack.length > 0) {
-          runNext(aniStep);
-        } else {
-          if (onFinish) {
-            onFinish();
-          }
-        }
-      }
     };
 
     runNext(aniStep);

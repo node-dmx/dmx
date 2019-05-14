@@ -27,7 +27,7 @@ function EnttecUSBDMXPRO(deviceId, options = {}) {
   });
 }
 
-EnttecUSBDMXPRO.prototype.sendUniverse = function () {
+EnttecUSBDMXPRO.prototype.sendUniverse = function ({ skipIfBusy } = {}) {
   if (!this.dev.writable) {
     return;
   }
@@ -45,7 +45,7 @@ EnttecUSBDMXPRO.prototype.sendUniverse = function () {
     Buffer.from([ENTTEC_PRO_END_OF_MSG]),
   ]);
 
-  if (this.readyToWrite) {
+  if (!skipIfBusy || this.readyToWrite) {
     this.dev.write(msg);
     this.readyToWrite = false;
   }
@@ -61,11 +61,11 @@ EnttecUSBDMXPRO.prototype.close = function (cb) {
   this.dev.close(cb);
 };
 
-EnttecUSBDMXPRO.prototype.update = function (u) {
+EnttecUSBDMXPRO.prototype.update = function (u, { skipIfBusy } = {}) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
-  this.sendUniverse();
+  this.sendUniverse({ skipIfBusy });
 
   this.emit('update', u);
 };
