@@ -82,8 +82,7 @@ class Anim {
     };
 
     aniSetup();
-    setTimeout(aniStep, 5);
-    // iid = this.interval = setInterval(aniStep, resolution);
+    iid = this.interval = setInterval(aniStep, resolution);
 
     return this;
   }
