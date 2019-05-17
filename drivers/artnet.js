@@ -4,6 +4,7 @@ const EventEmitter = require('events').EventEmitter;
 
 function ArtnetDriver(deviceId = '127.0.0.1', options = {}) {
   const self = this;
+
   this.readyToWrite = true;
 
   self.header = Buffer.from([65, 114, 116, 45, 78, 101, 116, 0, 0, 80, 0, 14]);

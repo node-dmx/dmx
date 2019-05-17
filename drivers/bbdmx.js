@@ -6,6 +6,7 @@ const UNIVERSE_LEN = 512;
 
 function BBDMX(deviceId = '127.0.0.1', options = {}) {
   const self = this;
+
   this.readyToWrite = true;
 
   self.options = options;
