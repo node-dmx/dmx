@@ -8,7 +8,7 @@ const updateMock = jest.fn();
 universe.update = updateMock;
 universe.update({ 1: 255 });
 
-const ANIM_PRECISION = 10;
+const ANIM_PRECISION = 50;
 
 test('fake timers', () => {
   jest.useFakeTimers();

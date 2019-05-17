@@ -118,14 +118,14 @@ class Anim {
     return this;
   }
 
-  run(universe) {
+  run(universe, onFinish) {
     this.reset();
-    this.runNextLoop(universe);
+    this.runNextLoop(universe, onFinish);
   }
 
-  runLoop(universe, loops = Infinity) {
+  runLoop(universe, onFinish, loops = Infinity) {
     this.loops = loops;
-    this.run(universe);
+    this.run(universe, onFinish);
     return this;
   }
 }
