@@ -8,6 +8,7 @@ function DMX4ALL(deviceId, options = {}) {
   const self = this;
 
   this.universe = Buffer.alloc(UNIVERSE_LEN + 1);
+  this.readyToWrite = true;
 
   this.dev = new SerialPort(deviceId, {
     'baudRate': 38400,
@@ -24,7 +25,7 @@ function DMX4ALL(deviceId, options = {}) {
   });
 }
 
-DMX4ALL.prototype.sendUniverse = function () {
+DMX4ALL.prototype.sendUniverse = function ({ skipIfBusy } = {}) {
   if (!this.dev.writable) {
     return;
   }
@@ -36,7 +37,14 @@ DMX4ALL.prototype.sendUniverse = function () {
     msg[i * 3 + 1] = i;
     msg[i * 3 + 2] = this.universe[i + 1];
   }
-  this.dev.write(msg);
+
+  if (!skipIfBusy || this.readyToWrite) {
+    this.dev.write(msg);
+    this.readyToWrite = false;
+  }
+  this.dev.drain(() => {
+    this.readyToWrite = true;
+  });
 };
 
 DMX4ALL.prototype.start = () => {};
@@ -46,20 +54,20 @@ DMX4ALL.prototype.close = function (cb) {
   this.dev.close(cb);
 };
 
-DMX4ALL.prototype.update = function (u) {
+DMX4ALL.prototype.update = function (u, { skipIfBusy } = {}) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
-  this.sendUniverse();
+  this.sendUniverse({ skipIfBusy });
 
   this.emit('update', u);
 };
 
-DMX4ALL.prototype.updateAll = function (v) {
+DMX4ALL.prototype.updateAll = function (v, { skipIfBusy } = {}) {
   for (let i = 1; i <= 512; i++) {
     this.universe[i] = v;
   }
-  this.sendUniverse();
+  this.sendUniverse({ skipIfBusy });
 };
 
 DMX4ALL.prototype.get = function (c) {
