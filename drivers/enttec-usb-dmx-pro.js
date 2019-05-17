@@ -12,7 +12,6 @@ function EnttecUSBDMXPRO(deviceId, options = {}) {
   const self = this;
 
   this.universe = Buffer.alloc(513, 0);
-
   this.readyToWrite = true;
 
   this.dev = new SerialPort(deviceId, {
@@ -70,11 +69,11 @@ EnttecUSBDMXPRO.prototype.update = function (u, { skipIfBusy } = {}) {
   this.emit('update', u);
 };
 
-EnttecUSBDMXPRO.prototype.updateAll = function (v) {
+EnttecUSBDMXPRO.prototype.updateAll = function (v, { skipIfBusy } = {}) {
   for (let i = 1; i <= 512; i++) {
     this.universe[i] = v;
   }
-  this.sendUniverse();
+  this.sendUniverse({ skipIfBusy });
 };
 
 EnttecUSBDMXPRO.prototype.get = function (c) {
