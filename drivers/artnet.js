@@ -4,6 +4,7 @@ const EventEmitter = require('events').EventEmitter;
 
 function ArtnetDriver(deviceId = '127.0.0.1', options = {}) {
   const self = this;
+  this.readyToWrite = true;
 
   self.header = Buffer.from([65, 114, 116, 45, 78, 101, 116, 0, 0, 80, 0, 14]);
   self.sequence = Buffer.from([0]);
@@ -38,7 +39,12 @@ ArtnetDriver.prototype.sendUniverse = function (_) {
     this.universe.slice(1),
   ]);
 
-  this.dev.send(pkg, 0, pkg.length, this.port, this.host);
+  if (this.readyToWrite) {
+    this.readyToWrite = false;
+    this.dev.send(pkg, 0, pkg.length, this.port, this.host, () => {
+      this.readyToWrite = true;
+    });
+  }
 };
 
 ArtnetDriver.prototype.start = function () {
