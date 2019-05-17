@@ -45,12 +45,12 @@ EnttecUSBDMXPRO.prototype.sendUniverse = function ({ skipIfBusy } = {}) {
   ]);
 
   if (!skipIfBusy || this.readyToWrite) {
-    this.dev.write(msg);
     this.readyToWrite = false;
+    this.dev.write(msg);
+    this.dev.drain(() => {
+      this.readyToWrite = true;
+    });
   }
-  this.dev.drain(() => {
-    this.readyToWrite = true;
-  });
 };
 
 EnttecUSBDMXPRO.prototype.start = () => { };
