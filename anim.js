@@ -2,16 +2,25 @@ const ease = require('./easing.js').ease;
 
 class Anim {
   constructor({ targetFPS } = {}) {
-    this.targetFPS = targetFPS || 1;
-    this.fxStack = [];
+    this.targetFrameDelay = targetFPS ? (1000 / targetFPS) : 1;
+    this.animations = [];
+    this.lastAnimation = 0;
     this.timeout = null;
-    this.lastFrameAt = 0;
+    this.duration = 0;
+    this.startTime = 0;
   }
 
   add(to, duration = 0, options = {}) {
     options.easing = options.easing || 'linear';
 
-    this.fxStack.push({ 'to': to, 'duration': duration, 'options': options });
+    this.animations.push({
+      to,
+      options,
+      start: this.duration,
+      end: this.duration + duration,
+    });
+    this.duration += duration;
+
     return this;
   }
 
@@ -24,77 +33,68 @@ class Anim {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
-    this.fxStack = [];
   }
 
   run(universe, onFinish) {
-    let config = {};
-    let elapsedTime = 0;
-    let duration = 0;
-    let animationStep;
-    let lastFrameTime;
+    this.startTime = new Date();
+    this.lastAnimation = 0;
 
-    const stack = [ ...this.fxStack ];
+    const runAnimationStep = () => {
+      const now = new Date();
+      const elapsedTime = now - this.startTime;
 
-    const runNext = (animationStepFunction) => {
-      if (stack.length === 0) {
+      this.timeout = setTimeout(runAnimationStep, this.targetFrameDelay);
+
+      let currentAnimation = this.lastAnimation;
+
+      while (currentAnimation < this.animations.length && elapsedTime >= this.animations[currentAnimation].end) {
+        currentAnimation++;
+      }
+
+      const completedAnimations = this.animations.slice(this.lastAnimation, currentAnimation);
+
+      if (completedAnimations.length) {
+        const completedAnimationStatesToSet = Object.assign({}, ...completedAnimations.map((a) => a.to));
+
+        universe.update(completedAnimationStatesToSet);
+      }
+
+      if (elapsedTime >= this.duration) {
+        this.stop();
         if (onFinish) {
           onFinish();
         }
-        return;
-      }
-
-      animationStep = stack.shift();
-      duration = animationStep.duration;
-      elapsedTime = 0;
-      lastFrameTime = Date.now();
-
-      config = {};
-      for (const k in animationStep.to) {
-        config[k] = {
-          'start': universe.get(k),
-          'end': animationStep.to[k],
-          'options': animationStep.options,
-        };
-      }
-
-      animationStepFunction();
-    };
-
-    const aniStep = () => {
-      const now = new Date();
-      const frameElapsedTime = now - lastFrameTime;
-
-      this.timeout = setTimeout(aniStep, this.targetFPS);
-      lastFrameTime = now;
-
-      if (elapsedTime >= duration) {
-        const newValues = {};
-
-        for (const k in config) {
-          newValues[k] = config[k].end || 0;
-        }
-        universe.update(newValues);
-
-        clearTimeout(this.timeout);
-        runNext(aniStep);
       } else {
-        const newValues = {};
+        const animation = this.animations[currentAnimation];
+        const easing = ease[animation.options.easing];
+        const duration = animation.end - animation.start;
+        const animationElapsedTime = elapsedTime - animation.start;
 
-        for (const k in config) {
-          const entry = config[k];
-          const easing = ease[entry.options.easing];
-          const offset = easing(Math.min(elapsedTime, duration), 0, 1, duration) * (entry.end - entry.start);
-
-          newValues[k] = Math.round(entry.start + offset);
+        if (!animation.from) {
+          animation.from = {};
+          for (const k in animation.to) {
+            animation.from[k] = universe.get(k);
+          }
         }
-        universe.update(newValues, { skipIfBusy: true });
+
+        if (duration) {
+          const easeProgress = easing(Math.min(animationElapsedTime, duration), 0, 1, duration);
+          const intermediateValues = {};
+
+          for (const k in animation.to) {
+            const startValue = animation.from[k];
+            const endValue = animation.to[k];
+
+            intermediateValues[k] = Math.round(startValue + easeProgress * (endValue - startValue));
+          }
+          universe.update(intermediateValues, { skipIfBusy: true });
+        }
       }
 
-      elapsedTime = elapsedTime + frameElapsedTime;
+      this.lastAnimation = currentAnimation;
     };
 
-    runNext(aniStep);
+    runAnimationStep();
 
     return this;
   }
