@@ -16,7 +16,7 @@ function BBDMX(deviceId = '127.0.0.1', options = {}) {
   self.start();
 }
 
-BBDMX.prototype.sendUniverse = function () {
+BBDMX.prototype.sendUniverse = function (_) {
   let channel;
   let messageBuffer = Buffer.from(UNIVERSE_LEN.toString());
 
@@ -40,7 +40,7 @@ BBDMX.prototype.close = function (cb) {
   cb(null);
 };
 
-BBDMX.prototype.update = function (u) {
+BBDMX.prototype.update = function (u, _) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
@@ -48,7 +48,7 @@ BBDMX.prototype.update = function (u) {
   this.emit('update', u);
 };
 
-BBDMX.prototype.updateAll = function (v) {
+BBDMX.prototype.updateAll = function (v, _) {
   for (const i = 1; i <= UNIVERSE_LEN; i++) {
     this.universe[i] = v;
   }
