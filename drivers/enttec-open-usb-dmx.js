@@ -25,7 +25,7 @@ function EnttecOpenUsbDMX(deviceId, options) {
   });
 }
 
-EnttecOpenUsbDMX.prototype.sendUniverse = function () {
+EnttecOpenUsbDMX.prototype.sendUniverse = function (_) {
   const self = this;
 
   if (!this.dev.writable) {
@@ -57,7 +57,7 @@ EnttecOpenUsbDMX.prototype.close = function (cb) {
   this.dev.close(cb);
 };
 
-EnttecOpenUsbDMX.prototype.update = function (u) {
+EnttecOpenUsbDMX.prototype.update = function (u, _) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
@@ -65,7 +65,7 @@ EnttecOpenUsbDMX.prototype.update = function (u) {
   this.emit('update', u);
 };
 
-EnttecOpenUsbDMX.prototype.updateAll = function (v) {
+EnttecOpenUsbDMX.prototype.updateAll = function (v, _) {
   for (let i = 1; i <= 512; i++) {
     this.universe[i] = v;
   }
