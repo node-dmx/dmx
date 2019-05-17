@@ -6,6 +6,7 @@ const UNIVERSE_LEN = 512;
 
 function BBDMX(deviceId = '127.0.0.1', options = {}) {
   const self = this;
+  this.readyToWrite = true;
 
   self.options = options;
   self.universe = Buffer.alloc(UNIVERSE_LEN + 1);
@@ -24,7 +25,13 @@ BBDMX.prototype.sendUniverse = function (_) {
     channel = Buffer.from(' ' + this.universe[i]);
     messageBuffer = Buffer.concat([messageBuffer, channel]);
   }
-  this.dev.send(messageBuffer, 0, messageBuffer.length, this.port, this.host);
+
+  if (this.readyToWrite) {
+    this.readyToWrite = false;
+    this.dev.send(messageBuffer, 0, messageBuffer.length, this.port, this.host, () => {
+      this.readyToWrite = true;
+    });
+  }
 };
 
 BBDMX.prototype.start = function () {
