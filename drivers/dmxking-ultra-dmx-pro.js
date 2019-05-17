@@ -15,6 +15,7 @@ function DMXKingUltraDMXPro(deviceId, options = {}) {
 
   this.options = options;
   this.universe = Buffer.alloc(513, 0);
+  this.readyToWrite = true;
 
   this.sendDMXReq = DMXKING_ULTRA_DMX_PRO_SEND_DMX_RQ;
   if (this.options.port === 'A') {
@@ -35,7 +36,7 @@ function DMXKingUltraDMXPro(deviceId, options = {}) {
   });
 }
 
-DMXKingUltraDMXPro.prototype.sendUniverse = function () {
+DMXKingUltraDMXPro.prototype.sendUniverse = function ({ skipIfBusy } = {}) {
   if (!this.dev.writable) {
     return;
   }
@@ -53,7 +54,13 @@ DMXKingUltraDMXPro.prototype.sendUniverse = function () {
     Buffer.from([DMXKING_ULTRA_DMX_PRO_END_OF_MSG]),
   ]);
 
-  this.dev.write(msg);
+  if (!skipIfBusy || this.readyToWrite) {
+    this.dev.write(msg);
+    this.readyToWrite = false;
+  }
+  this.dev.drain(() => {
+    this.readyToWrite = true;
+  });
 };
 
 DMXKingUltraDMXPro.prototype.start = () => { };
@@ -63,20 +70,20 @@ DMXKingUltraDMXPro.prototype.close = function (cb) {
   this.dev.close(cb);
 };
 
-DMXKingUltraDMXPro.prototype.update = function (u) {
+DMXKingUltraDMXPro.prototype.update = function (u, { skipIfBusy } = {}) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
-  this.sendUniverse();
+  this.sendUniverse({ skipIfBusy });
 
   this.emit('update', u);
 };
 
-DMXKingUltraDMXPro.prototype.updateAll = function (v) {
+DMXKingUltraDMXPro.prototype.updateAll = function (v, { skipIfBusy } = {}) {
   for (let i = 1; i <= 512; i++) {
     this.universe[i] = v;
   }
-  this.sendUniverse();
+  this.sendUniverse({ skipIfBusy });
 };
 
 DMXKingUltraDMXPro.prototype.get = function (c) {
