@@ -28,7 +28,7 @@ function ArtnetDriver(deviceId = '127.0.0.1', options = {}) {
   self.start();
 }
 
-ArtnetDriver.prototype.sendUniverse = function () {
+ArtnetDriver.prototype.sendUniverse = function (_) {
   const pkg = Buffer.concat([
     this.header,
     this.sequence,
@@ -54,7 +54,7 @@ ArtnetDriver.prototype.close = function (cb) {
   cb(null);
 };
 
-ArtnetDriver.prototype.update = function (u) {
+ArtnetDriver.prototype.update = function (u, _) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
@@ -62,7 +62,7 @@ ArtnetDriver.prototype.update = function (u) {
   this.emit('update', u);
 };
 
-ArtnetDriver.prototype.updateAll = function (v) {
+ArtnetDriver.prototype.updateAll = function (v, _) {
   for (let i = 1; i <= 512; i++) {
     this.universe[i] = v;
   }
