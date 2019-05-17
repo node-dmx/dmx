@@ -15,6 +15,7 @@ class Anim {
 
     this.animations.push({
       to,
+      from: options.from,
       options,
       start: this.duration,
       end: this.duration + duration,
