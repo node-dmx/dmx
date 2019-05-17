@@ -1,13 +1,15 @@
 const ease = require('./easing.js').ease;
 
 class Anim {
-  constructor({ targetFPS } = {}) {
+  constructor({ targetFPS, loop } = {}) {
     this.targetFrameDelay = targetFPS ? (1000 / targetFPS) : 1;
     this.animations = [];
     this.lastAnimation = 0;
     this.timeout = null;
     this.duration = 0;
-    this.startTime = 0;
+    this.startTime = null;
+    this.loops = loop || 1;
+    this.currentLoop = 0;
   }
 
   add(to, duration = 0, options = {}) {
@@ -16,7 +18,7 @@ class Anim {
     this.animations.push({
       to,
       from: options.from,
-      options,
+      options: { easing: options.easing },
       start: this.duration,
       end: this.duration + duration,
     });
@@ -36,21 +38,27 @@ class Anim {
     }
   }
 
-  run(universe, onFinish) {
-    this.startTime = new Date();
+  reset(startTime = new Date().getTime()) {
+    this.startTime = startTime;
     this.lastAnimation = 0;
+  }
 
+  runNextLoop(universe, onFinish) {
     const runAnimationStep = () => {
-      const now = new Date();
+      const now = new Date().getTime();
       const elapsedTime = now - this.startTime;
 
       this.timeout = setTimeout(runAnimationStep, this.targetFrameDelay);
+
+      // Find the animation for the current point in time, the latest if multiple match
 
       let currentAnimation = this.lastAnimation;
 
       while (currentAnimation < this.animations.length && elapsedTime >= this.animations[currentAnimation].end) {
         currentAnimation++;
       }
+
+      // Ensure final state of all newly completed animations have been set
 
       const completedAnimations = this.animations.slice(this.lastAnimation, currentAnimation);
 
@@ -60,12 +68,24 @@ class Anim {
         universe.update(completedAnimationStatesToSet);
       }
 
+      this.lastAnimation = currentAnimation;
+
       if (elapsedTime >= this.duration) {
+        // This animation loop is complete
+        this.currentLoop++;
         this.stop();
-        if (onFinish) {
-          onFinish();
+        if (this.currentLoop >= this.loops) {
+          // All loops complete
+          if (onFinish) {
+            onFinish();
+          }
+        } else {
+          // Run next loop
+          this.reset(this.startTime + this.duration);
+          this.runNextLoop(universe);
         }
       } else {
+        // Set intermediate channel values during an animation
         const animation = this.animations[currentAnimation];
         const easing = ease[animation.options.easing];
         const duration = animation.end - animation.start;
@@ -91,8 +111,6 @@ class Anim {
           universe.update(intermediateValues, { skipIfBusy: true });
         }
       }
-
-      this.lastAnimation = currentAnimation;
     };
 
     runAnimationStep();
@@ -100,15 +118,14 @@ class Anim {
     return this;
   }
 
-  runLoop(universe) {
-    const doAnimation = () => {
-      this.run(universe, () => {
-        setImmediate(doAnimation);
-      });
-    };
+  run(universe) {
+    this.reset();
+    this.runNextLoop(universe);
+  }
 
-    doAnimation();
-
+  runLoop(universe, loops = Infinity) {
+    this.loops = loops;
+    this.run(universe);
     return this;
   }
 }
