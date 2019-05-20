@@ -5,30 +5,28 @@ const EventEmitter = require('events').EventEmitter;
 const UNIVERSE_LEN = 512;
 
 function BBDMX(deviceId = '127.0.0.1', options = {}) {
-  const self = this;
-
   this.readyToWrite = true;
-
-  self.options = options;
-  self.universe = Buffer.alloc(UNIVERSE_LEN + 1);
-  self.host = deviceId;
-  self.port = self.options.port || 9930;
-  self.dev = dgram.createSocket('udp4');
-  self.sleepTime = 24;
-  self.start();
+  this.interval = options.dmx_speed ? (1000 / options.dmx_speed) : 24;
+  this.options = options;
+  this.universe = Buffer.alloc(UNIVERSE_LEN + 1);
+  this.host = deviceId;
+  this.port = options.port || 9930;
+  this.dev = dgram.createSocket('udp4');
+  this.start();
 }
 
-BBDMX.prototype.sendUniverse = function (_) {
-  let channel;
-  let messageBuffer = Buffer.from(UNIVERSE_LEN.toString());
-
-  for (const i = 1; i <= UNIVERSE_LEN; i++) {
-    channel = Buffer.from(' ' + this.universe[i]);
-    messageBuffer = Buffer.concat([messageBuffer, channel]);
-  }
-
+BBDMX.prototype.sendUniverse = function () {
   if (this.readyToWrite) {
     this.readyToWrite = false;
+
+    let channel;
+    let messageBuffer = Buffer.from(UNIVERSE_LEN.toString());
+
+    for (const i = 1; i <= UNIVERSE_LEN; i++) {
+      channel = Buffer.from(' ' + this.universe[i]);
+      messageBuffer = Buffer.concat([messageBuffer, channel]);
+    }
+
     this.dev.send(messageBuffer, 0, messageBuffer.length, this.port, this.host, () => {
       this.readyToWrite = true;
     });
@@ -36,11 +34,11 @@ BBDMX.prototype.sendUniverse = function (_) {
 };
 
 BBDMX.prototype.start = function () {
-  this.timeout = setInterval(this.sendUniverse.bind(this), this.sleepTime);
+  this.interval = setInterval(this.sendUniverse.bind(this), this.interval);
 };
 
 BBDMX.prototype.stop = function () {
-  clearInterval(this.timeout);
+  clearInterval(this.interval);
 };
 
 BBDMX.prototype.close = function (cb) {
@@ -48,7 +46,7 @@ BBDMX.prototype.close = function (cb) {
   cb(null);
 };
 
-BBDMX.prototype.update = function (u, _) {
+BBDMX.prototype.update = function (u) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
@@ -56,7 +54,7 @@ BBDMX.prototype.update = function (u, _) {
   this.emit('update', u);
 };
 
-BBDMX.prototype.updateAll = function (v, _) {
+BBDMX.prototype.updateAll = function (v) {
   for (const i = 1; i <= UNIVERSE_LEN; i++) {
     this.universe[i] = v;
   }

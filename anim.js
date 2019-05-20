@@ -108,7 +108,7 @@ class Anim {
 
             intermediateValues[k] = Math.round(startValue + easeProgress * (endValue - startValue));
           }
-          universe.update(intermediateValues, { skipIfBusy: true });
+          universe.update(intermediateValues);
         }
       }
     };

@@ -2,15 +2,10 @@ const SerialPort = require('serialport');
 const util = require('util');
 const EventEmitter = require('events').EventEmitter;
 
-function EnttecOpenUsbDMX(deviceId, options) {
-  const self = this;
-
-  options = options || {};
-
+function EnttecOpenUsbDMX(deviceId, options = {}) {
   this.universe = Buffer.alloc(513);
   this.readyToWrite = true;
-
-  self.interval = 46;
+  this.interval = options.dmx_speed ? (1000 / options.dmx_speed) : 46;
 
   this.dev = new SerialPort(deviceId, {
     'baudRate': 250000,
@@ -18,15 +13,15 @@ function EnttecOpenUsbDMX(deviceId, options) {
     'stopBits': 2,
     'parity': 'none',
   }, err => {
-    if (err) {
-      console.log(err);
-      return;
+    if (!err) {
+      this.start();
+    } else {
+      console.warn(err);
     }
-    self.start();
   });
 }
 
-EnttecOpenUsbDMX.prototype.sendUniverse = function (_) {
+EnttecOpenUsbDMX.prototype.sendUniverse = function () {
   const self = this;
 
   if (!this.dev.writable) {
@@ -64,7 +59,7 @@ EnttecOpenUsbDMX.prototype.close = function (cb) {
   this.dev.close(cb);
 };
 
-EnttecOpenUsbDMX.prototype.update = function (u, _) {
+EnttecOpenUsbDMX.prototype.update = function (u) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
@@ -72,7 +67,7 @@ EnttecOpenUsbDMX.prototype.update = function (u, _) {
   this.emit('update', u);
 };
 
-EnttecOpenUsbDMX.prototype.updateAll = function (v, _) {
+EnttecOpenUsbDMX.prototype.updateAll = function (v) {
   for (let i = 1; i <= 512; i++) {
     this.universe[i] = v;
   }

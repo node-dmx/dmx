@@ -1,20 +1,16 @@
 const util = require('util');
 const EventEmitter = require('events').EventEmitter;
 
-function NullDriver(deviceId, options) {
-  const self = this;
-
-  options = options || {};
+function NullDriver(deviceId, options = {}) {
   this.universe = Buffer.alloc(513, 0);
-  self.start();
+  this.interval = 1000 / (options.dmx_speed || 1);
+  this.start();
 }
 
 NullDriver.prototype.start = function () {
-  const self = this;
-
-  self.timeout = setInterval(() => {
+  this.timeout = setInterval(() => {
     this.logUniverse();
-  }, 1000);
+  }, this.interval);
 };
 
 NullDriver.prototype.stop = function () {
