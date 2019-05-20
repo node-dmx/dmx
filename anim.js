@@ -1,4 +1,4 @@
-const ease = require('./easing.js').ease;
+const ease = require("./easing.js").ease;
 
 class Anim {
   constructor({ loop } = {}) {
@@ -13,14 +13,14 @@ class Anim {
   }
 
   add(to, duration = 0, options = {}) {
-    options.easing = options.easing || 'linear';
+    options.easing = options.easing || "linear";
 
     this.animations.push({
       to,
       from: options.from,
       options: { easing: options.easing },
       start: this.duration,
-      end: this.duration + duration,
+      end: this.duration + duration
     });
     this.duration += duration;
 
@@ -54,16 +54,25 @@ class Anim {
 
       let currentAnimation = this.lastAnimation;
 
-      while (currentAnimation < this.animations.length && elapsedTime >= this.animations[currentAnimation].end) {
+      while (
+        currentAnimation < this.animations.length &&
+        elapsedTime >= this.animations[currentAnimation].end
+      ) {
         currentAnimation++;
       }
 
       // Ensure final state of all newly completed animations have been set
 
-      const completedAnimations = this.animations.slice(this.lastAnimation, currentAnimation);
+      const completedAnimations = this.animations.slice(
+        this.lastAnimation,
+        currentAnimation
+      );
 
       if (completedAnimations.length) {
-        const completedAnimationStatesToSet = Object.assign({}, ...completedAnimations.map((a) => a.to));
+        const completedAnimationStatesToSet = Object.assign(
+          {},
+          ...completedAnimations.map(a => a.to)
+        );
 
         universe.update(completedAnimationStatesToSet);
       }
@@ -99,14 +108,21 @@ class Anim {
         }
 
         if (duration) {
-          const easeProgress = easing(Math.min(animationElapsedTime, duration), 0, 1, duration);
+          const easeProgress = easing(
+            Math.min(animationElapsedTime, duration),
+            0,
+            1,
+            duration
+          );
           const intermediateValues = {};
 
           for (const k in animation.to) {
             const startValue = animation.from[k];
             const endValue = animation.to[k];
 
-            intermediateValues[k] = Math.round(startValue + easeProgress * (endValue - startValue));
+            intermediateValues[k] = Math.round(
+              startValue + easeProgress * (endValue - startValue)
+            );
           }
           universe.update(intermediateValues);
         }
@@ -124,6 +140,7 @@ class Anim {
       this.frameDelay = universe.interval / 2;
     }
     this.reset();
+    this.currentLoop = 0;
     this.runNextLoop(universe, onFinish);
   }
 
