@@ -1,8 +1,8 @@
 const ease = require('./easing.js').ease;
 
 class Anim {
-  constructor({ targetFPS, loop } = {}) {
-    this.targetFrameDelay = targetFPS ? (1000 / targetFPS) : 1;
+  constructor({ loop } = {}) {
+    this.frameDelay = 1;
     this.animations = [];
     this.lastAnimation = 0;
     this.timeout = null;
@@ -48,7 +48,7 @@ class Anim {
       const now = new Date().getTime();
       const elapsedTime = now - this.startTime;
 
-      this.timeout = setTimeout(runAnimationStep, this.targetFrameDelay);
+      this.timeout = setTimeout(runAnimationStep, this.frameDelay);
 
       // Find the animation for the current point in time, the latest if multiple match
 
@@ -119,6 +119,10 @@ class Anim {
   }
 
   run(universe, onFinish) {
+    if (universe.interval) {
+      // Optimisation to run animation updates at double the rate of driver updates using Nyquist's theorem
+      this.frameDelay = universe.interval / 2;
+    }
     this.reset();
     this.runNextLoop(universe, onFinish);
   }
