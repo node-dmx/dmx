@@ -17,8 +17,7 @@ class Anim {
 
     this.animations.push({
       to,
-      from: options.from,
-      options: { easing: options.easing },
+      options,
       start: this.duration,
       end: this.duration + duration
     });
@@ -62,11 +61,15 @@ class Anim {
       }
 
       // Ensure final state of all newly completed animations have been set
-
       const completedAnimations = this.animations.slice(
         this.lastAnimation,
         currentAnimation
       );
+
+      // Ensure future animations interpolate from the most recent state
+      completedAnimations.forEach(completedAnimation => {
+        delete completedAnimation.from;
+      })
 
       if (completedAnimations.length) {
         const completedAnimationStatesToSet = Object.assign(
@@ -104,6 +107,9 @@ class Anim {
           animation.from = {};
           for (const k in animation.to) {
             animation.from[k] = universe.get(k);
+          }
+          if (animation.options.from) {
+            animation.from = Object.assign(animation.from, animation.options.from);
           }
         }
 
