@@ -1,4 +1,4 @@
-const SerialPort = require('serialport');
+const SerialPort = require('../vendor/serialport');
 const util = require('util');
 const EventEmitter = require('events').EventEmitter;
 
