@@ -34,13 +34,13 @@ CFLAGS_CC_Debug := \
 	-std=gnu++1y
 
 INCS_Debug := \
-	-I/home/delos/.node-gyp/11.11.0/include/node \
-	-I/home/delos/.node-gyp/11.11.0/src \
-	-I/home/delos/.node-gyp/11.11.0/deps/openssl/config \
-	-I/home/delos/.node-gyp/11.11.0/deps/openssl/openssl/include \
-	-I/home/delos/.node-gyp/11.11.0/deps/uv/include \
-	-I/home/delos/.node-gyp/11.11.0/deps/zlib \
-	-I/home/delos/.node-gyp/11.11.0/deps/v8/include \
+	-I/home/delos/.node-gyp/10.15.3/include/node \
+	-I/home/delos/.node-gyp/10.15.3/src \
+	-I/home/delos/.node-gyp/10.15.3/deps/openssl/config \
+	-I/home/delos/.node-gyp/10.15.3/deps/openssl/openssl/include \
+	-I/home/delos/.node-gyp/10.15.3/deps/uv/include \
+	-I/home/delos/.node-gyp/10.15.3/deps/zlib \
+	-I/home/delos/.node-gyp/10.15.3/deps/v8/include \
 	-I$(srcdir)/../nan
 
 DEFS_Release := \
@@ -72,13 +72,13 @@ CFLAGS_CC_Release := \
 	-std=gnu++1y
 
 INCS_Release := \
-	-I/home/delos/.node-gyp/11.11.0/include/node \
-	-I/home/delos/.node-gyp/11.11.0/src \
-	-I/home/delos/.node-gyp/11.11.0/deps/openssl/config \
-	-I/home/delos/.node-gyp/11.11.0/deps/openssl/openssl/include \
-	-I/home/delos/.node-gyp/11.11.0/deps/uv/include \
-	-I/home/delos/.node-gyp/11.11.0/deps/zlib \
-	-I/home/delos/.node-gyp/11.11.0/deps/v8/include \
+	-I/home/delos/.node-gyp/10.15.3/include/node \
+	-I/home/delos/.node-gyp/10.15.3/src \
+	-I/home/delos/.node-gyp/10.15.3/deps/openssl/config \
+	-I/home/delos/.node-gyp/10.15.3/deps/openssl/openssl/include \
+	-I/home/delos/.node-gyp/10.15.3/deps/uv/include \
+	-I/home/delos/.node-gyp/10.15.3/deps/zlib \
+	-I/home/delos/.node-gyp/10.15.3/deps/v8/include \
 	-I$(srcdir)/../nan
 
 OBJS := \
