@@ -16,7 +16,12 @@
     "light control"
   ],
   "dependencies": {
-    "serialport": "^6.0.4"
+    "@serialport/parser-byte-length": "^1.0.5",
+    "@serialport/parser-cctalk": "^1.0.5",
+    "@serialport/parser-delimiter": "^1.0.5",
+    "@serialport/parser-readline": "^1.0.5",
+    "@serialport/parser-ready": "^1.0.5",
+    "@serialport/parser-regex": "^1.0.5"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
