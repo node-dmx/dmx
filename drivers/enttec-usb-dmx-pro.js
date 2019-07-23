@@ -55,11 +55,11 @@ EnttecUSBDMXPRO.prototype.sendUniverse = function () {
   }
 };
 
-EnttecUSBDMXPRO.prototype.start = function() {
+EnttecUSBDMXPRO.prototype.start = function () {
   this.intervalhandle = setInterval(this.sendUniverse.bind(this), this.interval);
 };
 
-EnttecUSBDMXPRO.prototype.stop = function() {
+EnttecUSBDMXPRO.prototype.stop = function () {
   clearInterval(this.intervalhandle);
 };
 

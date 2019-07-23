@@ -66,11 +66,11 @@ DMXKingUltraDMXPro.prototype.sendUniverse = function () {
   }
 };
 
-DMXKingUltraDMXPro.prototype.start = function() {
+DMXKingUltraDMXPro.prototype.start = function () {
   this.intervalhandle = setInterval(this.sendUniverse.bind(this), this.interval);
 };
 
-DMXKingUltraDMXPro.prototype.stop = function() {
+DMXKingUltraDMXPro.prototype.stop = function () {
   clearInterval(this.intervalhandle);
 };
 

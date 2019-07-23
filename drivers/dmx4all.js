@@ -49,11 +49,11 @@ DMX4ALL.prototype.sendUniverse = function () {
   }
 };
 
-DMX4ALL.prototype.start = function() {
+DMX4ALL.prototype.start = function () {
   this.intervalhandle = setInterval(this.sendUniverse.bind(this), this.interval);
 };
 
-DMX4ALL.prototype.stop = function() {
+DMX4ALL.prototype.stop = function () {
   clearInterval(this.intervalhandle);
 };
 

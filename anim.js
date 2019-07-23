@@ -1,4 +1,4 @@
-const ease = require("./easing.js").ease;
+const ease = require('./easing.js').ease;
 
 class Anim {
   constructor({ loop } = {}) {
@@ -13,13 +13,13 @@ class Anim {
   }
 
   add(to, duration = 0, options = {}) {
-    options.easing = options.easing || "linear";
+    options.easing = options.easing || 'linear';
 
     this.animations.push({
       to,
       options,
       start: this.duration,
-      end: this.duration + duration
+      end: this.duration + duration,
     });
     this.duration += duration;
 
@@ -69,7 +69,7 @@ class Anim {
       // Ensure future animations interpolate from the most recent state
       completedAnimations.forEach(completedAnimation => {
         delete completedAnimation.from;
-      })
+      });
 
       if (completedAnimations.length) {
         const completedAnimationStatesToSet = Object.assign(
