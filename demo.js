@@ -5,6 +5,7 @@ const A = dmx.animation;
 
 // var universe = dmx.addUniverse('demo', 'enttec-usb-dmx-pro', '/dev/cu.usbserial-6AVNHXS8')
 // var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
+// const universe = dmx.addUniverse('demo', 'socket', null, {port: 17809, debug: true});
 const universe = dmx.addUniverse('demo', 'null');
 
 universe.update({1: 1, 2: 0});
