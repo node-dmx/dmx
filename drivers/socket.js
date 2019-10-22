@@ -1,18 +1,18 @@
 const util = require('util');
 const EventEmitter = require('events').EventEmitter;
-const Server = require('socket.io');
 
 function SocketDriver(deviceId, options) {
   options = options || {};
 
   const self = this;
-  const io = require("socket.io");
+  const io = require('socket.io');
   const port = options.port || 18909;
-  this.server = io.listen(port);
   const debug = options.debug || false;
-  this.server.on("connection", (socket) => {
+
+  this.server = io.listen(port);
+  this.server.on('connection', (socket) => {
     if (debug) console.info(`Client connected [id=${socket.id}]`);
-    socket.on("disconnect", () => {
+    socket.on('disconnect', () => {
       if (debug) console.info(`Client gone [id=${socket.id}]`);
     });
   });
@@ -21,9 +21,7 @@ function SocketDriver(deviceId, options) {
   self.start();
 }
 
-SocketDriver.prototype.start = function () {
-  const self = this;
-};
+SocketDriver.prototype.start = function () {};
 
 SocketDriver.prototype.stop = function () {
   clearInterval(this.timeout);
@@ -37,7 +35,7 @@ SocketDriver.prototype.update = function (u) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
-  this.server.sockets.emit("update", [...this.universe]);
+  this.server.sockets.emit('update', [...this.universe]);
   this.emit('update', u);
 };
 
@@ -45,8 +43,8 @@ SocketDriver.prototype.updateAll = function (v) {
   for (let i = 1; i <= 512; i++) {
     this.universe[i] = v;
   }
-  
-  this.server.sockets.emit("update", [...this.universe]);
+
+  this.server.sockets.emit('update', [...this.universe]);
 };
 
 SocketDriver.prototype.get = function (c) {
