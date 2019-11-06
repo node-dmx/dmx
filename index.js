@@ -12,7 +12,7 @@ class DMX {
     this.animation = require('./anim');
 
     this.registerDriver('null', require('./drivers/null'));
-    this.registerDriver('socket', require('./drivers/socket'));
+    this.registerDriver('socketio', require('./drivers/socketio'));
     this.registerDriver('dmx4all', require('./drivers/dmx4all'));
     this.registerDriver('enttec-usb-dmx-pro', require('./drivers/enttec-usb-dmx-pro'));
     this.registerDriver('enttec-open-usb-dmx', require('./drivers/enttec-open-usb-dmx'));

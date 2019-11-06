@@ -1,7 +1,7 @@
 const util = require('util');
 const EventEmitter = require('events').EventEmitter;
 
-function SocketDriver(deviceId, options) {
+function SocketioDriver(deviceId, options) {
   options = options || {};
 
   const self = this;
@@ -21,17 +21,17 @@ function SocketDriver(deviceId, options) {
   self.start();
 }
 
-SocketDriver.prototype.start = function () {};
+SocketioDriver.prototype.start = function () {};
 
-SocketDriver.prototype.stop = function () {
+SocketioDriver.prototype.stop = function () {
   clearInterval(this.timeout);
 };
 
-SocketDriver.prototype.close = cb => {
+SocketioDriver.prototype.close = cb => {
   cb(null);
 };
 
-SocketDriver.prototype.update = function (u) {
+SocketioDriver.prototype.update = function (u) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
@@ -39,7 +39,7 @@ SocketDriver.prototype.update = function (u) {
   this.emit('update', u);
 };
 
-SocketDriver.prototype.updateAll = function (v) {
+SocketioDriver.prototype.updateAll = function (v) {
   for (let i = 1; i <= 512; i++) {
     this.universe[i] = v;
   }
@@ -47,10 +47,10 @@ SocketDriver.prototype.updateAll = function (v) {
   this.server.sockets.emit('update', [...this.universe]);
 };
 
-SocketDriver.prototype.get = function (c) {
+SocketioDriver.prototype.get = function (c) {
   return this.universe[c];
 };
 
-util.inherits(SocketDriver, EventEmitter);
+util.inherits(SocketioDriver, EventEmitter);
 
-module.exports = SocketDriver;
+module.exports = SocketioDriver;
