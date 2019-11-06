@@ -13,7 +13,7 @@ NullDriver.prototype.start = function () {
   const self = this;
 
   self.timeout = setInterval(() => {
-    console.log(self.universe);
+    this.logUniverse();
   }, 1000);
 };
 
@@ -29,7 +29,7 @@ NullDriver.prototype.update = function (u) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
-  console.log(this.universe.slice(1));
+  this.logUniverse();
 
   this.emit('update', u);
 };
@@ -42,6 +42,10 @@ NullDriver.prototype.updateAll = function (v) {
 
 NullDriver.prototype.get = function (c) {
   return this.universe[c];
+};
+
+NullDriver.prototype.logUniverse = function () {
+  console.log(this.universe.slice(1));
 };
 
 util.inherits(NullDriver, EventEmitter);
