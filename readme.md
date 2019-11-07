@@ -4,11 +4,12 @@ DMX-512 controller library for node.js
 
 ## Install
 
-	npm install dmx
+    npm install dmx
 
 ## Library API
-
-	const DMX = require('dmx')
+```javascript
+const DMX = require('dmx')
+```
 
 ### Class DMX
 
@@ -26,6 +27,7 @@ Register a new DMX Driver module by its name.
 These drivers are currently registered by default:
 
 - null: a development driver that prints the universe to stdout
+- socketio: a driver which sends out the universe via socket.IO as an array (see [demo_socket_client.js](./demo_socket_client.js) as a client example)
 - artnet: driver for EnttecODE
 - bbdmx: driver for [BeagleBone-DMX](https://github.com/boxysean/beaglebone-DMX)
 - dmx4all: driver for DMX4ALL devices like the "NanoDMX USB Interface"
@@ -135,7 +137,7 @@ Run the Animation on the specified universe.
 Runs an animation constantly until <code>animation.stop()</code> is called
 
 The example below shows a value being animated for 5 seconds:
-```
+```javascript
 const animation = new DMX.Animation().add({
   1: 255,
 }, 100).add({
