@@ -1,16 +1,28 @@
 const ease = require('./easing.js').ease;
-const resolution = 1;
 
 class Anim {
-  constructor() {
-    this.fxStack = [];
-    this.interval = null;
+  constructor({ loop } = {}) {
+    this.frameDelay = 1;
+    this.animations = [];
+    this.lastAnimation = 0;
+    this.timeout = null;
+    this.duration = 0;
+    this.startTime = null;
+    this.loops = loop || 1;
+    this.currentLoop = 0;
   }
 
-  add(to, duration = resolution, options = {}) {
+  add(to, duration = 0, options = {}) {
     options.easing = options.easing || 'linear';
 
-    this.fxStack.push({ 'to': to, 'duration': duration, 'options': options });
+    this.animations.push({
+      to,
+      options,
+      start: this.duration,
+      end: this.duration + duration,
+    });
+    this.duration += duration;
+
     return this;
   }
 
@@ -20,79 +32,127 @@ class Anim {
   }
 
   stop() {
-    if (this.interval) {
-      clearInterval(this.interval);
+    if (this.timeout) {
+      clearTimeout(this.timeout);
     }
-    this.fxStack = [];
   }
 
-  run(universe, onFinish) {
-    let config = {};
-    let ticks = 0;
-    let duration = 0;
-    let animationStep;
-    let iid = null;
+  reset(startTime = new Date().getTime()) {
+    this.startTime = startTime;
+    this.lastAnimation = 0;
+  }
 
-    const stack = [ ...this.fxStack ];
+  runNextLoop(universe, onFinish) {
+    const runAnimationStep = () => {
+      const now = new Date().getTime();
+      const elapsedTime = now - this.startTime;
 
-    const aniSetup = () => {
-      animationStep = stack.shift();
-      ticks = 0;
+      this.timeout = setTimeout(runAnimationStep, this.frameDelay);
 
-      /**
-       * Set duration and force to be at least one
-       * @type Number
-       */
-      duration = !isNaN(animationStep.duration) && animationStep.duration < 1 ? 1 : animationStep.duration;
+      // Find the animation for the current point in time, the latest if multiple match
 
-      config = {};
-      for (const k in animationStep.to) {
-        config[k] = {
-          'start': universe.get(k),
-          'end': animationStep.to[k],
-          'options': animationStep.options,
-        };
-      }
-    };
-    const aniStep = () => {
-      const newValues = {};
+      let currentAnimation = this.lastAnimation;
 
-      for (const k in config) {
-        const entry = config[k];
-        const easing = ease[entry.options.easing];
-
-        newValues[k] = Math.round(entry.start + easing(ticks, 0, 1, duration) * (entry.end - entry.start));
+      while (
+        currentAnimation < this.animations.length &&
+        elapsedTime >= this.animations[currentAnimation].end
+      ) {
+        currentAnimation++;
       }
 
-      ticks = ticks + resolution;
-      universe.update(newValues);
-      if (ticks > duration) {
-        if (stack.length > 0) {
-          aniSetup();
-        } else {
-          clearInterval(iid);
+      // Ensure final state of all newly completed animations have been set
+      const completedAnimations = this.animations.slice(
+        this.lastAnimation,
+        currentAnimation
+      );
+
+      // Ensure future animations interpolate from the most recent state
+      completedAnimations.forEach(completedAnimation => {
+        delete completedAnimation.from;
+      });
+
+      if (completedAnimations.length) {
+        const completedAnimationStatesToSet = Object.assign(
+          {},
+          ...completedAnimations.map(a => a.to)
+        );
+
+        universe.update(completedAnimationStatesToSet);
+      }
+
+      this.lastAnimation = currentAnimation;
+
+      if (elapsedTime >= this.duration) {
+        // This animation loop is complete
+        this.currentLoop++;
+        this.stop();
+        if (this.currentLoop >= this.loops) {
+          // All loops complete
           if (onFinish) {
             onFinish();
           }
+        } else {
+          // Run next loop
+          this.reset(this.startTime + this.duration);
+          this.runNextLoop(universe);
+        }
+      } else {
+        // Set intermediate channel values during an animation
+        const animation = this.animations[currentAnimation];
+        const easing = ease[animation.options.easing];
+        const duration = animation.end - animation.start;
+        const animationElapsedTime = elapsedTime - animation.start;
+
+        if (!animation.from) {
+          animation.from = {};
+          for (const k in animation.to) {
+            animation.from[k] = universe.get(k);
+          }
+          if (animation.options.from) {
+            animation.from = Object.assign(animation.from, animation.options.from);
+          }
+        }
+
+        if (duration) {
+          const easeProgress = easing(
+            Math.min(animationElapsedTime, duration),
+            0,
+            1,
+            duration
+          );
+          const intermediateValues = {};
+
+          for (const k in animation.to) {
+            const startValue = animation.from[k];
+            const endValue = animation.to[k];
+
+            intermediateValues[k] = Math.round(
+              startValue + easeProgress * (endValue - startValue)
+            );
+          }
+          universe.update(intermediateValues);
         }
       }
     };
 
-    aniSetup();
-    iid = this.interval = setInterval(aniStep, resolution);
+    runAnimationStep();
 
     return this;
   }
 
-  runLoop(universe) {
-    const doAnimation = () => {
-      this.run(universe, () => {
-        setImmediate(doAnimation);
-      });
-    };
+  run(universe, onFinish) {
+    if (universe.interval) {
+      // Optimisation to run animation updates at double the rate of driver updates using Nyquist's theorem
+      this.frameDelay = universe.interval / 2;
+    }
+    this.reset();
+    this.currentLoop = 0;
+    this.runNextLoop(universe, onFinish);
+  }
 
-    doAnimation();
-
+  runLoop(universe, onFinish, loops = Infinity) {
+    this.loops = loops;
+    this.run(universe, onFinish);
     return this;
   }
 }

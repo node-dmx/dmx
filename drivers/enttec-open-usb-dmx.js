@@ -2,14 +2,10 @@ const SerialPort = require('serialport');
 const util = require('util');
 const EventEmitter = require('events').EventEmitter;
 
-function EnttecOpenUsbDMX(deviceId, options) {
-  const self = this;
-
-  options = options || {};
-
+function EnttecOpenUsbDMX(deviceId, options = {}) {
   this.universe = Buffer.alloc(513);
-
-  self.interval = 46;
+  this.readyToWrite = true;
+  this.interval = options.dmx_speed ? (1000 / options.dmx_speed) : 46;
 
   this.dev = new SerialPort(deviceId, {
     'baudRate': 250000,
@@ -17,11 +13,11 @@ function EnttecOpenUsbDMX(deviceId, options) {
     'stopBits': 2,
     'parity': 'none',
   }, err => {
-    if (err) {
-      console.log(err);
-      return;
+    if (!err) {
+      this.start();
+    } else {
+      console.warn(err);
     }
-    self.start();
   });
 }
 
@@ -37,7 +33,13 @@ EnttecOpenUsbDMX.prototype.sendUniverse = function () {
     setTimeout(() => {
       self.dev.set({brk: false, rts: true}, (err, r) => {
         setTimeout(() => {
-          self.dev.write(Buffer.concat([Buffer([0]), self.universe.slice(1)]));
+          if (self.readyToWrite) {
+            self.readyToWrite = false;
+            self.dev.write(Buffer.concat([Buffer([0]), self.universe.slice(1)]));
+            self.dev.drain(() => {
+              self.readyToWrite = true;
+            });
+          }
         }, 1);
       });
     }, 1);

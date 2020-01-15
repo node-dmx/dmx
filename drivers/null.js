@@ -1,20 +1,16 @@
 const util = require('util');
 const EventEmitter = require('events').EventEmitter;
 
-function NullDriver(deviceId, options) {
-  const self = this;
-
-  options = options || {};
+function NullDriver(deviceId, options = {}) {
   this.universe = Buffer.alloc(513, 0);
-  self.start();
+  this.interval = 1000 / (options.dmx_speed || 1);
+  this.start();
 }
 
 NullDriver.prototype.start = function () {
-  const self = this;
-
-  self.timeout = setInterval(() => {
+  this.timeout = setInterval(() => {
     this.logUniverse();
-  }, 1000);
+  }, this.interval);
 };
 
 NullDriver.prototype.stop = function () {
@@ -25,7 +21,7 @@ NullDriver.prototype.close = cb => {
   cb(null);
 };
 
-NullDriver.prototype.update = function (u) {
+NullDriver.prototype.update = function (u, _) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
@@ -34,7 +30,7 @@ NullDriver.prototype.update = function (u) {
   this.emit('update', u);
 };
 
-NullDriver.prototype.updateAll = function (v) {
+NullDriver.prototype.updateAll = function (v, _) {
   for (let i = 1; i <= 512; i++) {
     this.universe[i] = v;
   }
