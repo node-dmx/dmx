@@ -78,12 +78,12 @@ DMXKingUltraDMXPro.prototype.close = function (cb) {
   this.dev.close(cb);
 };
 
-DMXKingUltraDMXPro.prototype.update = function (u) {
+DMXKingUltraDMXPro.prototype.update = function (u, origin) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
 
-  this.emit('update', u);
+  this.emit('update', u, origin);
 };
 
 DMXKingUltraDMXPro.prototype.updateAll = function (v) {

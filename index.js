@@ -35,8 +35,8 @@ class DMX {
     return this.universes[name];
   }
 
-  update(universe, channels) {
-    this.universes[universe].update(channels);
+  update(universe, channels, origin) {
+    this.universes[universe].update(channels, origin || null);
   }
 
   updateAll(universe, value) {
