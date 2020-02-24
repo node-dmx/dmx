@@ -21,13 +21,13 @@ NullDriver.prototype.close = cb => {
   cb(null);
 };
 
-NullDriver.prototype.update = function (u, origin) {
+NullDriver.prototype.update = function (u, extraData) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
   this.logUniverse();
 
-  this.emit('update', u, origin);
+  this.emit('update', u, extraData);
 };
 
 NullDriver.prototype.updateAll = function (v, _) {

@@ -31,12 +31,12 @@ SocketioDriver.prototype.close = cb => {
   cb(null);
 };
 
-SocketioDriver.prototype.update = function (u, origin) {
+SocketioDriver.prototype.update = function (u, extraData) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
   this.server.sockets.emit('update', [...this.universe]);
-  this.emit('update', u, origin);
+  this.emit('update', u, extraData);
 };
 
 SocketioDriver.prototype.updateAll = function (v) {

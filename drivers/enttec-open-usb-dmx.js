@@ -59,12 +59,12 @@ EnttecOpenUsbDMX.prototype.close = function (cb) {
   this.dev.close(cb);
 };
 
-EnttecOpenUsbDMX.prototype.update = function (u, origin) {
+EnttecOpenUsbDMX.prototype.update = function (u, extraData) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
 
-  this.emit('update', u, origin);
+  this.emit('update', u, extraData);
 };
 
 EnttecOpenUsbDMX.prototype.updateAll = function (v) {

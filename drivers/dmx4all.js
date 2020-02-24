@@ -61,12 +61,12 @@ DMX4ALL.prototype.close = function (cb) {
   this.dev.close(cb);
 };
 
-DMX4ALL.prototype.update = function (u, origin) {
+DMX4ALL.prototype.update = function (u, extraData) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
 
-  this.emit('update', u, origin);
+  this.emit('update', u, extraData);
 };
 
 DMX4ALL.prototype.updateAll = function (v) {

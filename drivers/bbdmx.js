@@ -46,12 +46,12 @@ BBDMX.prototype.close = function (cb) {
   cb(null);
 };
 
-BBDMX.prototype.update = function (u, origin) {
+BBDMX.prototype.update = function (u, extraData) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
 
-  this.emit('update', u, origin);
+  this.emit('update', u, extraData);
 };
 
 BBDMX.prototype.updateAll = function (v) {
