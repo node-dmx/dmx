@@ -45,10 +45,11 @@ These drivers are currently registered by default:
 Add a new DMX Universe with a name, driver and an optional device_id used by the driver to identify the device.
 For enttec-usb-dmx-pro and enttec-open-usb-dmx device_id is the path the the serial device. For artnet it is the target ip.
 
-#### dmx.update(universe, channels)
+#### dmx.update(universe, channels[, extraData])
 
 - <code>universe</code> - String, name of the universe
 - <code>channels</code> - Object, keys are channel numbers, values the values to set that channel to
+- <code>extraData</code> - Object, this data will be passed unmodified to the <code>update</code> Event. (Optional; default value is `{}`)
 
 Update one or multiple channels of a universe. Also emits a <code>update</code> Event with the same information.
 
@@ -149,6 +150,16 @@ setTimeout(() => {
   animation.stop()
 }, 5000)
 ```
+
+#### update Event
+
+- <code>universe</code> - String, name of the universe
+- <code>channels</code> - Object, keys are channel numbers, values the values to set that channel to
+- <code>extraData</code> - Object, data that was passed to the <code>update</code> method.
+
+This event is emitted whenever <code>update</code> is called either by the integrating application or by an animation step.
+
+If triggered by an animation step, <code>extraData.origin</code> will be the string <code>'animation'</code>.
 
 ## Webinterface
 
