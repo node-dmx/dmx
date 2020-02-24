@@ -77,7 +77,7 @@ class Anim {
           ...completedAnimations.map(a => a.to)
         );
 
-        universe.update(completedAnimationStatesToSet, {origin: 'animation'});
+        universe.update(completedAnimationStatesToSet, { origin: 'animation' });
       }
 
       this.lastAnimation = currentAnimation;
@@ -130,7 +130,7 @@ class Anim {
               startValue + easeProgress * (endValue - startValue)
             );
           }
-          universe.update(intermediateValues, {origin: 'animation'});
+          universe.update(intermediateValues, { origin: 'animation' });
         }
       }
     };
