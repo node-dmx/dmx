@@ -82,7 +82,7 @@ class Anim {
           this.filter(completedAnimationStatesToSet);
         }
 
-        universe.update(completedAnimationStatesToSet);
+        universe.update(completedAnimationStatesToSet, { origin: 'animation' });
       }
 
       this.lastAnimation = currentAnimation;
@@ -140,7 +140,7 @@ class Anim {
             this.filter(intermediateValues);
           }
 
-          universe.update(intermediateValues);
+          universe.update(intermediateValues, { origin: 'animation' });
         }
       }
     };
