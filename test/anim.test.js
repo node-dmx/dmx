@@ -21,8 +21,8 @@ test('fake timers', () => {
 
   jest.runAllTimers();
 
-  expect(updateMock).toHaveBeenCalledWith({ 1: 255 });
-  expect(updateMock).toHaveBeenCalledWith({ 1: 0 });
+  expect(updateMock).toHaveBeenCalledWith({ 1: 255 }, { origin: 'animation' });
+  expect(updateMock).toHaveBeenCalledWith({ 1: 0 }, { origin: 'animation' });
 });
 
 test('real timers', done => {

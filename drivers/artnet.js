@@ -58,12 +58,12 @@ ArtnetDriver.prototype.close = function (cb) {
   cb(null);
 };
 
-ArtnetDriver.prototype.update = function (u, _) {
+ArtnetDriver.prototype.update = function (u, extraData) {
   for (const c in u) {
     this.universe[c] = u[c];
   }
 
-  this.emit('update', u);
+  this.emit('update', u, extraData);
 };
 
 ArtnetDriver.prototype.updateAll = function (v, _) {
