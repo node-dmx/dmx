@@ -1,7 +1,7 @@
 const ease = require('./easing.js').ease;
 
 class Anim {
-  constructor({ loop } = {}) {
+  constructor({ loop, filter } = {}) {
     this.frameDelay = 1;
     this.animations = [];
     this.lastAnimation = 0;
@@ -10,6 +10,7 @@ class Anim {
     this.startTime = null;
     this.loops = loop || 1;
     this.currentLoop = 0;
+    this.filter = filter;
   }
 
   add(to, duration = 0, options = {}) {
@@ -77,6 +78,10 @@ class Anim {
           ...completedAnimations.map(a => a.to)
         );
 
+        if (typeof this.filter === 'function') {
+          this.filter(completedAnimationStatesToSet);
+        }
+
         universe.update(completedAnimationStatesToSet, { origin: 'animation' });
       }
 
@@ -130,6 +135,11 @@ class Anim {
               startValue + easeProgress * (endValue - startValue)
             );
           }
+
+          if (typeof this.filter === 'function') {
+            this.filter(intermediateValues);
+          }
+
           universe.update(intermediateValues, { origin: 'animation' });
         }
       }
