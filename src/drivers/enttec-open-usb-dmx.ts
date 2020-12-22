@@ -3,15 +3,13 @@ import {AbstractUniverseDriver} from './abstract-universe-driver';
 import {UniverseDriver} from './universe-driver';
 
 const SerialPort = require('serialport');
-const util = require('util');
-const EventEmitter = require('events').EventEmitter;
 
 export interface EnttecOpenUsbDmxArgs {
   dmx_speed?: number;
 }
 
 export class EnttecOpenUsbDMX extends AbstractUniverseDriver implements UniverseDriver {
-  constructor(args: EnttecOpenUsbDmxArgs) {
+  constructor(deviceId: string, args: EnttecOpenUsbDmxArgs) {
     super();
 
     this._universe = Buffer.alloc(513);
@@ -32,20 +30,17 @@ export class EnttecOpenUsbDMX extends AbstractUniverseDriver implements Universe
     });
   }
 
-  onUpdate(cb: (u: (number[] | string[]), extraData: any) => void): void {
-  }
-
-  update(channels: any, extraData: any): void {
-    for (const c in u) {
-      this._universe[c] = u[c];
+  update(channels: {[key:number]: number}, extraData: any): void {
+    for (const c in channels) {
+      this._universe[c] = channels[c];
     }
 
-    this.emit('update', u, extraData);
+    this.emitUpdate(channels, extraData);
   }
 
   updateAll(value: any): void {
     for (let i = 1; i <= 512; i++) {
-      this._universe[i] = v;
+      this._universe[i] = value;
     }
   }
 
@@ -57,13 +52,13 @@ export class EnttecOpenUsbDMX extends AbstractUniverseDriver implements Universe
     }
 
     // toggle break
-    self._dev.set({brk: true, rts: true}, (err, r) => {
+    self._dev.set({brk: true, rts: true}, (err:any, r:any) => {
       setTimeout(() => {
-        self._dev.set({brk: false, rts: true}, (err, r) => {
+        self._dev.set({brk: false, rts: true}, (err:any, r:any) => {
           setTimeout(() => {
             if (self._readyToWrite) {
               self._readyToWrite = false;
-              self._dev.write(Buffer.concat([Buffer([0]), self._universe.slice(1)]));
+              self._dev.write(Buffer.concat([Buffer.from([0]), self._universe.slice(1)]));
               self._dev.drain(() => {
                 self._readyToWrite = true;
               });

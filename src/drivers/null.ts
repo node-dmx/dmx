@@ -30,13 +30,13 @@ export class NullDriver extends AbstractUniverseDriver implements UniverseDriver
     cb(null);
   }
 
-  update(u: number[], extraData: any): void {
+  update(u: {[key: number]: number}, extraData: any): void {
     for (const c in u) {
       this._universe[c] = u[c];
     }
     this.logUniverse();
 
-    this._events.emit('update', u, extraData);
+    this.emitUpdate(u, extraData);
   }
 
   updateAll(v: number): void {

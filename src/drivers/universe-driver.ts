@@ -3,5 +3,5 @@ export interface UniverseDriver {
 
   updateAll(value: any): void;
 
-  onUpdate(cb: (u: number[] | string[], extraData: any) => void): void;
+  onUpdate(cb: (u: {[key: number]: number}, extraData: any) => void): void;
 }

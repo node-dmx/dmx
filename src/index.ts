@@ -24,7 +24,7 @@ export interface DmxArgs {
 }
 
 export class DMX {
-  constructor(options: DmxArgs) {
+  constructor(options?: DmxArgs) {
     const devices = options?.devices ?? {};
 
     this._devices = Object.assign({}, require('./devices'), devices);
@@ -40,11 +40,11 @@ export class DMX {
     this.registerDriver(Driver.bbdmx, require('./drivers/bbdmx'));
   }
 
-  registerDriver(name: Driver|string, module: any): void {
+  registerDriver(name: Driver | string, module: any): void {
     this._driversByName.set(name, module);
   }
 
-  addUniverse(name: string, driver: Driver | string, deviceId, options): UniverseDriver {
+  addUniverse(name: string, driver: Driver | string, deviceId?: any, options?: any): UniverseDriver {
     const DriverConstructor = this._driversByName.get(driver);
 
     const universe = new DriverConstructor(deviceId, options);
@@ -66,7 +66,7 @@ export class DMX {
     this._events.on(Events.updateAll, cb);
   }
 
-  update(universe: string, channels, extraData): void {
+  update(universe: string, channels: {[key: number]: number}, extraData?: any): void {
     this._universesByName.get(universe).update(channels, extraData || {});
   }
 
@@ -75,13 +75,14 @@ export class DMX {
     this._events.emit(Events.updateAll, universe, value);
   }
 
-  universeToObject(universeKey: string): void {
+  universeToObject(universeKey: string): {[key: number]: number} {
     const universe = this._universesByName.get(universeKey);
-    const u = {};
+    const u: {[key: number]: number} = {};
 
     for (let i = 0; i < 512; i++) {
       u[i] = universe.get(i);
     }
+
     return u;
   }
 

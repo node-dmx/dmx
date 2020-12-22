@@ -7,5 +7,9 @@ export abstract class AbstractUniverseDriver {
     this._events.on('update', cb);
   }
 
-  protected readonly _events = new EventEmitter();
+  protected emitUpdate(channels: {[key:number]: number}, extraData?: any):void{
+    this._events.emit('update', channels, extraData);
+  }
+
+  private readonly _events = new EventEmitter();
 }
