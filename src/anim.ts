@@ -1,16 +1,32 @@
 const ease = require('./easing.js').ease;
 
-class Anim {
-  constructor({ loop, filter } = {}) {
+export interface AnimArgs {
+  loop?: number;
+  filter?: any;
+}
+
+export class Anim {
+
+  public loops: number;
+  public frameDelay: number;
+  public animations: any[];
+  public lastAnimation: number;
+  public timeout: any;
+  public duration: number;
+  public startTime: any;
+  public currentLoop: number;
+  public filter: any;
+
+  constructor(args: AnimArgs = {}) {
     this.frameDelay = 1;
     this.animations = [];
     this.lastAnimation = 0;
     this.timeout = null;
     this.duration = 0;
     this.startTime = null;
-    this.loops = loop || 1;
+    this.loops = args.loop || 1;
     this.currentLoop = 0;
-    this.filter = filter;
+    this.filter = args.filter;
   }
 
   add(to, duration = 0, options = {}) {
@@ -57,7 +73,7 @@ class Anim {
       while (
         currentAnimation < this.animations.length &&
         elapsedTime >= this.animations[currentAnimation].end
-      ) {
+        ) {
         currentAnimation++;
       }
 
@@ -82,7 +98,7 @@ class Anim {
           this.filter(completedAnimationStatesToSet);
         }
 
-        universe.update(completedAnimationStatesToSet, { origin: 'animation' });
+        universe.update(completedAnimationStatesToSet, {origin: 'animation'});
       }
 
       this.lastAnimation = currentAnimation;
@@ -140,7 +156,7 @@ class Anim {
             this.filter(intermediateValues);
           }
 
-          universe.update(intermediateValues, { origin: 'animation' });
+          universe.update(intermediateValues, {origin: 'animation'});
         }
       }
     };
@@ -150,7 +166,7 @@ class Anim {
     return this;
   }
 
-  run(universe, onFinish) {
+  run(universe, onFinish: Function) {
     if (universe.interval) {
       // Optimisation to run animation updates at double the rate of driver updates using Nyquist's theorem
       this.frameDelay = universe.interval / 2;
@@ -166,5 +182,3 @@ class Anim {
     return this;
   }
 }
-
-module.exports = Anim;

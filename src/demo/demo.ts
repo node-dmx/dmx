@@ -1,4 +1,4 @@
-const DMX = require('./index');
+import {DMX} from '../index';
 
 const dmx = new DMX();
 const A = dmx.animation;

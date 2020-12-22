@@ -34,7 +34,7 @@
 
 // t: current time, b: begInnIng value, c: change In value, d: duration
 
-exports.ease = {
+export const ease = {
   linear(t, b, c, d) { return c * t / d + b; },
   inQuad(t, b, c, d) { return c * (t /= d) * t + b; },
   outQuad(t, b, c, d) { return -c * (t /= d) * (t - 2) + b; },
