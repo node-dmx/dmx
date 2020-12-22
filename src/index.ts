@@ -1,10 +1,22 @@
 import {EventEmitter} from 'events';
 import {UniverseDriver} from './drivers/universe-driver';
 import {NullDriver} from './drivers/null';
+import {EnttecOpenUsbDMX} from './drivers/enttec-open-usb-dmx';
 
 enum Events {
   update = 'update',
   updateAll = 'updateAll',
+}
+
+export enum Driver {
+  null = 'null',
+  socketIo = 'socketio',
+  dmx4all = 'dmx4all',
+  enttecUsbDmxPro = 'enttec-usb-dmx-pro',
+  enttecOpenUsbDmx = 'enttec-open-usb-dmx',
+  dmxkingUltraDmxPro = 'dmxking-ultra-dmx-pro',
+  artNet = 'artNet',
+  bbdmx = 'bbdmx',
 }
 
 export interface DmxArgs {
@@ -18,21 +30,21 @@ export class DMX {
     this._devices = Object.assign({}, require('./devices'), devices);
     this._animation = require('./anim');
 
-    this.registerDriver('null', NullDriver);
-    this.registerDriver('socketio', require('./drivers/socketio'));
-    this.registerDriver('dmx4all', require('./drivers/dmx4all'));
-    this.registerDriver('enttec-usb-dmx-pro', require('./drivers/enttec-usb-dmx-pro'));
-    this.registerDriver('enttec-open-usb-dmx', require('./drivers/enttec-open-usb-dmx'));
-    this.registerDriver('dmxking-ultra-dmx-pro', require('./drivers/dmxking-ultra-dmx-pro'));
-    this.registerDriver('artnet', require('./drivers/artnet'));
-    this.registerDriver('bbdmx', require('./drivers/bbdmx'));
+    this.registerDriver(Driver.null, NullDriver);
+    this.registerDriver(Driver.socketIo, require('./drivers/socketio'));
+    this.registerDriver(Driver.dmx4all, require('./drivers/dmx4all'));
+    this.registerDriver(Driver.enttecUsbDmxPro, require('./drivers/enttec-usb-dmx-pro'));
+    this.registerDriver(Driver.enttecOpenUsbDmx, EnttecOpenUsbDMX);
+    this.registerDriver(Driver.dmxkingUltraDmxPro, require('./drivers/dmxking-ultra-dmx-pro'));
+    this.registerDriver(Driver.artNet, require('./drivers/artnet'));
+    this.registerDriver(Driver.bbdmx, require('./drivers/bbdmx'));
   }
 
-  registerDriver(name: string, module: any): void {
+  registerDriver(name: Driver|string, module: any): void {
     this._driversByName.set(name, module);
   }
 
-  addUniverse(name: string, driver: string, deviceId, options): UniverseDriver {
+  addUniverse(name: string, driver: Driver | string, deviceId, options): UniverseDriver {
     const DriverConstructor = this._driversByName.get(driver);
 
     const universe = new DriverConstructor(deviceId, options);
