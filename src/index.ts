@@ -86,6 +86,12 @@ export class DMX {
     return u;
   }
 
+  async close(): Promise<void> {
+    for (const uni of this._universesByName.values()) {
+      await uni.close();
+    }
+  }
+
   private readonly _devices: any;
   private readonly _animation: any;
   private readonly _driversByName: Map<string, new () => UniverseDriver> = new Map();

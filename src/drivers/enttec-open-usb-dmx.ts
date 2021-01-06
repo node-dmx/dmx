@@ -77,9 +77,9 @@ export class EnttecOpenUsbDMX extends AbstractUniverseDriver implements Universe
     this._intervalHandle && clearInterval(this._intervalHandle);
   }
 
-  close(cb: Function): void {
+  close(): Promise<void> {
     this.stop();
-    this._dev.close(cb);
+    return new Promise((resolve,reject) => this._dev.close((err:any)=>err ? reject(err):resolve(err)));
   }
 
   get(c: number): number {
