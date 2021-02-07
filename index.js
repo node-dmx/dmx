@@ -19,6 +19,7 @@ class DMX {
     this.registerDriver('dmxking-ultra-dmx-pro', require('./drivers/dmxking-ultra-dmx-pro'));
     this.registerDriver('artnet', require('./drivers/artnet'));
     this.registerDriver('bbdmx', require('./drivers/bbdmx'));
+    this.registerDriver('sacn', require('./drivers/sacn'));
   }
 
   registerDriver(name, module) {
