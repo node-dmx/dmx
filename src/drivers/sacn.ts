@@ -1,58 +1,57 @@
-const EventEmitter = require('events').EventEmitter;
-const util = require('util');
-const sacn = require('sacn');
+import { EventEmitter } from 'events';
+import { IUniverseDriver, UniverseData } from '../models/IUniverseDriver';
+import * as sacn from 'sacn';
 
-function SACNDriver(deviceId, options = {}) {
-  this.sACNServer = new sacn.Sender({
-    universe: options.universe || 1,
-    reuseAddr: true,
-  });
-  this.universe = {};
+export class SACNDriver extends EventEmitter implements IUniverseDriver {
+  sACNServer: any;
+  universe: any = {};
+  constructor(universe = 1) {
+    super();
+    this.sACNServer = new sacn.Sender({
+      universe: universe || 1,
+      reuseAddr: true,
+    });
+  }
+
+  start(): void {}
+
+  stop(): void {
+    this.sACNServer.close();
+  }
+
+  close(): void {
+    this.stop();
+  }
+
+  update(u: UniverseData, extraData: any): void {
+    for (const c in u) {
+      this.universe[c] = this.dmxToPercent(u[c]);
+    }
+    this.sendUniverse();
+  }
+
+  sendUniverse(): void {
+    this.sACNServer.send({
+      payload: this.universe,
+    });
+  }
+
+  updateAll(v: number): void {
+    for (let i = 1; i <= 512; i++) {
+      this.universe[i] = this.dmxToPercent(v);
+    }
+    this.sendUniverse();
+  }
+
+  get(c: number): number {
+    return this.percentToDmx(this.universe[c]);
+  }
+
+  dmxToPercent(v: number): number {
+    return v / 255 * 100;
+  }
+
+  percentToDmx(v: number): number {
+    return v / 100 * 255;
+  }
 }
-
-SACNDriver.prototype.start = function () {};
-
-SACNDriver.prototype.stop = function () {
-  this.sACNServer.close();
-};
-
-SACNDriver.prototype.close = function (cb) {
-  this.stop();
-  cb(null);
-};
-
-SACNDriver.prototype.update = function (u, extraData) {
-  for (const c in u) {
-    this.universe[c] = this.dmxToPercent(u[c]);
-  }
-  this.sendUniverse();
-};
-
-SACNDriver.prototype.sendUniverse = function () {
-  this.sACNServer.send({
-    payload: this.universe,
-  });
-};
-
-SACNDriver.prototype.updateAll = function (v, _) {
-  for (let i = 1; i <= 512; i++) {
-    this.universe[i] = this.dmxToPercent(v);
-  }
-  this.sendUniverse();
-};
-
-SACNDriver.prototype.get = function (c) {
-  return this.percentToDmx(this.universe[c]);
-};
-
-SACNDriver.prototype.dmxToPercent = function (v) {
-  return v / 255 * 100;
-};
-
-SACNDriver.prototype.percentToDmx = function (v) {
-  return v / 100 * 255;
-};
-
-util.inherits(SACNDriver, EventEmitter);
-
-module.exports = SACNDriver;

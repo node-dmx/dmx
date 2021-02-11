@@ -1,56 +1,59 @@
-const util = require('util');
-const EventEmitter = require('events').EventEmitter;
+import { IUniverseDriver, UniverseData } from '../models/IUniverseDriver';
+import * as io from 'socket.io';
+import { EventEmitter } from 'events';
 
-function SocketioDriver(deviceId, options) {
-  options = options || {};
-
-  const self = this;
-  const io = require('socket.io');
-  const port = options.port || 18909;
-  const debug = options.debug || false;
-
-  this.server = io.listen(port);
-  this.server.on('connection', (socket) => {
-    if (debug) console.info(`Client connected [id=${socket.id}]`);
-    socket.on('disconnect', () => {
-      if (debug) console.info(`Client gone [id=${socket.id}]`);
-    });
-  });
-
-  this.universe = Buffer.alloc(513, 0);
-  self.start();
+export interface SocketIOArgs {
+  port?: number;
+  debug?: boolean;
 }
 
-SocketioDriver.prototype.start = function () {};
+export class SocketIODriver extends EventEmitter implements IUniverseDriver {
+  universe: Buffer;
+  server: io.Server;
+  constructor(options: SocketIOArgs) {
+    super();
+    options = options || {};
 
-SocketioDriver.prototype.stop = function () {
-  clearInterval(this.timeout);
-};
+    const self = this;
+    const port = options.port || 18909;
+    const debug = options.debug || false;
 
-SocketioDriver.prototype.close = cb => {
-  cb(null);
-};
+    this.server = io.listen(port);
+    this.server.on('connection', (socket) => {
+      if (debug) console.info(`Client connected [id=${socket.id}]`);
+      socket.on('disconnect', () => {
+        if (debug) console.info(`Client gone [id=${socket.id}]`);
+      });
+    });
 
-SocketioDriver.prototype.update = function (u, extraData) {
-  for (const c in u) {
-    this.universe[c] = u[c];
+    this.universe = Buffer.alloc(513, 0);
+    self.start();
   }
-  this.server.sockets.emit('update', [...this.universe]);
-  this.emit('update', u, extraData);
-};
 
-SocketioDriver.prototype.updateAll = function (v) {
-  for (let i = 1; i <= 512; i++) {
-    this.universe[i] = v;
+  start(): void { }
+
+  stop(): void {}
+
+  close(): void {}
+
+  update(u: UniverseData, extraData: any): void {
+    for (const c in u) {
+      this.universe[c] = u[c];
+    }
+    this.server.sockets.emit('update', [...this.universe]);
+    this.emit('update', u, extraData);
   }
 
-  this.server.sockets.emit('update', [...this.universe]);
-};
+  updateAll(v: number): void {
+    for (let i = 1; i <= 512; i++) {
+      this.universe[i] = v;
+    }
 
-SocketioDriver.prototype.get = function (c) {
-  return this.universe[c];
-};
+    this.server.sockets.emit('update', [...this.universe]);
+  }
 
-util.inherits(SocketioDriver, EventEmitter);
+  get(c: number): number {
+    return this.universe[c];
+  }
+}
 
-module.exports = SocketioDriver;

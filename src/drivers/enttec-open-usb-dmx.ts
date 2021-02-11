@@ -1,14 +1,19 @@
-import Timeout = NodeJS.Timeout;
-import {AbstractUniverseDriver} from './abstract-universe-driver';
-import {UniverseDriver} from './universe-driver';
-
-const SerialPort = require('serialport');
+import SerialPort from 'serialport';
+import {IUniverseDriver} from '../models/IUniverseDriver';
+import {EventEmitter} from 'events';
 
 export interface EnttecOpenUsbDmxArgs {
   dmx_speed?: number;
 }
 
-export class EnttecOpenUsbDMX extends AbstractUniverseDriver implements UniverseDriver {
+export class EnttecOpenUsbDMX extends EventEmitter implements IUniverseDriver {
+  private readonly _universe: Buffer;
+  private readonly _interval: number;
+  private readonly _dev: SerialPort;
+
+  private _readyToWrite: boolean;
+  private _intervalHandle: NodeJS.Timeout | undefined;
+
   constructor(deviceId: string, args: EnttecOpenUsbDmxArgs) {
     super();
 
@@ -30,12 +35,12 @@ export class EnttecOpenUsbDMX extends AbstractUniverseDriver implements Universe
     });
   }
 
-  update(channels: {[key:number]: number}, extraData: any): void {
+  update(channels: {[key: number]: number}, extraData?: any): void {
     for (const c in channels) {
       this._universe[c] = channels[c];
     }
 
-    this.emitUpdate(channels, extraData);
+    this.emit('update', channels, extraData);
   }
 
   updateAll(value: any): void {
@@ -52,9 +57,9 @@ export class EnttecOpenUsbDMX extends AbstractUniverseDriver implements Universe
     }
 
     // toggle break
-    self._dev.set({brk: true, rts: true}, (err:any, r:any) => {
+    self._dev.set({brk: true, rts: true}, (err: any) => {
       setTimeout(() => {
-        self._dev.set({brk: false, rts: true}, (err:any, r:any) => {
+        self._dev.set({brk: false, rts: true}, (err: any) => {
           setTimeout(() => {
             if (self._readyToWrite) {
               self._readyToWrite = false;
@@ -79,17 +84,10 @@ export class EnttecOpenUsbDMX extends AbstractUniverseDriver implements Universe
 
   close(): Promise<void> {
     this.stop();
-    return new Promise((resolve,reject) => this._dev.close((err:any)=>err ? reject(err):resolve(err)));
+    return new Promise((resolve,reject) => this._dev.close((err: any)=>err ? reject(err):resolve(err)));
   }
 
   get(c: number): number {
     return this._universe[c];
   }
-
-  private readonly _universe: Buffer;
-  private readonly _interval: number;
-  private readonly _dev: any;
-
-  private _readyToWrite: boolean;
-  private _intervalHandle: Timeout | undefined;
 }

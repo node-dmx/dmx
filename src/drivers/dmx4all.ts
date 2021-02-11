@@ -1,84 +1,100 @@
-const SerialPort = require('serialport');
-const util = require('util');
-const EventEmitter = require('events').EventEmitter;
+import SerialPort from 'serialport';
+import {EventEmitter} from 'events';
+import { IUniverseDriver, UniverseData } from '../models/IUniverseDriver';
 
 const UNIVERSE_LEN = 512;
 
-function DMX4ALL(deviceId, options = {}) {
-  this.universe = Buffer.alloc(UNIVERSE_LEN + 1);
-  this.readyToWrite = true;
-  this.interval = 1000 / (options.dmx_speed || 33);
-
-  this.dev = new SerialPort(deviceId, {
-    'baudRate': 38400,
-    'dataBits': 8,
-    'stopBits': 1,
-    'parity': 'none',
-  }, err => {
-    if (!err) {
-      this.start();
-    } else {
-      console.warn(err);
-    }
-  });
-  // this.dev.on('data', data => {
-  //   process.stdout.write(data.toString('ascii'))
-  // });
+export interface DMX4AllArgs {
+  dmx_speed?: number;
 }
 
-DMX4ALL.prototype.sendUniverse = function () {
-  if (!this.dev.writable) {
-    return;
+export class DMX4AllDriver extends EventEmitter implements IUniverseDriver {
+  private readonly universe: Buffer;
+  private readyToWrite: boolean;
+  private readonly interval: number;
+  private readonly dev: SerialPort;
+  private intervalhandle?: NodeJS.Timeout;
+  constructor(deviceId: string, options: DMX4AllArgs = {}) {
+    super();
+    this.universe = Buffer.alloc(UNIVERSE_LEN + 1);
+    this.readyToWrite = true;
+    this.interval = 1000 / (options.dmx_speed || 33);
+
+    this.dev = new SerialPort(deviceId, {
+      'baudRate': 38400,
+      'dataBits': 8,
+      'stopBits': 1,
+      'parity': 'none',
+    }, (err: any) => {
+      if (!err) {
+        this.start();
+      } else {
+        console.warn(err);
+      }
+    });
+    // this.dev.on('data', data => {
+    //   process.stdout.write(data.toString('ascii'))
+    // });
   }
 
-  if (this.readyToWrite) {
-    this.readyToWrite = false;
-
-    const msg = Buffer.alloc(UNIVERSE_LEN * 3);
-
-    for (let i = 0; i < UNIVERSE_LEN; i++) {
-      msg[i * 3 + 0] = (i < 256) ? 0xE2 : 0xE3;
-      msg[i * 3 + 1] = i;
-      msg[i * 3 + 2] = this.universe[i + 1];
+  sendUniverse(): void {
+    if (!this.dev.writable) {
+      return;
     }
 
-    this.dev.write(msg);
-    this.dev.drain(() => {
-      this.readyToWrite = true;
+    if (this.readyToWrite) {
+      this.readyToWrite = false;
+
+      const msg = Buffer.alloc(UNIVERSE_LEN * 3);
+
+      for (let i = 0; i < UNIVERSE_LEN; i++) {
+        msg[i * 3 + 0] = (i < 256) ? 0xE2 : 0xE3;
+        msg[i * 3 + 1] = i;
+        msg[i * 3 + 2] = this.universe[i + 1];
+      }
+
+      this.dev.write(msg);
+      this.dev.drain(() => {
+        this.readyToWrite = true;
+      });
+    }
+  }
+
+  start(): void {
+    this.intervalhandle = setInterval(this.sendUniverse.bind(this), this.interval);
+  }
+
+  stop(): void {
+    if (this.intervalhandle) clearInterval(this.intervalhandle);
+  }
+
+  close(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.dev.close((e) => {
+        if (e) {
+          reject(e);
+          return;
+        }
+        resolve();
+      });
     });
   }
-};
 
-DMX4ALL.prototype.start = function () {
-  this.intervalhandle = setInterval(this.sendUniverse.bind(this), this.interval);
-};
+  update(u: UniverseData, extraData?: any): void {
+    for (const c in u) {
+      this.universe[c] = u[c];
+    }
 
-DMX4ALL.prototype.stop = function () {
-  clearInterval(this.intervalhandle);
-};
-
-DMX4ALL.prototype.close = function (cb) {
-  this.dev.close(cb);
-};
-
-DMX4ALL.prototype.update = function (u, extraData) {
-  for (const c in u) {
-    this.universe[c] = u[c];
+    this.emit('update', u, extraData);
   }
 
-  this.emit('update', u, extraData);
-};
-
-DMX4ALL.prototype.updateAll = function (v) {
-  for (let i = 1; i <= 512; i++) {
-    this.universe[i] = v;
+  updateAll(v: number): void {
+    for (let i = 1; i <= 512; i++) {
+      this.universe[i] = v;
+    }
   }
-};
 
-DMX4ALL.prototype.get = function (c) {
-  return this.universe[c];
-};
-
-util.inherits(DMX4ALL, EventEmitter);
-
-module.exports = DMX4ALL;
+  get(c: number): number {
+    return this.universe[c];
+  }
+}

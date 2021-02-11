@@ -1,14 +1,12 @@
-import {AbstractUniverseDriver} from './abstract-universe-driver';
-import {UniverseDriver} from './universe-driver';
-
-const EventEmitter = require('events').EventEmitter;
+import {EventEmitter} from 'events';
+import {IUniverseDriver} from '../models/IUniverseDriver';
 
 export interface NullDriverArgs {
   dmx_speed?: number;
 }
 
-export class NullDriver extends AbstractUniverseDriver implements UniverseDriver {
-  constructor(deviceId: any, options: NullDriverArgs) {
+export class NullDriver extends EventEmitter implements IUniverseDriver {
+  constructor(options: NullDriverArgs = {}) {
     super();
 
     this._universe = Buffer.alloc(513, 0);
@@ -26,9 +24,7 @@ export class NullDriver extends AbstractUniverseDriver implements UniverseDriver
     clearInterval(this._timeout);
   }
 
-  close(cb: Function): void {
-    cb(null);
-  }
+  close(): void {}
 
   update(u: {[key: number]: number}, extraData: any): void {
     for (const c in u) {
@@ -36,7 +32,7 @@ export class NullDriver extends AbstractUniverseDriver implements UniverseDriver
     }
     this.logUniverse();
 
-    this.emitUpdate(u, extraData);
+    this.emit('update', u, extraData);
   }
 
   updateAll(v: number): void {
