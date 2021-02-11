@@ -9,7 +9,7 @@ const ENTTEC_PRO_SEND_DMX_RQ = 0x06;
 // var ENTTEC_PRO_RECV_DMX_PKT = 0x05;
 
 export interface EnttecUSBDMXProArgs {
-  dmx_speed?: number;
+  dmxSpeed?: number;
 }
 
 export class EnttecUSBDMXProDriver extends EventEmitter implements IUniverseDriver {
@@ -17,12 +17,12 @@ export class EnttecUSBDMXProDriver extends EventEmitter implements IUniverseDriv
   readyToWrite: boolean;
   interval: number;
   dev: SerialPort;
-  intervalhandle?: NodeJS.Timeout;
+  intervalhandle?: any;
   constructor(deviceId: string, options: EnttecUSBDMXProArgs = {}) {
     super();
     this.universe = Buffer.alloc(513, 0);
     this.readyToWrite = true;
-    this.interval = 1000 / (options.dmx_speed || 40);
+    this.interval = 1000 / (options.dmxSpeed || 40);
 
     this.dev = new SerialPort(deviceId, {
       'baudRate': 250000,
@@ -65,7 +65,6 @@ export class EnttecUSBDMXProDriver extends EventEmitter implements IUniverseDriv
       });
     }
   }
-
 
   start(): void {
     this.intervalhandle = setInterval(this.sendUniverse.bind(this), this.interval);

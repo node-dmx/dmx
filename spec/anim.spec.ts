@@ -35,7 +35,9 @@ test('real timers', done => {
     1: 255,
   }, 250).add({
     1: 0,
-  }, 250).run(universe, () => {
+  }, 250).run(universe, async () => {
+    await universe.stop();
+    await universe.close();
     const timeTook = Date.now() - startAt;
 
     expect(timeTook).toBeGreaterThanOrEqual(500 - ANIM_PRECISION);

@@ -11,5 +11,7 @@ export interface IUniverseDriver extends EventEmitter {
 
   updateAll(value: number): void;
 
+  start(): Promise<void> | void;
+  stop(): Promise<void> | void;
   close(): Promise<void> | void;
 }

@@ -3,7 +3,7 @@ import {IUniverseDriver} from '../models/IUniverseDriver';
 import {EventEmitter} from 'events';
 
 export interface EnttecOpenUsbDmxArgs {
-  dmx_speed?: number;
+  dmxSpeed?: number;
 }
 
 export class EnttecOpenUSBDMXDriver extends EventEmitter implements IUniverseDriver {
@@ -12,14 +12,14 @@ export class EnttecOpenUSBDMXDriver extends EventEmitter implements IUniverseDri
   private readonly _dev: SerialPort;
 
   private _readyToWrite: boolean;
-  private _intervalHandle: NodeJS.Timeout | undefined;
+  private _intervalHandle?: any;
 
   constructor(deviceId: string, args: EnttecOpenUsbDmxArgs) {
     super();
 
     this._universe = Buffer.alloc(513);
     this._readyToWrite = true;
-    this._interval = args?.dmx_speed ? (1000 / args.dmx_speed) : 46;
+    this._interval = args?.dmxSpeed ? (1000 / args.dmxSpeed) : 46;
 
     this._dev = new SerialPort(deviceId, {
       'baudRate': 250000,
@@ -84,7 +84,7 @@ export class EnttecOpenUSBDMXDriver extends EventEmitter implements IUniverseDri
 
   close(): Promise<void> {
     this.stop();
-    return new Promise((resolve,reject) => this._dev.close((err: any)=>err ? reject(err):resolve(err)));
+    return new Promise((resolve, reject) => this._dev.close((err: any)=>err ? reject(err) : resolve(err)));
   }
 
   get(c: number): number {

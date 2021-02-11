@@ -6,14 +6,14 @@ const dgram = require('dgram');
 const UNIVERSE_LEN = 512;
 
 export interface BBDMXArgs {
-  dmx_speed?: number,
+  dmxSpeed?: number,
   port?: number,
 }
 
-export class BBDMXDriver extends EventEmitter  implements IUniverseDriver {
+export class BBDMXDriver extends EventEmitter implements IUniverseDriver {
   readyToWrite: boolean;
   interval: number;
-  timeout?: NodeJS.Timeout;
+  timeout?: any;
   options: {};
   universe: Buffer;
   host: string;
@@ -22,7 +22,7 @@ export class BBDMXDriver extends EventEmitter  implements IUniverseDriver {
   constructor(deviceId = '127.0.0.1', options: BBDMXArgs = {}) {
     super();
     this.readyToWrite = true;
-    this.interval = options.dmx_speed ? (1000 / options.dmx_speed) : 24;
+    this.interval = options.dmxSpeed ? (1000 / options.dmxSpeed) : 24;
     this.options = options;
     this.universe = Buffer.alloc(UNIVERSE_LEN + 1);
     this.host = deviceId;

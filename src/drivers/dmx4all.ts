@@ -5,7 +5,7 @@ import { IUniverseDriver, UniverseData } from '../models/IUniverseDriver';
 const UNIVERSE_LEN = 512;
 
 export interface DMX4AllArgs {
-  dmx_speed?: number;
+  dmxSpeed?: number;
 }
 
 export class DMX4AllDriver extends EventEmitter implements IUniverseDriver {
@@ -13,7 +13,7 @@ export class DMX4AllDriver extends EventEmitter implements IUniverseDriver {
   private readyToWrite: boolean;
   private readonly interval: number;
   private readonly dev: SerialPort;
-  private intervalhandle?: NodeJS.Timeout;
+  private intervalhandle?: any;
   constructor(deviceId: string, options: DMX4AllArgs = {}) {
     super();
     this.universe = Buffer.alloc(UNIVERSE_LEN + 1);

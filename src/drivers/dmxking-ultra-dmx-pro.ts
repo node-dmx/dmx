@@ -10,9 +10,8 @@ const DMXKING_ULTRA_DMX_PRO_SEND_DMX_A_RQ = 0x64;
 const DMXKING_ULTRA_DMX_PRO_SEND_DMX_B_RQ = 0x65;
 // var DMXKING_ULTRA_DMX_PRO_RECV_DMX_PKT = 0x05;
 
-
 export interface DMXKingUltraDMXProDriverArgs {
-  dmx_speed?: number;
+  dmxSpeed?: number;
   port?: 'A' | 'B';
 }
 
@@ -23,13 +22,13 @@ export class DMXKingUltraDMXProDriver extends EventEmitter implements IUniverseD
   interval: number;
   sendDMXReq: number;
   dev: SerialPort;
-  intervalhandle?: NodeJS.Timeout;
+  intervalhandle?: any;
   constructor(deviceId: string, options: DMXKingUltraDMXProDriverArgs = {}) {
     super();
     this.options = options;
     this.universe = Buffer.alloc(513, 0);
     this.readyToWrite = true;
-    this.interval = 1000 / (options.dmx_speed || 40);
+    this.interval = 1000 / (options.dmxSpeed || 40);
 
     this.sendDMXReq = DMXKING_ULTRA_DMX_PRO_SEND_DMX_RQ;
     if (this.options.port === 'A') {

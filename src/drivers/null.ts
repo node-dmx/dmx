@@ -2,7 +2,7 @@ import {EventEmitter} from 'events';
 import {IUniverseDriver} from '../models/IUniverseDriver';
 
 export interface NullDriverArgs {
-  dmx_speed?: number;
+  dmxSpeed?: number;
 }
 
 export class NullDriver extends EventEmitter implements IUniverseDriver {
@@ -10,7 +10,7 @@ export class NullDriver extends EventEmitter implements IUniverseDriver {
     super();
 
     this._universe = Buffer.alloc(513, 0);
-    this._interval = 1000 / (options?.dmx_speed ?? 1);
+    this._interval = 1000 / (options?.dmxSpeed ?? 1);
     this.start();
   }
 

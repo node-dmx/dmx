@@ -1,10 +1,9 @@
 import { EventEmitter } from 'events';
 import { IUniverseDriver, UniverseData } from '../models/IUniverseDriver';
-
-const dgram = require('dgram');
+import dgram from 'dgram';
 
 export interface ArtnetArgs {
-  dmx_speed?: number,
+  dmxSpeed?: number,
   universe?: number,
   port?: number,
 }
@@ -21,7 +20,7 @@ export class ArtnetDriver extends EventEmitter implements IUniverseDriver {
   host: string;
   port: any;
   dev: any;
-  timeout?: NodeJS.Timeout;
+  timeout?: any;
   constructor(deviceId = '127.0.0.1', options: ArtnetArgs = {}) {
     super();
     this.readyToWrite = true;
@@ -38,7 +37,7 @@ export class ArtnetDriver extends EventEmitter implements IUniverseDriver {
      * Allow artnet rate to be set and default to 44Hz
      * @type Number
      */
-    this.interval = options.dmx_speed !== undefined && !isNaN(options.dmx_speed) ? 1000 / options.dmx_speed : 24;
+    this.interval = options.dmxSpeed !== undefined && !isNaN(options.dmxSpeed) ? 1000 / options.dmxSpeed : 24;
 
     this.universeId.writeInt16LE(options.universe || 0, 0);
     this.host = deviceId;
