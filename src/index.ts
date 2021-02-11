@@ -1,80 +1,43 @@
 import {EventEmitter} from 'events';
-import {UniverseDriver} from './drivers/universe-driver';
-import {NullDriver} from './drivers/null';
-import {EnttecOpenUsbDMX} from './drivers/enttec-open-usb-dmx';
+import {IUniverseDriver} from './drivers/IUniverseDriver';
+import {Devices, PredefinedDevices} from './devices';
 
 enum Events {
   update = 'update',
   updateAll = 'updateAll',
 }
 
-export enum Driver {
-  null = 'null',
-  socketIo = 'socketio',
-  dmx4all = 'dmx4all',
-  enttecUsbDmxPro = 'enttec-usb-dmx-pro',
-  enttecOpenUsbDmx = 'enttec-open-usb-dmx',
-  dmxkingUltraDmxPro = 'dmxking-ultra-dmx-pro',
-  artNet = 'artNet',
-  bbdmx = 'bbdmx',
-  sacn = 'sacn',
-}
-
 export interface DmxArgs {
   devices?: any;
 }
 
-export class DMX {
+export class DMX extends EventEmitter {
+  private readonly _devices: Devices;
+  private readonly _universesByName: Map<string, IUniverseDriver> = new Map();
   constructor(options?: DmxArgs) {
+    super();
     const devices = options?.devices ?? {};
 
-    this._devices = Object.assign({}, require('./devices'), devices);
-    this._animation = require('./anim');
-
-    this.registerDriver(Driver.null, NullDriver);
-    this.registerDriver(Driver.socketIo, require('./drivers/socketio'));
-    this.registerDriver(Driver.dmx4all, require('./drivers/dmx4all'));
-    this.registerDriver(Driver.enttecUsbDmxPro, require('./drivers/enttec-usb-dmx-pro'));
-    this.registerDriver(Driver.enttecOpenUsbDmx, EnttecOpenUsbDMX);
-    this.registerDriver(Driver.dmxkingUltraDmxPro, require('./drivers/dmxking-ultra-dmx-pro'));
-    this.registerDriver(Driver.artNet, require('./drivers/artnet'));
-    this.registerDriver(Driver.bbdmx, require('./drivers/bbdmx'));
-    this.registerDriver(Driver.sacn, require('./drivers/sacn'));
+    this._devices = Object.assign({}, PredefinedDevices, devices);
   }
 
-  registerDriver(name: Driver | string, module: any): void {
-    this._driversByName.set(name, module);
-  }
-
-  addUniverse(name: string, driver: Driver | string, deviceId?: any, options?: any): UniverseDriver {
-    const DriverConstructor = this._driversByName.get(driver);
-
-    const universe = new DriverConstructor(deviceId, options);
+  addUniverse(name: string, universe: IUniverseDriver): IUniverseDriver {
     universe.onUpdate((channels, extraData) => {
-      this._events.emit(Events.update, name, channels, extraData);
+      this.emit(Events.update, name, channels, extraData);
     });
 
     this._universesByName.set(name, universe);
 
-
     return universe;
   }
 
-  onUpdate(cb: (channels, extraData) => void): void {
-    this._events.on(Events.update, cb);
-  }
-
-  onUpdateAll(cb: (universe, value) => void): void {
-    this._events.on(Events.updateAll, cb);
-  }
-
   update(universe: string, channels: {[key: number]: number}, extraData?: any): void {
-    this._universesByName.get(universe).update(channels, extraData || {});
+    this._universesByName.get(universe)?.update(channels, extraData || {});
   }
 
-  updateAll(universe: string, value): void {
-    this._universesByName.get(universe).updateAll(value);
-    this._events.emit(Events.updateAll, universe, value);
+  updateAll(universe: string, value: number): void {
+    this._universesByName.get(universe)?.updateAll(value);
+    this.emit(Events.updateAll, universe, value);
   }
 
   universeToObject(universeKey: string): {[key: number]: number} {
@@ -82,7 +45,7 @@ export class DMX {
     const u: {[key: number]: number} = {};
 
     for (let i = 0; i < 512; i++) {
-      u[i] = universe.get(i);
+      u[i] = universe?.get(i) || 0;
     }
 
     return u;
@@ -93,10 +56,4 @@ export class DMX {
       await uni.close();
     }
   }
-
-  private readonly _devices: any;
-  private readonly _animation: any;
-  private readonly _driversByName: Map<string, new () => UniverseDriver> = new Map();
-  private readonly _universesByName: Map<string, UniverseDriver> = new Map();
-  private readonly _events = new EventEmitter();
 }
