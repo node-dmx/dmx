@@ -74,7 +74,7 @@ Create a new DMX Animation instance. This can be chained similar to jQuery.
 
 The options Object takes the following keys:
 
-- <code>loops</code> - Number, the number of times this animation sequence will loop when <code>run</code> is invoked. This value is overridden if you invoke <code>runLoop</code>.
+- <code>loop</code> - Number, the number of times this animation sequence will loop when <code>run</code> is invoked. This value is overridden if you invoke <code>runLoop</code>.
 - <code>filter</code> - Function, allows you to read or modify the values being set to each channel during each animation step.
 
 If you specify a <code>filter</code> function, it must take a single object parameter in which keys are channel numbers and values are the values to set those channels to.

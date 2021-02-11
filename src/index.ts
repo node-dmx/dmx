@@ -17,6 +17,7 @@ export enum Driver {
   dmxkingUltraDmxPro = 'dmxking-ultra-dmx-pro',
   artNet = 'artNet',
   bbdmx = 'bbdmx',
+  sacn = 'sacn',
 }
 
 export interface DmxArgs {
@@ -38,6 +39,7 @@ export class DMX {
     this.registerDriver(Driver.dmxkingUltraDmxPro, require('./drivers/dmxking-ultra-dmx-pro'));
     this.registerDriver(Driver.artNet, require('./drivers/artnet'));
     this.registerDriver(Driver.bbdmx, require('./drivers/bbdmx'));
+    this.registerDriver(Driver.sacn, require('./drivers/sacn'));
   }
 
   registerDriver(name: Driver | string, module: any): void {
