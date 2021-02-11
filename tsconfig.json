@@ -9,6 +9,7 @@
     "declaration": true,
     "outDir": "dist",
     "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": false,
     "target": "ES6",
     "strict": true,
     "lib": [

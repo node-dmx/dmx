@@ -18,7 +18,7 @@ export class DMX4AllDriver extends EventEmitter implements IUniverseDriver {
     super();
     this.universe = Buffer.alloc(UNIVERSE_LEN + 1);
     this.readyToWrite = true;
-    this.interval = 1000 / (options.dmx_speed || 33);
+    this.interval = 1000 / (options.dmxSpeed || 33);
 
     this.dev = new SerialPort(deviceId, {
       'baudRate': 38400,
