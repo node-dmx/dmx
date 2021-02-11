@@ -1,11 +1,8 @@
 import {EventEmitter} from 'events';
-import {IUniverseDriver} from './drivers/IUniverseDriver';
+import {IUniverseDriver} from './models/IUniverseDriver';
 import {Devices, PredefinedDevices} from './devices';
+import { Events } from './models/Events';
 
-enum Events {
-  update = 'update',
-  updateAll = 'updateAll',
-}
 
 export interface DmxArgs {
   devices?: any;
@@ -22,7 +19,7 @@ export class DMX extends EventEmitter {
   }
 
   addUniverse(name: string, universe: IUniverseDriver): IUniverseDriver {
-    universe.onUpdate((channels, extraData) => {
+    universe.on(Events.update, (channels, extraData) => {
       this.emit(Events.update, name, channels, extraData);
     });
 

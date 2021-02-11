@@ -1,18 +1,20 @@
+import { Animation } from '../animation';
+import { NullDriver } from '../drivers/null';
 import {DMX} from '../index';
+import { IUniverseDriver, UniverseData } from '../models/IUniverseDriver';
 
 const dmx = new DMX();
-const A = dmx.animation;
 
 // var universe = dmx.addUniverse('demo', 'enttec-usb-dmx-pro', '/dev/cu.usbserial-6AVNHXS8')
 // var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
 // const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});
-const universe = dmx.addUniverse('demo', 'null');
+const universe = dmx.addUniverse('demo', new NullDriver());
 
 universe.update({1: 1, 2: 0});
 universe.update({16: 1, 17: 255});
 universe.update({1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0});
 
-function greenWater(universe, channels, duration) {
+function greenWater(universe: IUniverseDriver, channels: UniverseData, duration: number): void {
   const colors = [
     [160, 230, 20],
     [255, 255, 0],
@@ -21,22 +23,23 @@ function greenWater(universe, channels, duration) {
 
   for (const c in channels) {
     const r = Math.floor((Math.random() * colors.length));
-    const u = {};
+    const u: UniverseData = {};
 
     for (let i = 0; i < 3; i++) {
       u[channels[c] + i] = colors[r][i];
     }
-    new A().add(u, duration).run(universe);
+    new Animation().add(u, duration).run(universe);
   }
-  setTimeout(function () {greenWater(universe, channels, duration);}, duration * 2);
+  setTimeout(() => greenWater(universe, channels, duration), duration * 2);
 }
 
-function warp(universe, channel, min, max, duration) {
-  const a = {}, b = {};
+function warp(universe: IUniverseDriver, channel: number, min: number, max: number, duration: number): void {
+  const a: UniverseData = {};
+  const b: UniverseData = {};
 
   a[channel] = min;
   b[channel] = max;
-  new A().add(a, duration).add(b, duration).run(universe, function () {
+  new Animation().add(a, duration).add(b, duration).run(universe, function () {
     warp(universe, channel, min, max, duration);
   });
 }

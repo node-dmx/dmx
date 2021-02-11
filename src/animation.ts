@@ -1,12 +1,12 @@
-const ease = require('./easing.js').ease;
+import { IUniverseDriver } from './models/IUniverseDriver';
+import { ease } from './easing';
 
-export interface AnimArgs {
+export interface AnimationArgs {
   loop?: number;
   filter?: any;
 }
 
-export class Anim {
-
+export class Animation {
   public loops: number;
   public frameDelay: number;
   public animations: any[];
@@ -17,7 +17,7 @@ export class Anim {
   public currentLoop: number;
   public filter: any;
 
-  constructor(args: AnimArgs = {}) {
+  constructor(args: AnimationArgs = {}) {
     this.frameDelay = 1;
     this.animations = [];
     this.lastAnimation = 0;
@@ -29,7 +29,7 @@ export class Anim {
     this.filter = args.filter;
   }
 
-  add(to, duration = 0, options = {}) {
+  add(to: any, duration = 0, options: any = {}): this {
     options.easing = options.easing || 'linear';
 
     this.animations.push({
@@ -43,24 +43,24 @@ export class Anim {
     return this;
   }
 
-  delay(duration) {
+  delay(duration: number): this {
     this.add({}, duration);
     return this;
   }
 
-  stop() {
+  stop(): void {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
   }
 
-  reset(startTime = new Date().getTime()) {
+  reset(startTime = new Date().getTime()): void {
     this.startTime = startTime;
     this.lastAnimation = 0;
   }
 
-  runNextLoop(universe, onFinish) {
-    const runAnimationStep = () => {
+  runNextLoop(universe: IUniverseDriver, onFinish?: () => void): this {
+    const runAnimationStep = (): void => {
       const now = new Date().getTime();
       const elapsedTime = now - this.startTime;
 
@@ -73,7 +73,7 @@ export class Anim {
       while (
         currentAnimation < this.animations.length &&
         elapsedTime >= this.animations[currentAnimation].end
-        ) {
+      ) {
         currentAnimation++;
       }
 
@@ -120,14 +120,14 @@ export class Anim {
       } else {
         // Set intermediate channel values during an animation
         const animation = this.animations[currentAnimation];
-        const easing = ease[animation.options.easing];
+        const easing = (ease as any)[animation.options.easing];
         const duration = animation.end - animation.start;
         const animationElapsedTime = elapsedTime - animation.start;
 
         if (!animation.from) {
           animation.from = {};
           for (const k in animation.to) {
-            animation.from[k] = universe.get(k);
+            animation.from[k] = universe?.get(Number(k));
           }
           if (animation.options.from) {
             animation.from = Object.assign(animation.from, animation.options.from);
@@ -141,7 +141,7 @@ export class Anim {
             1,
             duration
           );
-          const intermediateValues = {};
+          const intermediateValues: any = {};
 
           for (const k in animation.to) {
             const startValue = animation.from[k];
@@ -166,17 +166,17 @@ export class Anim {
     return this;
   }
 
-  run(universe, onFinish: Function) {
-    if (universe.interval) {
+  run(universe: IUniverseDriver, onFinish?: () => void): void {
+    if ((universe as any).interval) {
       // Optimisation to run animation updates at double the rate of driver updates using Nyquist's theorem
-      this.frameDelay = universe.interval / 2;
+      this.frameDelay = (universe as any).interval / 2;
     }
     this.reset();
     this.currentLoop = 0;
     this.runNextLoop(universe, onFinish);
   }
 
-  runLoop(universe, onFinish, loops = Infinity) {
+  runLoop(universe: IUniverseDriver, onFinish?: () => void, loops = Infinity): this {
     this.loops = loops;
     this.run(universe, onFinish);
     return this;

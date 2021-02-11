@@ -1,10 +1,12 @@
 export interface Device {
   channels: string[]|number[];
   ranges?: any;
-  channelgroups?:string[];
+  channelgroups?: string[];
 }
 
-export const Devices: {[key: string]: Device} = {
+export type Devices = { [key: string]: Device };
+
+export const PredefinedDevices: Devices = {
   'generic': {
     channels: ['dimmer'],
   },
