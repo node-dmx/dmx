@@ -1,7 +1,8 @@
-import {DMX} from '../src';
+import {DMX, Animation} from '../src';
+import { NullDriver } from '../src/drivers/null';
 
 const dmx = new DMX();
-const universe = dmx.addUniverse('test', 'null', 'test');
+const universe = dmx.addUniverse('test', new NullDriver());
 
 const updateMock = jest.fn();
 
@@ -13,7 +14,7 @@ const ANIM_PRECISION = 50;
 test('fake timers', () => {
   jest.useFakeTimers();
 
-  new DMX.Animation().add({
+  new Animation().add({
     1: 255,
   }, 100).add({
     1: 0,
@@ -30,7 +31,7 @@ test('real timers', done => {
 
   const startAt = Date.now();
 
-  new DMX.Animation().add({
+  new Animation().add({
     1: 255,
   }, 250).add({
     1: 0,

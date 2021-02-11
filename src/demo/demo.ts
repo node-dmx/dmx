@@ -1,6 +1,6 @@
-import { Animation } from '../animation';
+import { Animation } from '../Animation';
 import { NullDriver } from '../drivers/null';
-import {DMX} from '../index';
+import { DMX } from '../';
 import { IUniverseDriver, UniverseData } from '../models/IUniverseDriver';
 
 const dmx = new DMX();

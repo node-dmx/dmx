@@ -6,7 +6,7 @@ export interface EnttecOpenUsbDmxArgs {
   dmx_speed?: number;
 }
 
-export class EnttecOpenUsbDMX extends EventEmitter implements IUniverseDriver {
+export class EnttecOpenUSBDMXDriver extends EventEmitter implements IUniverseDriver {
   private readonly _universe: Buffer;
   private readonly _interval: number;
   private readonly _dev: SerialPort;
