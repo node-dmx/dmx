@@ -1,10 +1,11 @@
-import { EventEmitter } from 'events';
-import { IUniverseDriver, UniverseData } from '../models/IUniverseDriver';
+import {EventEmitter} from 'events';
+import {IUniverseDriver, UniverseData} from '../models/IUniverseDriver';
 import * as sacn from 'sacn';
 
 export class SACNDriver extends EventEmitter implements IUniverseDriver {
   sACNServer: any;
   universe: any = {};
+
   constructor(universe = 1) {
     super();
     this.sACNServer = new sacn.Sender({
@@ -13,19 +14,16 @@ export class SACNDriver extends EventEmitter implements IUniverseDriver {
     });
   }
 
-  start(): void {}
-
-  stop(): void {
-    this.sACNServer.close();
+  async init(): Promise<void> {
   }
 
   close(): void {
-    this.stop();
+    this.sACNServer.close();
   }
 
   update(u: UniverseData, extraData: any): void {
     for (const c in u) {
-      this.universe[c] = this.dmxToPercent(u[c]);
+      this.universe[c] = SACNDriver.dmxToPercent(u[c]);
     }
     this.sendUniverse();
   }
@@ -38,20 +36,20 @@ export class SACNDriver extends EventEmitter implements IUniverseDriver {
 
   updateAll(v: number): void {
     for (let i = 1; i <= 512; i++) {
-      this.universe[i] = this.dmxToPercent(v);
+      this.universe[i] = SACNDriver.dmxToPercent(v);
     }
     this.sendUniverse();
   }
 
   get(c: number): number {
-    return this.percentToDmx(this.universe[c]);
+    return SACNDriver.percentToDmx(this.universe[c]);
   }
 
-  dmxToPercent(v: number): number {
+  static dmxToPercent(v: number): number {
     return v / 255 * 100;
   }
 
-  percentToDmx(v: number): number {
+  static percentToDmx(v: number): number {
     return v / 100 * 255;
   }
 }

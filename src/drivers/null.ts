@@ -11,20 +11,15 @@ export class NullDriver extends EventEmitter implements IUniverseDriver {
 
     this._universe = Buffer.alloc(513, 0);
     this._interval = 1000 / (options?.dmxSpeed ?? 1);
+  }
+
+  async init(): Promise<void> {
     this.start();
   }
 
-  start(): void {
-    this._timeout = setInterval(() => {
-      this.logUniverse();
-    }, this._interval);
+  close(): void {
+    this.stop();
   }
-
-  stop(): void {
-    clearInterval(this._timeout);
-  }
-
-  close(): void {}
 
   update(u: {[key: number]: number}, extraData: any): void {
     for (const c in u) {
@@ -47,6 +42,16 @@ export class NullDriver extends EventEmitter implements IUniverseDriver {
 
   logUniverse(): void {
     console.log(this._universe.slice(1));
+  }
+
+  private start(): void {
+    this._timeout = setInterval(() => {
+      this.logUniverse();
+    }, this._interval);
+  }
+
+  private stop(): void {
+    clearInterval(this._timeout);
   }
 
   private readonly _universe: Buffer;

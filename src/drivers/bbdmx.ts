@@ -1,5 +1,5 @@
-import { EventEmitter } from 'events';
-import { IUniverseDriver, UniverseData } from '../models/IUniverseDriver';
+import {EventEmitter} from 'events';
+import {IUniverseDriver, UniverseData} from '../models/IUniverseDriver';
 
 const dgram = require('dgram');
 
@@ -19,6 +19,7 @@ export class BBDMXDriver extends EventEmitter implements IUniverseDriver {
   host: string;
   port: any;
   dev: any;
+
   constructor(deviceId = '127.0.0.1', options: BBDMXArgs = {}) {
     super();
     this.readyToWrite = true;
@@ -28,6 +29,10 @@ export class BBDMXDriver extends EventEmitter implements IUniverseDriver {
     this.host = deviceId;
     this.port = options.port || 9930;
     this.dev = dgram.createSocket('udp4');
+    this.start();
+  }
+
+  async init(): Promise<void> {
     this.start();
   }
 
@@ -47,14 +52,6 @@ export class BBDMXDriver extends EventEmitter implements IUniverseDriver {
         this.readyToWrite = true;
       });
     }
-  }
-
-  start(): void {
-    this.timeout = setInterval(this.sendUniverse.bind(this), this.interval);
-  }
-
-  stop(): void {
-    if (this.timeout) clearInterval(this.timeout);
   }
 
   close(): void {
@@ -77,5 +74,13 @@ export class BBDMXDriver extends EventEmitter implements IUniverseDriver {
 
   get(c: number): number {
     return this.universe[c];
+  }
+
+  private start(): void {
+    this.timeout = setInterval(this.sendUniverse.bind(this), this.interval);
+  }
+
+  private stop(): void {
+    if (this.timeout) clearInterval(this.timeout);
   }
 }

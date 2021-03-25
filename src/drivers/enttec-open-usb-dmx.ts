@@ -1,93 +1,53 @@
-import SerialPort from 'serialport';
-import {IUniverseDriver} from '../models/IUniverseDriver';
-import {EventEmitter} from 'events';
+import {wait} from '../util/time';
+import {AbstractSerialDriver} from './abstract-serial-driver';
 
 export interface EnttecOpenUsbDmxArgs {
   dmxSpeed?: number;
 }
 
-export class EnttecOpenUSBDMXDriver extends EventEmitter implements IUniverseDriver {
-  private readonly _universe: Buffer;
-  private readonly _interval: number;
-  private readonly _dev: SerialPort;
-
+/**
+ * Controls the Enttec Open DMX device:
+ * https://www.enttec.com.au/product/lighting-communication-protocols/usb-lighting-interface/open-dmx-usb/
+ *
+ * The controller uses a FTDI FT232RL chip for serial communication. See
+ * [here](http://www.ftdichip.com/Support/Documents/ProgramGuides/D2XX_Programmer's_Guide(FT_000071).pdf)
+ * for an API reference and to translate the Enttec code examples to Node.js/Serialport.
+ */
+export class EnttecOpenUSBDMXDriver extends AbstractSerialDriver {
   private _readyToWrite: boolean;
-  private _intervalHandle?: any;
 
-  constructor(deviceId: string, args: EnttecOpenUsbDmxArgs) {
-    super();
-
-    this._universe = Buffer.alloc(513);
-    this._readyToWrite = true;
-    this._interval = args?.dmxSpeed ? (1000 / args.dmxSpeed) : 46;
-
-    this._dev = new SerialPort(deviceId, {
-      'baudRate': 250000,
-      'dataBits': 8,
-      'stopBits': 2,
-      'parity': 'none',
-    }, (err: any) => {
-      if (!err) {
-        this.start();
-      } else {
-        console.warn(err);
-      }
+  constructor(serialPort: string, args?: EnttecOpenUsbDmxArgs) {
+    super(serialPort, {
+      serialPortOptions: {
+        'baudRate': 250000,
+        'dataBits': 8,
+        'stopBits': 2,
+        'parity': 'none',
+      },
+      sendInterval: args?.dmxSpeed ? (1000 / args.dmxSpeed) : 46,
     });
+
+    this._readyToWrite = true;
   }
 
-  update(channels: {[key: number]: number}, extraData?: any): void {
-    for (const c in channels) {
-      this._universe[c] = channels[c];
-    }
-
-    this.emit('update', channels, extraData);
-  }
-
-  updateAll(value: any): void {
-    for (let i = 1; i <= 512; i++) {
-      this._universe[i] = value;
-    }
-  }
-
-  sendUniverse(): void {
-    const self = this;
-
-    if (!this._dev.writable) {
+  async sendUniverse(): Promise<void> {
+    if (!this.serialPort.writable) {
       return;
     }
 
     // toggle break
-    self._dev.set({brk: true, rts: true}, (err: any) => {
-      setTimeout(() => {
-        self._dev.set({brk: false, rts: true}, (err: any) => {
-          setTimeout(() => {
-            if (self._readyToWrite) {
-              self._readyToWrite = false;
-              self._dev.write(Buffer.concat([Buffer.from([0]), self._universe.slice(1)]));
-              self._dev.drain(() => {
-                self._readyToWrite = true;
-              });
-            }
-          }, 1);
-        });
-      }, 1);
-    });
-  }
+    await this.serialPort.set({brk: true, rts: false});
+    await wait(1);
+    await this.serialPort.set({brk: false, rts: false});
+    await wait(1);
+    if (this._readyToWrite) {
+      const dataToWrite = Buffer.concat([Buffer.from([0]), this.universeBuffer.slice(1)]);
 
-  start(): void {
-    this._intervalHandle = setInterval(this.sendUniverse.bind(this), this._interval);
-  }
-
-  stop(): void {
-    this._intervalHandle && clearInterval(this._intervalHandle);
-  }
-
-  close(): Promise<void> {
-    this.stop();
-    return new Promise((resolve, reject) => this._dev.close((err: any)=>err ? reject(err) : resolve(err)));
-  }
-
-  get(c: number): number {
-    return this._universe[c];
+      this._readyToWrite = false;
+      this.serialPort.write(dataToWrite);
+      this.serialPort.drain(() => {
+        this._readyToWrite = true;
+      });
+    }
   }
 }

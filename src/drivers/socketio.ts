@@ -1,6 +1,6 @@
-import { IUniverseDriver, UniverseData } from '../models/IUniverseDriver';
+import {IUniverseDriver, UniverseData} from '../models/IUniverseDriver';
 import * as io from 'socket.io';
-import { EventEmitter } from 'events';
+import {EventEmitter} from 'events';
 
 export interface SocketIOArgs {
   port?: number;
@@ -10,11 +10,11 @@ export interface SocketIOArgs {
 export class SocketIODriver extends EventEmitter implements IUniverseDriver {
   universe: Buffer;
   server: io.Server;
+
   constructor(options: SocketIOArgs) {
     super();
     options = options || {};
 
-    const self = this;
     const port = options.port || 18909;
     const debug = options.debug || false;
 
@@ -27,14 +27,13 @@ export class SocketIODriver extends EventEmitter implements IUniverseDriver {
     });
 
     this.universe = Buffer.alloc(513, 0);
-    self.start();
   }
 
-  start(): void { }
+  async init(): Promise<void> {
+  }
 
-  stop(): void {}
-
-  close(): void {}
+  close(): void {
+  }
 
   update(u: UniverseData, extraData: any): void {
     for (const c in u) {

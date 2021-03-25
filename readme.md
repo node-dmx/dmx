@@ -4,7 +4,9 @@ DMX-512 controller library for node.js
 
 ## Install
 
-    npm install dmx
+```bash
+npm install dmx
+```
 
 ## Library API
 ```javascript

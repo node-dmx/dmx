@@ -1,17 +1,16 @@
 import { EventEmitter } from 'events';
 
 export type UniverseData = {
-  [channel: number]: number;
+  [key: number]: number;
 }
 
 export interface IUniverseDriver extends EventEmitter {
+  init(): Promise<void>;
   update(channels: UniverseData, extraData?: any): void;
 
-  get(c: number): number;
+  get(channel: number): number;
 
   updateAll(value: number): void;
 
-  start(): Promise<void> | void;
-  stop(): Promise<void> | void;
   close(): Promise<void> | void;
 }

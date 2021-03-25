@@ -17,7 +17,9 @@ export class DMX extends EventEmitter {
       this._devices = Object.assign({}, PredefinedDevices, devices);
     }
 
-    addUniverse(name: string, universe: IUniverseDriver): IUniverseDriver {
+    async addUniverse(name: string, universe: IUniverseDriver): Promise<IUniverseDriver> {
+      await universe.init();
+
       universe.on(Events.update, (channels, extraData) => {
         this.emit(Events.update, name, channels, extraData);
       });
@@ -27,8 +29,12 @@ export class DMX extends EventEmitter {
       return universe;
     }
 
-    update(universe: string, channels: {[key: number]: number}, extraData?: any): void {
-      this._universesByName.get(universe)?.update(channels, extraData || {});
+    update(universeName: string, channels: {[key: number]: number}, extraData?: any): void {
+      const universe = this._universesByName.get( universeName );
+      if ( universe === undefined ) {
+        throw new Error( `Universe ${universe} does not exist` );
+      }
+      universe.update( channels, extraData || {} );
     }
 
     updateAll(universe: string, value: number): void {
@@ -51,5 +57,6 @@ export class DMX extends EventEmitter {
       for (const uni of this._universesByName.values()) {
         await uni.close();
       }
+      this.removeAllListeners();
     }
 }
