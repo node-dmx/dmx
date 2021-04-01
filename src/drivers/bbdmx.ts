@@ -1,7 +1,6 @@
 import {EventEmitter} from 'events';
 import {IUniverseDriver, UniverseData} from '../models/IUniverseDriver';
-
-const dgram = require('dgram');
+import dgram from 'dgram';
 
 const UNIVERSE_LEN = 512;
 
@@ -18,7 +17,7 @@ export class BBDMXDriver extends EventEmitter implements IUniverseDriver {
   universe: Buffer;
   host: string;
   port: any;
-  dev: any;
+  dev: dgram.Socket;
 
   constructor(deviceId = '127.0.0.1', options: BBDMXArgs = {}) {
     super();
@@ -56,6 +55,7 @@ export class BBDMXDriver extends EventEmitter implements IUniverseDriver {
 
   close(): void {
     this.stop();
+    this.dev.close();
   }
 
   update(u: UniverseData, extraData?: any): void {

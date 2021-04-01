@@ -33,6 +33,7 @@ export class SocketIODriver extends EventEmitter implements IUniverseDriver {
   }
 
   close(): void {
+    this.server.close();
   }
 
   update(u: UniverseData, extraData: any): void {

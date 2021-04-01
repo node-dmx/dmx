@@ -19,7 +19,7 @@ export class ArtnetDriver extends EventEmitter implements IUniverseDriver {
   interval: number;
   host: string;
   port: any;
-  dev: any;
+  dev: dgram.Socket;
   timeout?: any;
 
   constructor(deviceId = '127.0.0.1', options: ArtnetArgs = {}) {
@@ -70,6 +70,7 @@ export class ArtnetDriver extends EventEmitter implements IUniverseDriver {
   }
 
   close(): Promise<void> {
+    this.dev.close();
     return new Promise<void>((resolve) => {
       this.stop();
       resolve();
