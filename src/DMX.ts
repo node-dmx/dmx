@@ -30,11 +30,12 @@ export class DMX extends EventEmitter {
     }
 
     update(universeName: string, channels: {[key: number]: number}, extraData?: any): void {
-      const universe = this._universesByName.get( universeName );
-      if ( universe === undefined ) {
-        throw new Error( `Universe ${universe} does not exist` );
+      const universe = this._universesByName.get(universeName);
+
+      if (universe === undefined) {
+        throw new Error(`Universe ${universe} does not exist`);
       }
-      universe.update( channels, extraData || {} );
+      universe.update(channels, extraData || {});
     }
 
     updateAll(universe: string, value: number): void {
