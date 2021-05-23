@@ -175,4 +175,4 @@ Versions prior to 0.2 included a Webinterface. This has since been moved into it
 
 ## Community
 
-We're happy to help. Chat with us on IRC in #node-dmx on freenode.
+We're happy to help. Chat with us on IRC in #dmx on libera.chat.
