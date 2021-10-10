@@ -126,4 +126,71 @@ module.exports = {
   'lalucenatz-led-4ch': {
     channels: ['master', 'red', 'green', 'blue'],
   },
+  'fungeneration-led-pot-12x1w-qcl-rgbww-4ch': {
+    channels: ['red', 'green', 'blue', 'white'],
+  },
+  'fungeneration-led-pot-12x1w-qcl-rgbww-6ch': {
+    channels: ['dimmer', 'red', 'green', 'blue', 'white', 'strobe'],
+  },
+  'fungeneration-led-pot-12x1w-qcl-rgbww-8ch': {
+    channels: ['dimmer', 'red', 'green', 'blue', 'white', 'programme-selection', 'colour-macros-programme-01', 'strobe'],
+    ranges: {
+      ['red', 'green', 'blue', 'white']: {
+        'type': 'option',
+        'options': [
+          { 'value': 0, 'label': 'Intensity [color] (0 % to 100%), if channel 6 = 0' },
+        ],
+      },
+      'programme-selection': {
+        'type': 'option',
+        'options': [
+          { 'value': 0, 'label': 'No function' },
+          { 'value': 1, 'label': 'Programme 01' },
+          { 'value': 17, 'label': 'Programme 02' },
+          { 'value': 34, 'label': 'Programme 03' },
+          { 'value': 51, 'label': 'Programme 04' },
+          { 'value': 68, 'label': 'Programme 05' },
+          { 'value': 85, 'label': 'Programme 06' },
+          { 'value': 102, 'label': 'Programme 07' },
+          { 'value': 119, 'label': 'Programme 08' },
+          { 'value': 136, 'label': 'Programme 09' },
+          { 'value': 153, 'label': 'Programme 10' },
+          { 'value': 170, 'label': 'Programme 11' },
+          { 'value': 187, 'label': 'Programme 12' },
+          { 'value': 204, 'label': 'Programme 13' },
+          { 'value': 221, 'label': 'Programme 14' },
+          { 'value': 238, 'label': 'Programme Sound-controlled-operation' },
+        ],
+      },
+      'colour-macros-programme-01': {
+        'type': 'option',
+        'options': [
+          { 'value': 0, 'label': 'Red 0 % / Green 0 % / Blue 0 % / White 0 %, if channel 6 = 1 ... 16' },
+          { 'value': 16, 'label': 'Red 255 % / Green 0 % / Blue 0 % / White 0 %, if channel 6 = 1 ... 16' },
+          { 'value': 32, 'label': 'Red 0 % / Green 255 % / Blue 0 % / White 0 %, if channel 6 = 1 ... 16' },
+          { 'value': 48, 'label': 'Red 0 % / Green 0 % / Blue 255 % / White 0 %, if channel 6 = 1 ... 16' },
+          { 'value': 64, 'label': 'Red 0 % / Green 0 % / Blue 0 % / White 255 %, if channel 6 = 1 ... 16' },
+          { 'value': 80, 'label': 'Red 255 % / Green 150 % / Blue 0 % / White 0 %, if channel 6 = 1 ... 16' },
+          { 'value': 96, 'label': 'Red 255 % / Green 180 % / Blue 0 % / White 0 %, if channel 6 = 1 ... 16' },
+          { 'value': 112, 'label': 'Red 255 % / Green 255 % / Blue 0 % / White 0 %, if channel 6 = 1 ... 16' },
+          { 'value': 128, 'label': 'Red 255 % / Green 0 % / Blue 255 % / White 0 %, if channel 6 = 1 ... 16' },
+          { 'value': 144, 'label': 'Red 255 % / Green 0 % / Blue 140 % / White 0 %, if channel 6 = 1 ... 16' },
+          { 'value': 160, 'label': 'Red 0 % / Green 255 % / Blue 255 % / White 0 %, if channel 6 = 1 ... 16' },
+          { 'value': 176, 'label': 'Red 255 % / Green 0 % / Blue 0 % / White 210 %, if channel 6 = 1 ... 16' },
+          { 'value': 192, 'label': 'Red 0 % / Green 255 % / Blue 0 % / White 210 %, if channel 6 = 1 ... 16' },
+          { 'value': 208, 'label': 'Red 0 % / Green 0 % / Blue 255 % / White 210 %, if channel 6 = 1 ... 16' },
+          { 'value': 224, 'label': 'Red 255 % / Green 200 % / Blue 40 % / White 90 %, if channel 6 = 1 ... 16' },
+          { 'value': 240, 'label': 'Red 255 % / Green 255 % / Blue 255 % / White 255 %, if channel 6 = 1 ... 16' },
+          { 'value': 0, 'label': 'Microphone sensitivity, if channel 6 = 238 ... 255' },
+        ],
+      },
+      'strobe': {
+        'type': 'option',
+        'options': [
+          { 'value': 0, 'label': 'No function' },
+          { 'value': 1, 'label': 'Stroboscope effect (0 % to 100 %)' },
+        ],
+      },
+    },
+  },
 };
