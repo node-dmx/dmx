@@ -193,4 +193,109 @@ module.exports = {
       },
     },
   },
+  'eurolite-led-bar-[6,12]-qcl-rgba-2ch': {
+    channels: ['ctrl', 'DMX-Auto-program-speed,-increasing'],
+    ranges: {
+      'ctrl': {
+        'type': 'option',
+        'options': [
+          { 'value': 0, 'label': 'No function' },
+          { 'value': 10, 'label': 'Auto mode via DMX' },
+          { 'value': 120, 'label': 'Sound mode via DMX' },
+        ],
+      },
+    },
+  },
+  'eurolite-led-bar-[6,12]-qcl-rgba-4ch': {
+    channels: ['red', 'green', 'blue', 'amber'],
+  },
+  'eurolite-led-bar-[6,12]-qcl-rgba-5ch': {
+    channels: ['dimmer', 'color-presets', 'strobe', 'ctrl', 'DMX-Auto-program-speed,-increasing'],
+    ranges: {
+      'color-pretsets': {
+        'type': 'option',
+        'options': [
+          { 'value': 0, 'label': 'No function' },
+          { 'value': 10, 'label': 'Red' },
+          { 'value': 20, 'label': 'Green' },
+          { 'value': 30, 'label': 'Blue' },
+          { 'value': 40, 'label': 'Amber' },
+          { 'value': 50, 'label': 'Green Yellow' },
+          { 'value': 60, 'label': 'Cyan' },
+          { 'value': 70, 'label': 'Magenta' },
+          { 'value': 80, 'label': 'Yellow' },
+          { 'value': 90, 'label': 'Turquoise' },
+          { 'value': 100, 'label': 'Magenta' },
+          { 'value': 110, 'label': 'Orange' },
+          { 'value': 120, 'label': 'Light Green' },
+          { 'value': 130, 'label': 'Magenta' },
+          { 'value': 140, 'label': 'Pink' },
+          { 'value': 150, 'label': 'Light Green' },
+          { 'value': 160, 'label': 'Light Blue' },
+          { 'value': 170, 'label': 'Salmon' },
+          { 'value': 180, 'label': 'Cold white' },
+          { 'value': 190, 'label': 'Warm white' },
+          { 'value': 200, 'label': 'Lavender' },
+        ],
+      },
+      'ctrl': {
+        'type': 'option',
+        'options': [
+          { 'value': 0, 'label': 'No function' },
+          { 'value': 10, 'label': 'Auto mode via DMX' },
+          { 'value': 120, 'label': 'Sound mode via DMX' },
+        ],
+      },
+    },
+  },
+  'eurolite-led-bar-[6,12]-qcl-rgba-6ch': {
+    channels: ['red', 'green', 'blue', 'amber', 'dimmer', 'ctrl'],
+    ranges: {
+      'ctrl': {
+        'type': 'option',
+        'options': [
+          { 'value': 0, 'label': 'No function' },
+          { 'value': 1, 'label': 'Sound control' },
+          { 'value': 6, 'label': 'No function' },
+          { 'value': 11, 'label': 'Sound mode via DMX' },
+        ],
+      },
+    },
+  },
+  'eurolite-led-bar-[6,12]-qcl-rgba-9ch': {
+    channels: ['red', 'green', 'blue', 'amber', 'temperature', 'dimmer', 'strobe', 'ctrl', 'DMX-Auto-program-speed,-increasing'],
+    ranges: {
+      'temperature': {
+        'type': 'option',
+        'options:': [
+          { 'value': 0, 'label': 'No function' },
+          { 'value': 10, 'label': '2700K' },
+          { 'value': 30, 'label': '3200K' },
+          { 'value': 50, 'label': '3400K' },
+          { 'value': 70, 'label': '4200K' },
+          { 'value': 90, 'label': '4900K' },
+          { 'value': 110, 'label': '5600K' },
+          { 'value': 130, 'label': '6000K' },
+          { 'value': 150, 'label': '6500K' },
+          { 'value': 170, 'label': '7500K' },
+          { 'value': 190, 'label': '8000K' },
+        ],
+      },
+      'strobe': {
+        'type': 'option',
+        'options': [
+          { 'value': 0, 'label': 'No function' },
+          { 'value': 10, 'label': 'strobe with increasing speed' },
+        ],
+      },
+      'ctrl': {
+        'type': 'option',
+        'options': [
+          { 'value': 0, 'label': 'No function' },
+          { 'value': 10, 'label': 'Auto mode via DMX' },
+          { 'value': 120, 'label': 'Sound mode via DMX' },
+        ],
+      },
+    },
+  },
 };
