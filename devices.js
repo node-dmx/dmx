@@ -135,12 +135,6 @@ module.exports = {
   'fungeneration-led-pot-12x1w-qcl-rgbww-8ch': {
     channels: ['dimmer', 'red', 'green', 'blue', 'white', 'programme-selection', 'colour-macros-programme-01', 'strobe'],
     ranges: {
-      ['red', 'green', 'blue', 'white']: {
-        'type': 'option',
-        'options': [
-          { 'value': 0, 'label': 'Intensity [color] (0 % to 100%), if channel 6 = 0' },
-        ],
-      },
       'programme-selection': {
         'type': 'option',
         'options': [
