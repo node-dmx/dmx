@@ -1,6 +1,6 @@
-const ease = require('./easing.js').ease;
+import ease from './easing.js';
 
-class Anim {
+export default class Anim {
   constructor({ loop, filter } = {}) {
     this.frameDelay = 1;
     this.animations = [];
@@ -166,5 +166,3 @@ class Anim {
     return this;
   }
 }
-
-module.exports = Anim;

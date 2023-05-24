@@ -8,7 +8,7 @@ DMX-512 controller library for node.js
 
 ## Library API
 ```javascript
-const DMX = require('dmx')
+import DMX from '@vk/dmx'
 ```
 
 ### Class DMX
@@ -27,7 +27,7 @@ Register a new DMX Driver module by its name.
 These drivers are currently registered by default:
 
 - null: a development driver that prints the universe to stdout
-- socketio: a driver which sends out the universe via socket.IO as an array (see [demo_socket_client.js](./demo_socket_client.js) as a client example)
+- socketio: a driver which sends out the universe via socket.IO as an array (see [demo_socket_client.js](demo/demo_socket_client.js) as a client example)
 - artnet: driver for EnttecODE
 - bbdmx: driver for [BeagleBone-DMX](https://github.com/boxysean/beaglebone-DMX)
 - dmx4all: driver for DMX4ALL devices like the "NanoDMX USB Interface"
@@ -57,7 +57,7 @@ Update one or multiple channels of a universe. Also emits a <code>update</code> 
 #### DMX.devices
 
 A JSON Object describing some Devices and how many channels they use.
-Currently not many devices are in there but more can be added to the <code>devices.js</code> file. Pull requests welcome ;-)
+Currently not many devices are in there but more can be added to the <code>devices.json</code> file. Pull requests welcome ;-)
 
 The following Devices are known:
 

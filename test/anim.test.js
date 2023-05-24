@@ -1,4 +1,4 @@
-const DMX = require('dmx');
+import DMX from '@vk/dmx'
 
 const dmx = new DMX();
 const universe = dmx.addUniverse('test', 'null', 'test');

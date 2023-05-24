@@ -1,8 +1,8 @@
-const DMX = require('./index');
+import DMX from '@vk/dmx';
 
 const dmx = new DMX();
 
-// var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
+// const universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
 // const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});
 const universe = dmx.addUniverse('demo', 'null');
 

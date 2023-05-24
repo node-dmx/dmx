@@ -1,17 +1,28 @@
 {
   "name": "@vk/dmx",
-  "version": "0.2.5",
+  "version": "0.3.0-alpha",
   "author": "Sebastian Wiedenroth <wiedi@frubar.net>",
+  "contributors": [
+    {
+      "name": "Vlad Kurkin",
+      "email": "mail@b-vladi.ru"
+    }
+  ],
   "description": "A nodejs DMX library",
   "url": "https://github.com/node-dmx/dmx",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
   "scripts": {
     "test": "concurrently 'npm run eslint' 'npm run jest'",
-    "eslint": "node_modules/eslint/bin/eslint.js -c .eslintrc .",
-    "jest": "jest"
+    "eslint": "npx eslint ./src --ext .js",
+    "jest": "npx jest"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/node-dmx/dmx.git"
+    "url": "https://github.com/B-Vladi/dmx.git"
   },
   "keywords": [
     "DMX",
@@ -20,7 +31,7 @@
   "dependencies": {
     "sacn": "^4.3.0",
     "serialport": "^11.0.0",
-    "socket.io": "^4.6.1"
+    "socket.io-client": "^4.6.1"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
