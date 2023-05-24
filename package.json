@@ -1,5 +1,5 @@
 {
-  "name": "dmx",
+  "name": "@vk/dmx",
   "version": "0.2.5",
   "author": "Sebastian Wiedenroth <wiedi@frubar.net>",
   "description": "A nodejs DMX library",
