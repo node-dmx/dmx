@@ -1,6 +1,6 @@
-import SerialDriver from './drivers/SerialDriver.js';
+import SerialDriver from './SerialDriver.js';
 
-const ENTTEC_PRO_DMX_STARTCODE = 0x00;
+const ENTTEC_PRO_DMX_START_CODE = 0x00;
 const ENTTEC_PRO_START_OF_MSG = 0x7e;
 const ENTTEC_PRO_END_OF_MSG = 0xe7;
 const ENTTEC_PRO_SEND_DMX_RQ = 0x06;
@@ -16,7 +16,7 @@ export default class EntTecUsbDMXProDriver extends SerialDriver {
       ENTTEC_PRO_SEND_DMX_RQ,
       (this.universe.length) & 0xff,
       ((this.universe.length) >> 8) & 0xff,
-      ENTTEC_PRO_DMX_STARTCODE,
+      ENTTEC_PRO_DMX_START_CODE,
     ]);
 
     const msg = Buffer.concat([
