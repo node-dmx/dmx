@@ -1,69 +1,61 @@
 import { EventEmitter } from 'events';
-import ArtnetDriver from './drivers/artnet.js';
-import BBDMXDriver from './drivers/bbdmx.js';
-import NullDriver from './drivers/null.js';
-import Animation from './animation.js';
-import DMX4ALLDriver from './drivers/dmx4all.js';
-import DMXKingUltraDmxProDriver from './drivers/dmxking-ultra-dmx-pro.js';
-import EntTecOpenUsbDMXDriver from './drivers/enttec-open-usb-dmx.js';
-import EntTecUSBDMXPRODriver from './drivers/enttec-usb-dmx-pro.js';
-import SACNDriver from './drivers/sacn.js';
-import SocketIODriver from './drivers/socketio.js';
+import ArtNetDriver from 'src/drivers/ArtNetDriver.js';
+import BBDMXDriver from 'src/drivers/BBDMXDriver.js';
+import NullDriver from 'src/drivers/NullDriver.js';
+import Animation from 'src/Animation.js';
+import DMX4AllDriver from 'src/drivers/DMX4AllDriver.js';
+import DMXKingUltraDmxProDriver from 'src/drivers/DMXKingUltraDMXProDriver.js';
+import EntTecOpenUsbDMXDriver from 'src/drivers/EntTecOpenUsbDMXDriver.js';
+import EntTecUSBDMXProDriver from 'src/drivers/EntTecUsbDMXProDriver.js';
+import SACNDriver from 'src/drivers/SACNDriver.js';
+import SocketDriver from 'src/drivers/SocketDriver.js';
 import devices from '../devices.js';
 
 export default class DMX extends EventEmitter {
-  constructor(options) {
+  constructor() {
     super();
-    const opt = options || {};
-    const devices = opt.devices || {};
 
-    this.universes = {};
-    this.drivers = {};
-    this.devices = Object.assign({}, devices, devices);
+    this.universes = new Map();
+    this.drivers = new Map();
 
     this.registerDriver('null', NullDriver);
-    this.registerDriver('socketio', SocketIODriver);
-    this.registerDriver('dmx4all', DMX4ALLDriver);
-    this.registerDriver('enttec-usb-dmx-pro', EntTecUSBDMXPRODriver);
+    this.registerDriver('socketio', SocketDriver);
+    this.registerDriver('dmx4all', DMX4AllDriver);
+    this.registerDriver('enttec-usb-dmx-pro', EntTecUSBDMXProDriver);
     this.registerDriver('enttec-open-usb-dmx', EntTecOpenUsbDMXDriver);
     this.registerDriver('dmxking-ultra-dmx-pro', DMXKingUltraDmxProDriver);
-    this.registerDriver('artnet', ArtnetDriver);
+    this.registerDriver('artnet', ArtNetDriver);
     this.registerDriver('bbdmx', BBDMXDriver);
     this.registerDriver('sacn', SACNDriver);
   }
 
-  registerDriver(name, module) {
-    this.drivers[name] = module;
+  registerDriver(name, constructor) {
+    this.drivers.set(name, constructor);
   }
 
-  addUniverse(name, driver, deviceId, options) {
-    this.universes[name] = new this.drivers[driver](deviceId, options);
+  addUniverse(name, driver, options = {}) {
+    const Driver = this.drivers.get(driver);
+    const instance = new Driver(options);
 
-    this.universes[name].on('update', (channels, extraData) => {
-      this.emit('update', name, channels, extraData);
-    });
+    this.universes.set(name, instance);
 
-    return this.universes[name];
+    return instance;
   }
 
-  update(universe, channels, extraData) {
-    this.universes[universe].update(channels, extraData || {});
+  getUniverse(name) {
+    return this.universes.get(name);
   }
 
-  updateAll(universe, value) {
-    this.universes[universe].updateAll(value);
-    this.emit('updateAll', universe, value);
+  getUniverses() {
+    return this.universes.keys();
   }
 
-  universeToObject(universeKey) {
-    const universe = this.universes[universeKey];
-    const u = {};
+  update(name, channels) {
+    this.getUniverse(name).update(channels);
+  }
 
-    for (let i = 0; i < 512; i++) {
-      u[i] = universe.get(i);
-    }
-
-    return u;
+  updateAll(name, value) {
+    this.getUniverse(name).updateAll(value);
   }
 }
 

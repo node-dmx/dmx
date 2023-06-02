@@ -3,14 +3,16 @@ import DMX from '@vk/dmx';
 const dmx = new DMX();
 const A = DMX.Animation;
 
-// const universe = dmx.addUniverse('demo', 'enttec-usb-dmx-pro', '/dev/cu.usbserial-6AVNHXS8')
-// const universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
+// const universe = dmx.addUniverse('demo', 'enttec-usb-dmx-pro', { path: 'COM1' });
+// const universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', { path: '/dev/cu.usbserial-6AVNHXS8' });
 // const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});
 const universe = dmx.addUniverse('demo', 'null');
 
-universe.update({1: 1, 2: 0});
-universe.update({16: 1, 17: 255});
-universe.update({1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0});
+universe.on('ready', function () {
+  universe.update({1: 255, 2: 200});
+  // universe.update({16: 1, 17: 255});
+  // universe.update({1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0});
+});
 
 function greenWater(universe, channels, duration) {
   const colors = [

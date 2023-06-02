@@ -1,6 +1,6 @@
 import ease from './easing.js';
 
-export default class Anim {
+export default class Animation {
   constructor({ loop, filter } = {}) {
     this.frameDelay = 1;
     this.animations = [];
@@ -22,6 +22,7 @@ export default class Anim {
       start: this.duration,
       end: this.duration + duration,
     });
+
     this.duration += duration;
 
     return this;
@@ -29,6 +30,7 @@ export default class Anim {
 
   delay(duration) {
     this.add({}, duration);
+
     return this;
   }
 
@@ -91,6 +93,7 @@ export default class Anim {
         // This animation loop is complete
         this.currentLoop++;
         this.stop();
+
         if (this.currentLoop >= this.loops) {
           // All loops complete
           if (onFinish) {
@@ -110,9 +113,11 @@ export default class Anim {
 
         if (!animation.from) {
           animation.from = {};
+
           for (const k in animation.to) {
             animation.from[k] = universe.get(k);
           }
+
           if (animation.options.from) {
             animation.from = Object.assign(animation.from, animation.options.from);
           }
@@ -140,7 +145,7 @@ export default class Anim {
             this.filter(intermediateValues);
           }
 
-          universe.update(intermediateValues, { origin: 'animation' });
+          universe.update(intermediateValues);
         }
       }
     };
@@ -155,6 +160,7 @@ export default class Anim {
       // Optimisation to run animation updates at double the rate of driver updates using Nyquist's theorem
       this.frameDelay = universe.interval / 2;
     }
+
     this.reset();
     this.currentLoop = 0;
     this.runNextLoop(universe, onFinish);
