@@ -58,8 +58,12 @@ export default class Driver extends EventEmitter {
     }
   }
 
+  fill(value, begin, end) {
+    this.universe.fill(value, begin, end);
+  }
+
   updateAll(value) {
-    this.universe.fill(value, 0, DMX_MAX_CHANNEL);
+    this.fill(value, 0, DMX_MAX_CHANNEL);
   }
 
   send() {

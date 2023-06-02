@@ -63,8 +63,20 @@ export default class DMX extends EventEmitter {
     return Array.from(this.universes.keys());
   }
 
+  getValue(universe, address) {
+    return this.getUniverse(universe).get(address);
+  }
+
+  getValues(universe, begin, end) {
+    return this.getUniverse(universe).toArray(begin, end);
+  }
+
   update(name, channels) {
     this.getUniverse(name).update(channels);
+  }
+
+  fill(name, value, begin, end) {
+    this.getUniverse(name).fill(value, begin, end);
   }
 
   updateAll(name, value) {
