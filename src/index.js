@@ -12,6 +12,17 @@ import SocketDriver from './drivers/SocketDriver.js';
 export * from './devices.js';
 export * from './Animation.js';
 export * from './drivers/Driver.js';
+export const DRIVERS = [
+  'null',
+  'socketio',
+  'dmx4all',
+  'enttec-usb-dmx-pro',
+  'enttec-open-usb-dmx',
+  'dmxking-ultra-dmx-pro',
+  'artnet',
+  'bbdmx',
+  'sacn',
+];
 
 export default class DMX extends EventEmitter {
   constructor() {
