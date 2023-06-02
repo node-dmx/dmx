@@ -9,7 +9,7 @@ import EntTecOpenUsbDMXDriver from 'src/drivers/EntTecOpenUsbDMXDriver.js';
 import EntTecUSBDMXProDriver from 'src/drivers/EntTecUsbDMXProDriver.js';
 import SACNDriver from 'src/drivers/SACNDriver.js';
 import SocketDriver from 'src/drivers/SocketDriver.js';
-import devices from '../devices.js';
+import devices from 'src/devices.js';
 
 export default class DMX extends EventEmitter {
   constructor() {
