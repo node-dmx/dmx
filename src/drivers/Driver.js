@@ -48,8 +48,8 @@ export default class Driver extends EventEmitter {
     return (this.get(address) / DMX_MAX_CHANNEL) * 100;
   }
 
-  toArray(begin = 0, end = DMX_MAX_CHANNEL) {
-    return this.universe.subarray(begin, end);
+  toArray(begin = 1, end = DMX_MAX_CHANNEL) {
+    return Array.from(this.universe.subarray(begin, end));
   }
 
   update(values) {
