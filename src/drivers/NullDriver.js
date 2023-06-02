@@ -1,4 +1,4 @@
-import Driver from '../Driver.js';
+import Driver from './Driver.js';
 
 export default class NullDriver extends Driver {
   constructor(options = {}) {

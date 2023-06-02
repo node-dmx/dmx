@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import Driver from '../Driver.js';
+import Driver from './Driver.js';
 
 export const PORT = 18909;
 
