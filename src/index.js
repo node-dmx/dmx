@@ -47,12 +47,28 @@ export default class DMX extends EventEmitter {
   }
 
   addUniverse(name, driver, options = {}) {
+    if (this.drivers.has(driver)) {
+      throw new Error(`Driver ${driver} already registered`);
+    }
+
     const Driver = this.drivers.get(driver);
     const instance = new Driver(options);
 
     this.universes.set(name, instance);
 
     return instance;
+  }
+
+  deleteUniverse(name) {
+    const instance = this.universes.get(name);
+
+    instance.stop();
+
+    this.universes.delete(name);
+  }
+
+  deleteAllUniverse() {
+    this.universes.forEach(name => this.deleteUniverse(name));
   }
 
   getUniverse(name) {
