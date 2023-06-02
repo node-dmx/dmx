@@ -17,7 +17,7 @@ export default class SerialDriver extends Driver {
       dataBits: options.dataBits || DATA_BITS,
       stopBits: options.stopBits || STOP_BITS,
       parity: 'none',
-    }, this.init);
+    }, this.init.bind(this));
   }
 
   close() {
