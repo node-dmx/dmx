@@ -2,14 +2,16 @@ import { EventEmitter } from 'events';
 import ArtNetDriver from './drivers/ArtNetDriver.js';
 import BBDMXDriver from './drivers/BBDMXDriver.js';
 import NullDriver from './drivers/NullDriver.js';
-import Animation from './Animation.js';
 import DMX4AllDriver from './drivers/DMX4AllDriver.js';
 import DMXKingUltraDmxProDriver from './drivers/DMXKingUltraDMXProDriver.js';
 import EntTecOpenUsbDMXDriver from './drivers/EntTecOpenUsbDMXDriver.js';
 import EntTecUSBDMXProDriver from './drivers/EntTecUsbDMXProDriver.js';
 import SACNDriver from './drivers/SACNDriver.js';
 import SocketDriver from './drivers/SocketDriver.js';
-import devices from './devices.js';
+
+export * from './Driver.js';
+export { default as devices } from './devices.js';
+export { default as Animation } from './Animation.js';
 
 export default class DMX extends EventEmitter {
   constructor() {
@@ -58,6 +60,3 @@ export default class DMX extends EventEmitter {
     this.getUniverse(name).updateAll(value);
   }
 }
-
-DMX.devices = devices;
-DMX.Animation = Animation;
