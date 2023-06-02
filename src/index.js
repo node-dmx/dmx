@@ -1,15 +1,15 @@
 import { EventEmitter } from 'events';
-import ArtNetDriver from 'src/drivers/ArtNetDriver.js';
-import BBDMXDriver from 'src/drivers/BBDMXDriver.js';
-import NullDriver from 'src/drivers/NullDriver.js';
-import Animation from 'src/Animation.js';
-import DMX4AllDriver from 'src/drivers/DMX4AllDriver.js';
-import DMXKingUltraDmxProDriver from 'src/drivers/DMXKingUltraDMXProDriver.js';
-import EntTecOpenUsbDMXDriver from 'src/drivers/EntTecOpenUsbDMXDriver.js';
-import EntTecUSBDMXProDriver from 'src/drivers/EntTecUsbDMXProDriver.js';
-import SACNDriver from 'src/drivers/SACNDriver.js';
-import SocketDriver from 'src/drivers/SocketDriver.js';
-import devices from 'src/devices.js';
+import ArtNetDriver from './drivers/ArtNetDriver.js';
+import BBDMXDriver from './drivers/BBDMXDriver.js';
+import NullDriver from './drivers/NullDriver.js';
+import Animation from './Animation.js';
+import DMX4AllDriver from './drivers/DMX4AllDriver.js';
+import DMXKingUltraDmxProDriver from './drivers/DMXKingUltraDMXProDriver.js';
+import EntTecOpenUsbDMXDriver from './drivers/EntTecOpenUsbDMXDriver.js';
+import EntTecUSBDMXProDriver from './drivers/EntTecUsbDMXProDriver.js';
+import SACNDriver from './drivers/SACNDriver.js';
+import SocketDriver from './drivers/SocketDriver.js';
+import devices from './devices.js';
 
 export default class DMX extends EventEmitter {
   constructor() {
