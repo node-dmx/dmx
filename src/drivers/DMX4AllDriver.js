@@ -1,4 +1,4 @@
-import SerialDriver from 'src/drivers/SerialDriver.js';
+import SerialDriver from './drivers/SerialDriver.js';
 
 const UNIVERSE_LEN = 512;
 

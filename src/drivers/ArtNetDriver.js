@@ -1,5 +1,5 @@
 import dgram from 'dgram';
-import Driver from 'src/Driver.js';
+import Driver from '../Driver.js';
 
 const HOST = '127.0.0.1';
 const PORT = 6454;
