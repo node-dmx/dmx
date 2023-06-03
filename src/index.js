@@ -47,8 +47,8 @@ export default class DMX extends EventEmitter {
   }
 
   addUniverse(name, driver, options = {}) {
-    if (this.drivers.has(driver)) {
-      throw new Error(`Driver ${driver} already registered`);
+    if (this.universes.has(driver)) {
+      throw new Error(`Universe ${driver} already exists`);
     }
 
     const Driver = this.drivers.get(driver);
