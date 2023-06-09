@@ -72,6 +72,10 @@ export default class DMX extends EventEmitter {
   }
 
   getUniverse(name) {
+    if (!this.universes.has(name)) {
+      throw new Error(`Universe ${name} does not exist`);
+    }
+
     return this.universes.get(name);
   }
 

@@ -1,6 +1,5 @@
 import { EventEmitter } from 'events';
-
-export const DMX_MAX_CHANNEL = 512;
+export const DMX_MAX_CHANNELS = 512;
 export const INTERVAL = 50;
 export const EVENT_START = 'start';
 export const EVENT_STOP = 'stop';
@@ -10,7 +9,7 @@ export default class Driver extends EventEmitter {
   constructor(options) {
     super();
 
-    this.universe = Buffer.alloc(DMX_MAX_CHANNEL + 1, 0);
+    this.universe = Buffer.alloc(DMX_MAX_CHANNELS + 1, 0);
     this.interval = 1000 / (options.interval || INTERVAL);
     this.timeout = null;
   }
@@ -45,7 +44,7 @@ export default class Driver extends EventEmitter {
   }
 
   getPercent(address) {
-    return (this.get(address) / DMX_MAX_CHANNEL) * 100;
+    return (this.get(address) / DMX_MAX_CHANNELS) * 100;
   }
 
   toArray(begin = 1, end = this.universe.length) {

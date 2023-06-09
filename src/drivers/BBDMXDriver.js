@@ -1,5 +1,5 @@
 import dgram from 'dgram';
-import Driver, { DMX_MAX_CHANNEL } from './Driver.js';
+import Driver, { DMX_MAX_CHANNELS } from './Driver.js';
 
 const HOST = '127.0.0.1';
 const PORT = 9930;
@@ -22,9 +22,9 @@ export default class BBDMXDriver extends Driver {
 
     this.ready = false;
     let channel;
-    let message = Buffer.from(DMX_MAX_CHANNEL.toString());
+    let message = Buffer.from(DMX_MAX_CHANNELS.toString());
 
-    for (let i = 1; i <= DMX_MAX_CHANNEL; i++) {
+    for (let i = 1; i <= DMX_MAX_CHANNELS; i++) {
       channel = Buffer.from(' ' + this.universe[i]);
       message = Buffer.concat([message, channel]);
     }
