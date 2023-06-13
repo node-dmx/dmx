@@ -51,6 +51,10 @@ export default class DMX extends EventEmitter {
       throw new Error(`Universe ${driver} already exists`);
     }
 
+    if (!this.drivers.has(driver)) {
+      throw new Error(`Driver ${driver} does not exist`);
+    }
+
     const Driver = this.drivers.get(driver);
     const instance = new Driver(options);
 
