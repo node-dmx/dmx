@@ -75,8 +75,10 @@ export default class DMX extends EventEmitter {
     this.universes.delete(name);
   }
 
-  deleteAllUniverse() {
-    this.universes.forEach(name => this.deleteUniverse(name));
+  deleteAllUniverses() {
+    Array
+      .from(this.universes.keys())
+      .forEach(name => this.deleteUniverse(name));
   }
 
   getUniverse(name) {
