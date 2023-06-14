@@ -47,8 +47,8 @@ export default class DMX extends EventEmitter {
   }
 
   addUniverse(name, driver, options = {}) {
-    if (this.universes.has(driver)) {
-      throw new Error(`Universe ${driver} already exists`);
+    if (this.universes.has(name)) {
+      throw new Error(`Universe ${name} already exists`);
     }
 
     if (!this.drivers.has(driver)) {
@@ -64,6 +64,10 @@ export default class DMX extends EventEmitter {
   }
 
   deleteUniverse(name) {
+    if (!this.universes.has(name)) {
+      throw new Error(`Universe ${name} does not exist`);
+    }
+
     const instance = this.universes.get(name);
 
     instance.stop();
