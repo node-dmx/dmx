@@ -117,6 +117,28 @@ module.exports = {
       },
     },
   },
+  'lixada-par12-led-v2': {
+    channels: ['dimmer', 'red', 'green', 'blue', 'white', 'strobe', 'ctrl', 'speed'],
+    ranges: {
+      'ctrl': {
+        'type': 'option',
+        'options': [
+          { 'value': 0, 'label': 'Off' },
+          { 'value': 11, 'label': 'Static Color' },
+          { 'value': 61, 'label': 'Gradient slow' },
+          { 'value': 85, 'label': 'Gradient medium' },
+          { 'value': 110, 'label': 'Gradient fast' },
+          { 'value': 111, 'label': 'Pulse slow' },
+          { 'value': 135, 'label': 'Pulse medium' },
+          { 'value': 160, 'label': 'Pulse fast' },
+          { 'value': 161, 'label': 'Jump slow' },
+          { 'value': 185, 'label': 'Jump medium' },
+          { 'value': 210, 'label': 'Jump fast' },
+          { 'value': 211, 'label': 'Sound Activate' },
+        ],
+      },
+    },
+  },
   'eurolite-led-tha-120PC': {
     channels: ['red', 'green', 'blue', 'white', 'dimmer', 'strobe', 'effect'],
   },
