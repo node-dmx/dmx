@@ -1,19 +1,19 @@
-import { SerialPort } from 'serialport';
+import { SerialPort } from 'serialport'
 import Driver, { EVENT_STOP } from './Driver.js'
 
-export const BAUD_RATE = 250000;
-export const DATA_BITS = 8;
-export const STOP_BITS = 2;
+export const BAUD_RATE = 250000
+export const DATA_BITS = 8
+export const STOP_BITS = 2
 
-export const EVENT_CLOSE = 'close';
+export const EVENT_CLOSE = 'close'
 
 export default class SerialDriver extends Driver {
   constructor(options = {}) {
-    super(options);
+    super(options)
 
-    this.ready = true;
+    this.ready = true
 
-    this.on(EVENT_STOP, this.close);
+    this.on(EVENT_STOP, this.close)
 
     this.serial = new SerialPort({
       path: options.path,
@@ -21,12 +21,12 @@ export default class SerialDriver extends Driver {
       dataBits: options.dataBits || DATA_BITS,
       stopBits: options.stopBits || STOP_BITS,
       parity: 'none',
-    }, this.init.bind(this));
+    }, this.init.bind(this))
   }
 
   close() {
     this.serial.close((error) => {
-      this.emit(EVENT_CLOSE, error);
-    });
+      this.emit(EVENT_CLOSE, error)
+    })
   }
 }

@@ -1,27 +1,27 @@
-import dgram from 'dgram';
-import Driver from './Driver.js';
+import dgram from 'dgram'
+import Driver from './Driver.js'
 
-const HOST = '127.0.0.1';
-const PORT = 6454;
+const HOST = '127.0.0.1'
+const PORT = 6454
 
 export default class ArtNetDriver extends Driver {
   constructor(options = {}) {
-    super();
-    this.header = Buffer.from([65, 114, 116, 45, 78, 101, 116, 0, 0, 80, 0, 14]);
-    this.sequence = Buffer.from([0]);
-    this.physical = Buffer.from([0]);
-    this.length = Buffer.from([0x02, 0x00]);
-    this.universeId = Buffer.from([0x00, 0x00]);
-    this.universeId.writeInt16LE(options.universe || 0, 0);
-    this.host = options.host || HOST;
-    this.port = options.port || PORT;
-    this.socket = dgram.createSocket('udp4');
-    this.ready = true;
+    super()
+    this.header = Buffer.from([ 65, 114, 116, 45, 78, 101, 116, 0, 0, 80, 0, 14 ])
+    this.sequence = Buffer.from([ 0 ])
+    this.physical = Buffer.from([ 0 ])
+    this.length = Buffer.from([ 0x02, 0x00 ])
+    this.universeId = Buffer.from([ 0x00, 0x00 ])
+    this.universeId.writeInt16LE(options.universe || 0, 0)
+    this.host = options.host || HOST
+    this.port = options.port || PORT
+    this.socket = dgram.createSocket('udp4')
+    this.ready = true
 
     this.socket.bind(() => {
-      this.socket.setBroadcast(true);
-      this.init();
-    });
+      this.socket.setBroadcast(true)
+      this.init()
+    })
   }
 
   send() {
@@ -32,14 +32,14 @@ export default class ArtNetDriver extends Driver {
       this.universeId,
       this.length,
       this.universe.subarray(1),
-    ]);
+    ])
 
     if (this.ready) {
-      this.ready = false;
+      this.ready = false
 
       this.socket.send(buffer, 0, buffer.length, this.port, this.host, () => {
-        this.ready = true;
-      });
+        this.ready = true
+      })
     }
   }
 }

@@ -1,13 +1,13 @@
-import Driver from './Driver.js';
+import Driver from './Driver.js'
 
 export default class NullDriver extends Driver {
   constructor(options = {}) {
-    super(options);
+    super(options)
 
-    this.init();
+    this.init()
   }
 
   send() {
-    console.log(this.universe.subarray(1));
+    console.log(this.universe.subarray(1))
   }
 }

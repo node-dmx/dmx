@@ -787,4 +787,4 @@ export default {
       },
     },
   },
-};
+}

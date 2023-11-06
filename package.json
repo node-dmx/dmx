@@ -16,9 +16,12 @@
     ".": "./src/index.js"
   },
   "scripts": {
-    "test": "concurrently 'npm run eslint' 'npm run jest'",
-    "eslint": "npx eslint ./src --ext .js",
-    "jest": "npx jest"
+    "dev:audit": "npm audit fix",
+    "dev:format": "npm run test:lint -- --fix",
+    "dev:update": "npm update --save",
+    "test": "concurrently 'npm run test:lint' 'npm run test:jest'",
+    "test:jest": "npx jest",
+    "test:lint": "npx eslint ./src --ext .js"
   },
   "repository": {
     "type": "git",
@@ -34,8 +37,8 @@
     "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
-    "concurrently": "^8.2.1",
-    "eslint": "^8.50.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.53.0",
     "jest": "^29.7.0"
   },
   "license": "MIT"
