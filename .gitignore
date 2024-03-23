@@ -1,7 +1,25 @@
+# compiled output
+/dist
+/node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+graph.json
+
+# OS
 .DS_Store
 
-node_modules
+# Tests
+/coverage
+/.nyc_output
 
+# IDEs
 .idea
 .vscode
 *.iml
