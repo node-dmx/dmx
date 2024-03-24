@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events'
+
 export const DMX_MAX_CHANNELS = 512
 export const INTERVAL = 50
 export const EVENT_START = 'start'

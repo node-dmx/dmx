@@ -46,9 +46,9 @@ export default class DMX extends EventEmitter {
     this.drivers.set(name, constructor)
   }
 
-  addUniverse(name, driver, options = {}) {
-    if (this.universes.has(name)) {
-      throw new Error(`Universe ${name} already exists`)
+  addUniverse(id, driver, options = {}) {
+    if (this.universes.has(id)) {
+      throw new Error(`Universe ${id} already exists`)
     }
 
     if (!this.drivers.has(driver)) {
@@ -58,21 +58,21 @@ export default class DMX extends EventEmitter {
     const Driver = this.drivers.get(driver)
     const instance = new Driver(options)
 
-    this.universes.set(name, instance)
+    this.universes.set(id, instance)
 
     return instance
   }
 
-  deleteUniverse(name) {
-    if (!this.universes.has(name)) {
-      throw new Error(`Universe ${name} does not exist`)
+  deleteUniverse(id) {
+    if (!this.universes.has(id)) {
+      throw new Error(`Universe ${id} does not exist`)
     }
 
-    const instance = this.universes.get(name)
+    const instance = this.universes.get(id)
 
     instance.stop()
 
-    this.universes.delete(name)
+    this.universes.delete(id)
   }
 
   deleteAllUniverses() {
@@ -81,39 +81,39 @@ export default class DMX extends EventEmitter {
       .forEach(name => this.deleteUniverse(name))
   }
 
-  getUniverse(name) {
-    if (!this.universes.has(name)) {
-      throw new Error(`Universe ${name} does not exist`)
+  getUniverse(id) {
+    if (!this.universes.has(id)) {
+      throw new Error(`Universe ${id} does not exist`)
     }
 
-    return this.universes.get(name)
+    return this.universes.get(id)
   }
 
   getUniverses() {
     return Array.from(this.universes.keys())
   }
 
-  getValue(universe, address) {
-    return this.getUniverse(universe).get(address)
+  getValue(id, address) {
+    return this.getUniverse(id).get(address)
   }
 
-  getValues(universe, begin, end) {
-    return this.getUniverse(universe).toArray(begin, end)
+  getValues(id, begin, end) {
+    return this.getUniverse(id).toArray(begin, end)
   }
 
-  setValue(universe, address, value) {
-    return this.getUniverse(universe).set(address, value)
+  setValue(id, address, value) {
+    this.getUniverse(id).set(address, value)
   }
 
-  update(name, channels) {
-    this.getUniverse(name).update(channels)
+  update(id, channels) {
+    this.getUniverse(id).update(channels)
   }
 
-  fill(name, value, begin, end) {
-    this.getUniverse(name).fill(value, begin, end)
+  fill(id, value, begin, end) {
+    this.getUniverse(id).fill(value, begin, end)
   }
 
-  updateAll(name, value) {
-    this.fill(name, value)
+  updateAll(id, value) {
+    this.fill(id, value)
   }
 }
