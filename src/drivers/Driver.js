@@ -1,4 +1,7 @@
+/* global Buffer */
 import { EventEmitter } from 'events'
+import console from 'node:console'
+import { clearInterval, setInterval } from 'node:timers'
 
 export const DMX_MAX_CHANNELS = 512
 export const INTERVAL = 50

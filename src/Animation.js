@@ -1,3 +1,5 @@
+import clearTimeout from 'node/timers.js'
+import setTimeout from 'node/timers.js'
 import ease from './easing.js'
 
 export default class Animation {
@@ -66,7 +68,7 @@ export default class Animation {
       // Ensure final state of all newly completed animations have been set
       const completedAnimations = this.animations.slice(
         this.lastAnimation,
-        currentAnimation
+        currentAnimation,
       )
 
       // Ensure future animations interpolate from the most recent state
@@ -77,7 +79,7 @@ export default class Animation {
       if (completedAnimations.length) {
         const completedAnimationStatesToSet = Object.assign(
           {},
-          ...completedAnimations.map(a => a.to)
+          ...completedAnimations.map(a => a.to),
         )
 
         if (typeof this.filter === 'function') {
@@ -128,7 +130,7 @@ export default class Animation {
             Math.min(animationElapsedTime, duration),
             0,
             1,
-            duration
+            duration,
           )
           const intermediateValues = {}
 
@@ -137,7 +139,7 @@ export default class Animation {
             const endValue = animation.to[k]
 
             intermediateValues[k] = Math.round(
-              startValue + easeProgress * (endValue - startValue)
+              startValue + easeProgress * (endValue - startValue),
             )
           }
 

@@ -1,3 +1,4 @@
+/* global Buffer */
 import dgram from 'dgram'
 import Driver, { DMX_MAX_CHANNELS } from './Driver.js'
 

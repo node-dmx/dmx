@@ -1,6 +1,6 @@
 {
   "name": "@vk/dmx",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Sebastian Wiedenroth <wiedi@frubar.net>",
   "contributors": [
     {
@@ -24,7 +24,7 @@
     "dev:format": "npm run test:lint -- --fix",
     "test": "concurrently 'npm run test:lint' 'npm run test:jest'",
     "test:jest": "npx jest",
-    "test:lint": "npx eslint ./src --ext .js",
+    "test:lint": "npx eslint ./src",
     "update": "npm update --save"
   },
   "repository": {
@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
-    "eslint": "^8.57.0",
+    "eslint": "^9.1.1",
     "jest": "^29.7.0"
   },
   "license": "MIT"

@@ -1,4 +1,3 @@
-
 const easing = {
   inBack(t, b, c, d, s) {
     if (s === undefined) s = 1.70158
