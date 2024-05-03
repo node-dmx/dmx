@@ -1,5 +1,5 @@
-import clearTimeout from 'node/timers.js'
-import setTimeout from 'node/timers.js'
+import clearTimeout from 'node:timers'
+import setTimeout from 'node:timers'
 import ease from './easing.js'
 
 export default class Animation {
