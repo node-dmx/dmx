@@ -1,5 +1,5 @@
+import Driver from '#drivers'
 import console from 'node:console'
-import Driver from './Driver.js'
 
 export default class NullDriver extends Driver {
   constructor(options = {}) {

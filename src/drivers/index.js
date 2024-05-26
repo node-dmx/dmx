@@ -14,7 +14,7 @@ export default class Driver extends EventEmitter {
     super()
 
     this.universe = Buffer.alloc(DMX_MAX_CHANNELS + 1, 0)
-    this.interval = 1000 / (options.interval || INTERVAL)
+    this.interval = 1000 / (options.interval ?? INTERVAL)
     this.timeout = null
   }
 

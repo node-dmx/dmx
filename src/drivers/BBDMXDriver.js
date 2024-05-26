@@ -1,6 +1,6 @@
 /* global Buffer */
+import Driver, { DMX_MAX_CHANNELS } from '#drivers'
 import dgram from 'dgram'
-import Driver, { DMX_MAX_CHANNELS } from './Driver.js'
 
 const HOST = '127.0.0.1'
 const PORT = 9930
