@@ -1,4 +1,4 @@
 
 declare module '@vk/dmx' {
-  export * from '@vk/dmx'
+  export { default, DRIVERS } from '#index';
 }

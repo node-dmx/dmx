@@ -1,6 +1,6 @@
+import ease from '#easing.js'
 import clearTimeout from 'node:timers'
 import setTimeout from 'node:timers'
-import ease from './easing.js'
 
 export default class Animation {
   constructor({ loop, filter } = {}) {

@@ -1,5 +1,5 @@
+import Driver, { EVENT_STOP } from '#drivers'
 import { SerialPort } from 'serialport'
-import Driver, { EVENT_STOP } from './Driver.js'
 
 export const BAUD_RATE = 250000
 export const DATA_BITS = 8

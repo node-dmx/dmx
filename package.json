@@ -1,6 +1,6 @@
 {
   "name": "@vk/dmx",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "author": "Sebastian Wiedenroth <wiedi@frubar.net>",
   "contributors": [
     {
@@ -14,6 +14,10 @@
   "main": "./src/index.js",
   "imports": {
     "#*": "./src/*"
+  },
+  "exports": {
+    "import": "./src/index.js",
+    "types": "./src/types/index.d.ts"
   },
   "scripts": {
     "dev:audit": "npm audit fix",
