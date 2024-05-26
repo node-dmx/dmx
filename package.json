@@ -1,6 +1,6 @@
 {
   "name": "@vk/dmx",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "author": "Sebastian Wiedenroth <wiedi@frubar.net>",
   "contributors": [
     {
@@ -15,16 +15,13 @@
   "imports": {
     "#*": "./src/*"
   },
-  "exports": {
-    ".": "./src/index.js"
-  },
   "scripts": {
     "dev:audit": "npm audit fix",
     "dev:bootstrap": "npm  rm -rf node_modules package-lock.json && npm install",
     "dev:format": "npm run test:lint -- --fix",
     "test": "concurrently 'npm run test:lint' 'npm run test:jest'",
     "test:jest": "npx jest",
-    "test:lint": "npx eslint ./src",
+    "test:lint": "npx eslint .",
     "update": "npm update --save"
   },
   "repository": {
@@ -42,8 +39,9 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
-    "eslint": "^9.1.1",
-    "jest": "^29.7.0"
+    "eslint": "^9.3.0",
+    "jest": "^29.7.0",
+    "typescript": "^5.4.5"
   },
   "license": "MIT"
 }
