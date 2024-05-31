@@ -6,4 +6,4 @@ export default class BBDMXDriver extends Driver {
     ready: boolean;
 }
 import Driver from './index.js';
-import dgram from 'dgram';
+import * as dgram from 'node:dgram';

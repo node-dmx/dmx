@@ -1,11 +1,11 @@
-import sacn from 'sacn'
+import { Sender } from 'sacn'
 import Driver from './index.js'
 
 export default class SACNDriver extends Driver {
   constructor(options = {}) {
     super(options)
 
-    this.SACNServer = new sacn.Sender({
+    this.SACNServer = new Sender({
       universe: options.universe || 1,
       reuseAddr: true,
     })
@@ -15,6 +15,10 @@ export default class SACNDriver extends Driver {
     this.SACNServer.close()
   }
 
+  /**
+   *
+   * @param {Record<number, number>} values
+   */
   update(values) {
     Driver.prototype.update.call(this, values)
 
@@ -27,6 +31,10 @@ export default class SACNDriver extends Driver {
     })
   }
 
+  /**
+   *
+   * @param {number} value
+   */
   updateAll(value) {
     Driver.prototype.updateAll.call(this, value)
 

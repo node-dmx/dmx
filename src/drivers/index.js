@@ -1,5 +1,4 @@
 import { EventEmitter } from 'events'
-import console from 'node:console'
 import { clearInterval, setInterval } from 'node:timers'
 
 export const DMX_MAX_CHANNELS = 512
@@ -12,11 +11,30 @@ export default class Driver extends EventEmitter {
   constructor(options = {}) {
     super(options)
 
+    /**
+     *
+     * @type {Buffer}
+     * @protected
+     */
     this.universe = Buffer.alloc(DMX_MAX_CHANNELS + 1, 0)
+    /**
+     *
+     * @type {number}
+     * @protected
+     */
     this.interval = 1000 / (options.interval ?? INTERVAL)
-    this.timeout = null
+    /**
+     *
+     * @type {NodeJS.Timeout}
+     * @protected
+     */
+    this.timeout = undefined
   }
 
+  /**
+   *
+   * @param {Error} [error]
+   */
   init(error) {
     if (error) {
       console.error(error)
@@ -38,32 +56,67 @@ export default class Driver extends EventEmitter {
     this.emit(EVENT_STOP)
   }
 
+  /**
+   *
+   * @param {number} address
+   * @return {number}
+   */
   get(address) {
     return this.universe[address]
   }
 
+  /**
+   *
+   * @param {number} address
+   * @param {number} value
+   */
   set(address, value) {
     this.universe[address] = value
   }
 
+  /**
+   *
+   * @param {number} address
+   * @return {number}
+   */
   getPercent(address) {
     return (this.get(address) / DMX_MAX_CHANNELS) * 100
   }
 
+  /**
+   *
+   * @param {number} [begin=1]
+   * @param {number} [end=this.universe.length]
+   * @return {number[]}
+   */
   toArray(begin = 1, end = this.universe.length) {
     return Array.from(this.universe.subarray(begin, end))
   }
 
+  /**
+   *
+   * @param {Record<number, number>} values
+   */
   update(values) {
     for (const address in values) {
       this.universe[address] = values[address]
     }
   }
 
+  /**
+   *
+   * @param {number} value
+   * @param {number} [begin=1]
+   * @param {number} [end=this.universe.length]
+   */
   fill(value, begin = 1, end = this.universe.length) {
     this.universe.fill(value, begin, end)
   }
 
+  /**
+   *
+   * @param {number} value
+   */
   updateAll(value) {
     this.fill(value)
   }

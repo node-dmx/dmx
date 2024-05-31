@@ -1,4 +1,4 @@
-import dgram from 'dgram'
+import * as dgram from 'node:dgram'
 import Driver from './index.js'
 
 const HOST = '127.0.0.1'

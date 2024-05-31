@@ -1,5 +1,5 @@
 /**
- * @typedef {import("./drivers/index.js").default} Driver
+ * @typedef {import('./drivers/index.js').default} Driver
  */
 
 import { EventEmitter } from 'events'
@@ -35,7 +35,7 @@ export default class DMX extends EventEmitter {
     /**
      *
      * @type {Map<string, Driver>}
-     * @private
+     * @protected
      */
     this.universes = new Map()
     this.drivers = new Map()
@@ -140,7 +140,7 @@ export default class DMX extends EventEmitter {
   /**
    *
    * @param {string} id
-   * @param {number} begin
+   * @param {number} [begin]
    * @param {number} [end]
    * @returns {number[]}
    */
@@ -161,7 +161,7 @@ export default class DMX extends EventEmitter {
   /**
    *
    * @param {string} id
-   * @param {number[]} channels
+   * @param {Record<number, number>} channels
    */
   update(id, channels) {
     this.getUniverse(id).update(channels)

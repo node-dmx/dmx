@@ -1,4 +1,4 @@
-import dgram from 'dgram'
+import * as dgram from 'node:dgram'
 import Driver, { DMX_MAX_CHANNELS } from './index.js'
 
 const HOST = '127.0.0.1'
