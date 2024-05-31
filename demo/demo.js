@@ -1,52 +1,55 @@
-import DMX from '@vk/dmx';
+import DMX from '#'
 
-const dmx = new DMX();
-const A = DMX.Animation;
+const dmx = new DMX()
+const A = DMX.Animation
 
 // const universe = dmx.addUniverse('demo', 'enttec-usb-dmx-pro', { path: 'COM1' });
 // const universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', { path: '/dev/cu.usbserial-6AVNHXS8' });
 // const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});
-const universe = dmx.addUniverse('demo', 'null');
+const universe = dmx.addUniverse('demo', 'null')
 
 universe.on('ready', function () {
-  universe.update({1: 255, 2: 200});
+  universe.update({
+    1: 255,
+    2: 200,
+  })
   // universe.update({16: 1, 17: 255});
   // universe.update({1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0});
-});
+})
 
 function greenWater(universe, channels, duration) {
   const colors = [
-    [160, 230, 20],
-    [255, 255, 0],
-    [110, 255, 10],
-  ];
+    [ 160, 230, 20 ],
+    [ 255, 255, 0 ],
+    [ 110, 255, 10 ],
+  ]
 
   for (const c in channels) {
-    const r = Math.floor((Math.random() * colors.length));
-    const u = {};
+    const r = Math.floor((Math.random() * colors.length))
+    const u = {}
 
     for (let i = 0; i < 3; i++) {
-      u[channels[c] + i] = colors[r][i];
+      u[channels[c] + i] = colors[r][i]
     }
-    new A().add(u, duration).run(universe);
+    new A().add(u, duration).run(universe)
   }
-  setTimeout(function () {greenWater(universe, channels, duration);}, duration * 2);
+  setTimeout(function () {greenWater(universe, channels, duration)}, duration * 2)
 }
 
 function warp(universe, channel, min, max, duration) {
-  const a = {}, b = {};
+  const a = {}, b = {}
 
-  a[channel] = min;
-  b[channel] = max;
+  a[channel] = min
+  b[channel] = max
   new A().add(a, duration).add(b, duration).run(universe, function () {
-    warp(universe, channel, min, max, duration);
-  });
+    warp(universe, channel, min, max, duration)
+  })
 }
 
-warp(universe, 1, 200, 220, 360);
-warp(universe, 1 + 15, 200, 255, 240);
-greenWater(universe, [3, 6, 9], 4000);
-greenWater(universe, [3 + 15, 6 + 15, 9 + 15], 4000);
+warp(universe, 1, 200, 220, 360)
+warp(universe, 1 + 15, 200, 255, 240)
+greenWater(universe, [ 3, 6, 9 ], 4000)
+greenWater(universe, [ 3 + 15, 6 + 15, 9 + 15 ], 4000)
 
 // function done() { console.log('DONE'); }
 //

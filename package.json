@@ -13,7 +13,6 @@
   },
   "description": "A nodejs DMX library",
   "devDependencies": {
-    "@eslint/js": "^9.3.0",
     "@types/eslint__js": "^8.42.3",
     "@vk/dmx-types": "github:vs-kurkin/dmx-types#0.0.7",
     "concurrently": "^8.2.2",
@@ -25,11 +24,13 @@
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.11.0"
   },
+  "imports": {
+    "#": "./src/index.js"
+  },
   "files": [
     "src",
     "types"
   ],
-  "typings": "./types/index.d.ts",
   "keywords": [
     "DMX",
     "light control"
@@ -40,16 +41,17 @@
   "scripts": {
     "audit": "npm audit fix",
     "build": "npx tsc",
-    "check": "npm install && npm-check --development -u && npm run build && npm run lint",
+    "check": "npm install && npm run build && npm run lint",
     "doctor": "npm doctor",
     "format": "npm run test:lint -- --fix",
+    "lint": "npx eslint .",
     "prerelease": "npm run check && git commit -m \"Release %npm_package_version%\" -a",
     "release": "git tag -a %npm_package_version% -f -m \"Release %npm_package_version%\" && git push && git push --tags",
     "test": "npx concurrently 'npm run test:lint' 'npm run test:jest'",
-    "lint": "npx eslint .",
     "unit": "npx jest",
     "update": "npm update --save"
   },
   "type": "module",
-  "version": "0.9.0"
+  "types": "./types/index.d.ts",
+  "version": "0.10.0"
 }
