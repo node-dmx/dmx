@@ -1,4 +1,3 @@
-/* global Buffer */
 import SerialDriver from './SerialDriver.js'
 
 export default class EntTecOpenUsbDMXDriver extends SerialDriver {

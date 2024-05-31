@@ -1,4 +1,3 @@
-/* global Buffer */
 import SerialDriver from './SerialDriver.js'
 
 const UNIVERSE_LEN = 512

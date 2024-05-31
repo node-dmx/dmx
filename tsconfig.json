@@ -1,27 +1,24 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "declaration": true,
     "allowJs": true,
-    "paths": {
-      "#*": [ "./src/*" ]
-    },
+    "allowSyntheticDefaultImports": true,
+    "checkJs": true,
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "declaration": true,
+    "declarationDir": "types",
+    "emitDeclarationOnly": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
     "moduleResolution": "Node",
-    "resolvePackageJsonExports": true,
-    "baseUrl": ".",
+    "noImplicitAny": false,
+    "importHelpers": true,
+    "pretty": true,
+    "target": "ESNext",
+    "diagnostics": true,
+    "useUnknownInCatchVariables": true
   },
-  "include": [
-    "src/**/*",
-    "types/**/*",
-    "eslint.config.js"
-  ],
-  "exclude": [
-    "node_modules",
-    "./demo/**/*",
-    "./test/**/*"
-  ]
+  "include": [ "src" ],
+  "exclude": [ "node_modules", "demo", "test", "types" ]
 }

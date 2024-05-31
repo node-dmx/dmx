@@ -1,4 +1,3 @@
-/* global Buffer */
 import { EventEmitter } from 'events'
 import console from 'node:console'
 import { clearInterval, setInterval } from 'node:timers'
@@ -10,8 +9,8 @@ export const EVENT_STOP = 'stop'
 export const EVENT_READY = 'ready'
 
 export default class Driver extends EventEmitter {
-  constructor(options) {
-    super()
+  constructor(options = {}) {
+    super(options)
 
     this.universe = Buffer.alloc(DMX_MAX_CHANNELS + 1, 0)
     this.interval = 1000 / (options.interval ?? INTERVAL)
@@ -34,7 +33,7 @@ export default class Driver extends EventEmitter {
   }
 
   stop() {
-    clearInterval(this.timeout)
+    this.timeout != null && clearInterval(this.timeout)
 
     this.emit(EVENT_STOP)
   }

@@ -1,5 +1,5 @@
-import Driver from '#drivers'
 import sacn from 'sacn'
+import Driver from '.'
 
 export default class SACNDriver extends Driver {
   constructor(options = {}) {
@@ -9,8 +9,6 @@ export default class SACNDriver extends Driver {
       universe: options.universe || 1,
       reuseAddr: true,
     })
-
-    this.universe = {}
   }
 
   close() {

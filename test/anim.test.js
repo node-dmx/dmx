@@ -1,4 +1,4 @@
-import DMX from '@vk/dmx'
+import DMX from './'
 
 const dmx = new DMX();
 const universe = dmx.addUniverse('test', 'null', 'test');

@@ -1,4 +1,3 @@
-/* global Buffer */
 import SerialDriver from './SerialDriver.js'
 
 const ENTTEC_PRO_DMX_START_CODE = 0x00

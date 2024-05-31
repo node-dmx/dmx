@@ -1,18 +1,16 @@
-import ease from '#easing.js'
-import clearTimeout from 'node:timers'
-import setTimeout from 'node:timers'
+import ease from './easing.js'
 
 export default class Animation {
-  constructor({ loop, filter } = {}) {
+  constructor(options = {}) {
     this.frameDelay = 1
     this.animations = []
     this.lastAnimation = 0
     this.timeout = null
     this.duration = 0
     this.startTime = null
-    this.loops = loop || 1
+    this.loops = options.loop || 1
     this.currentLoop = 0
-    this.filter = filter
+    this.filter = options.filter
   }
 
   add(to, duration = 0, options = {}) {
@@ -37,7 +35,7 @@ export default class Animation {
   }
 
   stop() {
-    if (this.timeout) {
+    if (this.timeout != null) {
       clearTimeout(this.timeout)
     }
   }
@@ -48,111 +46,107 @@ export default class Animation {
   }
 
   runNextLoop(universe, onFinish) {
-    const runAnimationStep = () => {
-      const now = new Date().getTime()
-      const elapsedTime = now - this.startTime
+    const now = new Date().getTime()
+    const elapsedTime = now - (this.startTime ?? 0)
 
-      this.timeout = setTimeout(runAnimationStep, this.frameDelay)
+    this.timeout = setTimeout(this.runNextLoop.bind(this, ...[universe, onFinish]), this.frameDelay)
 
-      // Find the animation for the current point in time, the latest if multiple match
+    // Find the animation for the current point in time, the latest if multiple match
 
-      let currentAnimation = this.lastAnimation
+    let currentAnimation = this.lastAnimation
 
-      while (
-        currentAnimation < this.animations.length &&
-        elapsedTime >= this.animations[currentAnimation].end
+    while (
+      currentAnimation < this.animations.length &&
+      elapsedTime >= this.animations[currentAnimation].end
       ) {
-        currentAnimation++
-      }
-
-      // Ensure final state of all newly completed animations have been set
-      const completedAnimations = this.animations.slice(
-        this.lastAnimation,
-        currentAnimation,
-      )
-
-      // Ensure future animations interpolate from the most recent state
-      completedAnimations.forEach(completedAnimation => {
-        delete completedAnimation.from
-      })
-
-      if (completedAnimations.length) {
-        const completedAnimationStatesToSet = Object.assign(
-          {},
-          ...completedAnimations.map(a => a.to),
-        )
-
-        if (typeof this.filter === 'function') {
-          this.filter(completedAnimationStatesToSet)
-        }
-
-        universe.update(completedAnimationStatesToSet, { origin: 'animation' })
-      }
-
-      this.lastAnimation = currentAnimation
-
-      if (elapsedTime >= this.duration) {
-        // This animation loop is complete
-        this.currentLoop++
-        this.stop()
-
-        if (this.currentLoop >= this.loops) {
-          // All loops complete
-          if (onFinish) {
-            onFinish()
-          }
-        } else {
-          // Run next loop
-          this.reset(this.startTime + this.duration)
-          this.runNextLoop(universe)
-        }
-      } else {
-        // Set intermediate channel values during an animation
-        const animation = this.animations[currentAnimation]
-        const easing = ease[animation.options.easing]
-        const duration = animation.end - animation.start
-        const animationElapsedTime = elapsedTime - animation.start
-
-        if (!animation.from) {
-          animation.from = {}
-
-          for (const k in animation.to) {
-            animation.from[k] = universe.get(k)
-          }
-
-          if (animation.options.from) {
-            animation.from = Object.assign(animation.from, animation.options.from)
-          }
-        }
-
-        if (duration) {
-          const easeProgress = easing(
-            Math.min(animationElapsedTime, duration),
-            0,
-            1,
-            duration,
-          )
-          const intermediateValues = {}
-
-          for (const k in animation.to) {
-            const startValue = animation.from[k]
-            const endValue = animation.to[k]
-
-            intermediateValues[k] = Math.round(
-              startValue + easeProgress * (endValue - startValue),
-            )
-          }
-
-          if (typeof this.filter === 'function') {
-            this.filter(intermediateValues)
-          }
-
-          universe.update(intermediateValues)
-        }
-      }
+      currentAnimation++
     }
 
-    runAnimationStep()
+    // Ensure final state of all newly completed animations have been set
+    const completedAnimations = this.animations.slice(
+      this.lastAnimation,
+      currentAnimation,
+    )
+
+    // Ensure future animations interpolate from the most recent state
+    completedAnimations.forEach(completedAnimation => {
+      delete completedAnimation.from
+    })
+
+    if (completedAnimations.length) {
+      const completedAnimationStatesToSet = Object.assign(
+        {},
+        ...completedAnimations.map(a => a.to),
+      )
+
+      if (typeof this.filter === 'function') {
+        this.filter(completedAnimationStatesToSet)
+      }
+
+      universe.update(completedAnimationStatesToSet, { origin: 'animation' })
+    }
+
+    this.lastAnimation = currentAnimation
+
+    if (elapsedTime >= this.duration) {
+      // This animation loop is complete
+      this.currentLoop++
+      this.stop()
+
+      if (this.currentLoop >= this.loops) {
+        // All loops complete
+        if (onFinish) {
+          onFinish()
+        }
+      } else {
+        // Run next loop
+        this.reset((this.startTime ?? 0) + this.duration)
+        this.runNextLoop(universe)
+      }
+    } else {
+      // Set intermediate channel values during an animation
+      const animation = this.animations[currentAnimation]
+      const easing = ease[animation.options.easing]
+      const duration = animation.end - animation.start
+      const animationElapsedTime = elapsedTime - animation.start
+
+      if (!animation.from) {
+        animation.from = {}
+
+        for (const k in animation.to) {
+          animation.from[k] = universe.get(k)
+        }
+
+        if (animation.options.from) {
+          animation.from = Object.assign(animation.from, animation.options.from)
+        }
+      }
+
+      if (duration) {
+        const easeProgress = easing(
+          Math.min(animationElapsedTime, duration),
+          0,
+          1,
+          duration,
+        )
+        const intermediateValues = {}
+
+        for (const k in animation.to) {
+          const startValue = animation.from[k]
+          const endValue = animation.to[k]
+
+          intermediateValues[k] = Math.round(
+            startValue + easeProgress * (endValue - startValue),
+          )
+        }
+
+        if (typeof this.filter === 'function') {
+          this.filter(intermediateValues)
+        }
+
+        universe.update(intermediateValues)
+      }
+    }
 
     return this
   }

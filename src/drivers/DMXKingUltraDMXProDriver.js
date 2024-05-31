@@ -1,4 +1,3 @@
-/* global Buffer */
 import SerialDriver from './SerialDriver.js'
 
 const DMX_KING_ULTRA_DMX_PRO_DMX_START_CODE = 0x00

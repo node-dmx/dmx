@@ -1,6 +1,5 @@
-/* global Buffer */
-import Driver from '#drivers'
 import dgram from 'dgram'
+import Driver from '.'
 
 const HOST = '127.0.0.1'
 const PORT = 6454
