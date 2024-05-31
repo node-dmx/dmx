@@ -43,7 +43,6 @@
     "check": "npm-check --development -u",
     "doctor": "npm doctor",
     "format": "npm run test:lint -- --fix",
-    "prerelease": "npm run build",
     "release": "git tag %npm_package_version% && git push && git push --tags",
     "test": "npx concurrently 'npm run test:lint' 'npm run test:jest'",
     "lint": "npx eslint .",
@@ -51,5 +50,5 @@
     "update": "npm update --save"
   },
   "type": "module",
-  "version": "0.4.0"
+  "version": "0.5.0"
 }
