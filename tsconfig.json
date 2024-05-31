@@ -11,6 +11,7 @@
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "esModuleInterop": false,
+    "module": "ESNext",
     "moduleResolution": "Node",
     "noImplicitAny": false,
     "importHelpers": true,
