@@ -1,5 +1,4 @@
 // @ts-check
-import jestPlugin from 'eslint-plugin-jest'
 import globals from 'globals'
 
 import tsESLint from 'typescript-eslint'
@@ -11,8 +10,9 @@ export default tsESLint.config(
 
     plugins: {
       '@typescript-eslint': tsESLint.plugin,
-      jest: jestPlugin,
     },
+
+    files: [ 'src/**/*.js' ],
 
     rules: {
 
@@ -31,14 +31,4 @@ export default tsESLint.config(
         tsconfigRootDir: import.meta.dirname
       },
     },
-  },
-
-  {
-    files: [ '**/*.js' ],
-    ...tsESLint.configs.disableTypeChecked
-  },
-
-  {
-    files: [ 'test/**' ],
-    ...tsESLint.configs['flat/recommended'],
   })

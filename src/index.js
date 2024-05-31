@@ -1,3 +1,7 @@
+/**
+ * @typedef {import("./drivers/index.js").default} Driver
+ */
+
 import { EventEmitter } from 'events'
 import ArtNetDriver from './drivers/ArtNetDriver.js'
 import BBDMXDriver from './drivers/BBDMXDriver.js'
@@ -28,6 +32,11 @@ export default class DMX extends EventEmitter {
   constructor() {
     super()
 
+    /**
+     *
+     * @type {Map<string, Driver>}
+     * @private
+     */
     this.universes = new Map()
     this.drivers = new Map()
 
@@ -42,10 +51,22 @@ export default class DMX extends EventEmitter {
     this.registerDriver('sacn', SACNDriver)
   }
 
+  /**
+   *
+   * @param {string} name
+   * @param constructor
+   */
   registerDriver(name, constructor) {
     this.drivers.set(name, constructor)
   }
 
+  /**
+   *
+   * @param {string} id
+   * @param  {string} driver
+   * @param options
+   * @returns {Driver}
+   */
   addUniverse(id, driver, options = {}) {
     if (this.universes.has(id)) {
       throw new Error(`Universe ${id} already exists`)
@@ -63,6 +84,10 @@ export default class DMX extends EventEmitter {
     return instance
   }
 
+  /**
+   *
+   * @param {string} id
+   */
   deleteUniverse(id) {
     if (!this.universes.has(id)) {
       throw new Error(`Universe ${id} does not exist`)
@@ -81,6 +106,11 @@ export default class DMX extends EventEmitter {
     .forEach(name => this.deleteUniverse(name))
   }
 
+  /**
+   *
+   * @param {string} id
+   * @returns {Driver}
+   */
   getUniverse(id) {
     if (!this.universes.has(id)) {
       throw new Error(`Universe ${id} does not exist`)
@@ -89,30 +119,70 @@ export default class DMX extends EventEmitter {
     return this.universes.get(id)
   }
 
+  /**
+   *
+   * @returns {string[]}
+   */
   getUniverses() {
     return Array.from(this.universes.keys())
   }
 
+  /**
+   *
+   * @param {string} id
+   * @param {number} address
+   * @return {number}
+   */
   getValue(id, address) {
     return this.getUniverse(id).get(address)
   }
 
+  /**
+   *
+   * @param {string} id
+   * @param {number} begin
+   * @param {number} [end]
+   * @returns {number[]}
+   */
   getValues(id, begin, end) {
     return this.getUniverse(id).toArray(begin, end)
   }
 
+  /**
+   *
+   * @param {string} id
+   * @param {number} address
+   * @param {number} value
+   */
   setValue(id, address, value) {
     this.getUniverse(id).set(address, value)
   }
 
+  /**
+   *
+   * @param {string} id
+   * @param {number[]} channels
+   */
   update(id, channels) {
     this.getUniverse(id).update(channels)
   }
 
+  /**
+   *
+   * @param {string} id
+   * @param {number} value
+   * @param {number} [begin]
+   * @param {number} [end]
+   */
   fill(id, value, begin, end) {
     this.getUniverse(id).fill(value, begin, end)
   }
 
+  /**
+   *
+   * @param {string} id
+   * @param {number} value
+   */
   updateAll(id, value) {
     this.fill(id, value)
   }
