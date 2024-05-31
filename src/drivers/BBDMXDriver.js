@@ -1,5 +1,5 @@
 import dgram from 'dgram'
-import Driver, { DMX_MAX_CHANNELS } from '.'
+import Driver, { DMX_MAX_CHANNELS } from './index.js'
 
 const HOST = '127.0.0.1'
 const PORT = 9930

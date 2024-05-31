@@ -7,5 +7,5 @@ export default class SerialDriver extends Driver {
     serial: SerialPort<import("@serialport/bindings-cpp").AutoDetectTypes>;
     close(): void;
 }
-import Driver from '.';
+import Driver from './index.js';
 import { SerialPort } from 'serialport';

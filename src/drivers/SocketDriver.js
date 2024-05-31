@@ -1,5 +1,5 @@
 import { default as io } from 'socket.io-client'
-import Driver from '.'
+import Driver from './index.js'
 
 export const PORT = 18909
 

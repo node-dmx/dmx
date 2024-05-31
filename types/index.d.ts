@@ -1,5 +1,5 @@
 export * from "./Animation.js";
-export * from "./drivers";
+export * from "./drivers/index.js";
 export const DRIVERS: string[];
 export default class DMX extends EventEmitter<[never]> {
     constructor();

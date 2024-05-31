@@ -10,7 +10,7 @@ import SACNDriver from './drivers/SACNDriver.js'
 import SocketDriver from './drivers/SocketDriver.js'
 
 export * from './Animation.js'
-export * from './drivers'
+export * from './drivers/index.js'
 
 export const DRIVERS = [
   'null',

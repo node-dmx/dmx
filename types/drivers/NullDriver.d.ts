@@ -1,3 +1,3 @@
 export default class NullDriver extends Driver {
 }
-import Driver from '.';
+import Driver from './index.js';

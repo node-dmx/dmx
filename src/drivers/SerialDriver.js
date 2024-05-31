@@ -1,5 +1,5 @@
 import { SerialPort } from 'serialport'
-import Driver, { EVENT_STOP } from '.'
+import Driver, { EVENT_STOP } from './index.js'
 
 export const BAUD_RATE = 250000
 export const DATA_BITS = 8

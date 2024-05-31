@@ -3,5 +3,5 @@ export default class SACNDriver extends Driver {
     close(): void;
     send(): Promise<void>;
 }
-import Driver from '.';
+import Driver from './index.js';
 import sacn from 'sacn';

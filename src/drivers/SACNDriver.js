@@ -1,5 +1,5 @@
 import sacn from 'sacn'
-import Driver from '.'
+import Driver from './index.js'
 
 export default class SACNDriver extends Driver {
   constructor(options = {}) {
