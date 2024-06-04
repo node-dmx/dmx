@@ -1,6 +1,7 @@
+/// <reference types="@vk/dmx-types" />
 export * from "./Animation.js";
 export * from "./drivers/index.js";
-export const DRIVERS: string[];
+export const DRIVERS: import("@vk/dmx-types").SerialDriver;
 export default class DMX extends EventEmitter<[never]> {
     constructor();
     protected universes: Map<string, Driver>;
@@ -19,4 +20,5 @@ export default class DMX extends EventEmitter<[never]> {
     updateAll(id: string, value: number): void;
 }
 export type Driver = import('./drivers/index.js').default;
+export type SerialDriver = import('@vk/dmx-types').SerialDriver;
 import { EventEmitter } from 'events';

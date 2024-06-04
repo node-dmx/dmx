@@ -1,5 +1,6 @@
 /**
  * @typedef {import('./drivers/index.js').default} Driver
+ * @typedef {import('@vk/dmx-types').SerialDriver} SerialDriver
  */
 
 import { EventEmitter } from 'events'
@@ -16,8 +17,12 @@ import SocketDriver from './drivers/SocketDriver.js'
 export * from './Animation.js'
 export * from './drivers/index.js'
 
+/**
+ *
+ * @type {SerialDriver}
+ */
 export const DRIVERS = [
-  'null',
+  // 'null',
   'socketio',
   'dmx4all',
   'enttec-usb-dmx-pro',
