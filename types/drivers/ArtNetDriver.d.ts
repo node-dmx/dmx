@@ -1,5 +1,6 @@
 /// <reference types="node" resolution-mode="require"/>
-export default class ArtNetDriver extends Driver {
+export class ArtNetDriver extends AbstractDriver {
+    constructor(options?: {});
     header: Buffer;
     sequence: Buffer;
     physical: Buffer;
@@ -10,5 +11,5 @@ export default class ArtNetDriver extends Driver {
     socket: dgram.Socket;
     ready: boolean;
 }
-import Driver from './index.js';
+import { AbstractDriver } from './index.js';
 import * as dgram from 'node:dgram';

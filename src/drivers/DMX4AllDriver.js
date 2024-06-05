@@ -1,8 +1,8 @@
-import SerialDriver from './SerialDriver.js'
+import { SerialDriver } from './SerialDriver.js'
 
 const UNIVERSE_LEN = 512
 
-export default class DMX4AllDriver extends SerialDriver {
+export class DMX4AllDriver extends SerialDriver {
   constructor(options = {}) {
     options.baudRate = 38400
     options.stopBits = 1

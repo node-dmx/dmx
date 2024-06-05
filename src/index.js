@@ -1,24 +1,23 @@
 /**
- * @typedef {import('@vk/dmx-types').Serial} Serial
  * @typedef {import('@vk/dmx-types').SerialDriver} SerialDriver
- * @typedef {typeof import('./drivers/index.js').default} Driver
- * @typedef { InstanceType<Driver> } DriverInstance
+ * @typedef {typeof import('./drivers/index.js').AbstractDriver} Driver
  */
 
 import { EventEmitter } from 'events'
-import ArtNetDriver from './drivers/ArtNetDriver.js'
-import BBDMXDriver from './drivers/BBDMXDriver.js'
-import DMX4AllDriver from './drivers/DMX4AllDriver.js'
-import DMXKingUltraDmxProDriver from './drivers/DMXKingUltraDMXProDriver.js'
-import EntTecOpenUsbDMXDriver from './drivers/EntTecOpenUsbDMXDriver.js'
-import EntTecUSBDMXProDriver from './drivers/EntTecUsbDMXProDriver.js'
-import NullDriver from './drivers/NullDriver.js'
-import SACNDriver from './drivers/SACNDriver.js'
-import SocketDriver from './drivers/SocketDriver.js'
+import { ArtNetDriver } from './drivers/ArtNetDriver.js'
+import { BBDMXDriver } from './drivers/BBDMXDriver.js'
+import { DMX4AllDriver } from './drivers/DMX4AllDriver.js'
+import { DMXKingUltraDMXProDriver } from './drivers/DMXKingUltraDMXProDriver.js'
+import { EntTecOpenUsbDMXDriver } from './drivers/EntTecOpenUsbDMXDriver.js'
+import { EntTecUsbDMXProDriver } from './drivers/EntTecUsbDMXProDriver.js'
+import { NullDriver } from './drivers/NullDriver.js'
+import { SACNDriver } from './drivers/SACNDriver.js'
+import { SocketDriver } from './drivers/SocketDriver.js'
 
 /**
  *
  * @type {SerialDriver}
+ * @constant
  */
 export const DRIVERS = [
   // 'null',
@@ -38,13 +37,15 @@ export default class DMX extends EventEmitter {
 
     /**
      *
-     * @type {Map<string, DriverInstance>}
+     * @link Driver
+     * @type {Map<string, InstanceType<Driver>>}
      * @protected
      */
     this.universes = new Map()
 
     /**
      *
+     * @link Driver
      * @type {Map<string, Driver>}
      */
     this.drivers = new Map()
@@ -52,9 +53,9 @@ export default class DMX extends EventEmitter {
     this.registerDriver('null', NullDriver)
     this.registerDriver('socketio', SocketDriver)
     this.registerDriver('dmx4all', DMX4AllDriver)
-    this.registerDriver('enttec-usb-dmx-pro', EntTecUSBDMXProDriver)
+    this.registerDriver('enttec-usb-dmx-pro', EntTecUsbDMXProDriver)
     this.registerDriver('enttec-open-usb-dmx', EntTecOpenUsbDMXDriver)
-    this.registerDriver('dmxking-ultra-dmx-pro', DMXKingUltraDmxProDriver)
+    this.registerDriver('dmxking-ultra-dmx-pro', DMXKingUltraDMXProDriver)
     this.registerDriver('artnet', ArtNetDriver)
     this.registerDriver('bbdmx', BBDMXDriver)
     this.registerDriver('sacn', SACNDriver)
@@ -74,7 +75,7 @@ export default class DMX extends EventEmitter {
    * @param {string} id
    * @param  {string} driver
    * @param options
-   * @returns {DriverInstance}
+   * @returns {InstanceType<Driver>}
    */
   addUniverse(id, driver, options = {}) {
     if (this.universes.has(id)) {
@@ -118,7 +119,7 @@ export default class DMX extends EventEmitter {
   /**
    *
    * @param {string} id
-   * @returns {DriverInstance}
+   * @returns {InstanceType<Driver>}
    */
   getUniverse(id) {
     if (!this.universes.has(id)) {

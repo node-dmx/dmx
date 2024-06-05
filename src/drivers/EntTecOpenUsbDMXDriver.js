@@ -1,6 +1,6 @@
-import SerialDriver from './SerialDriver.js'
+import { SerialDriver } from './SerialDriver.js'
 
-export default class EntTecOpenUsbDMXDriver extends SerialDriver {
+export class EntTecOpenUsbDMXDriver extends SerialDriver {
   send() {
     if (!this.serial.writable || !this.ready) {
       return

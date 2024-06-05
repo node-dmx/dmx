@@ -1,6 +1,7 @@
-export default class SACNDriver extends Driver {
+export class SACNDriver extends AbstractDriver {
+    constructor(options?: {});
     SACNServer: Sender;
     send(): Promise<void>;
 }
-import Driver from './index.js';
+import { AbstractDriver } from './index.js';
 import { Sender } from 'sacn';

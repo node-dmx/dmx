@@ -1,11 +1,11 @@
-import SerialDriver from './SerialDriver.js'
+import { SerialDriver } from './SerialDriver.js'
 
 const ENTTEC_PRO_DMX_START_CODE = 0x00
 const ENTTEC_PRO_START_OF_MSG = 0x7e
 const ENTTEC_PRO_END_OF_MSG = 0xe7
 const ENTTEC_PRO_SEND_DMX_RQ = 0x06
 
-export default class EntTecUsbDMXProDriver extends SerialDriver {
+export class EntTecUsbDMXProDriver extends SerialDriver {
   send() {
     if (!this.serial.writable || !this.ready) {
       return

@@ -1,4 +1,4 @@
-import SerialDriver from './SerialDriver.js'
+import { SerialDriver } from './SerialDriver.js'
 
 const DMX_KING_ULTRA_DMX_PRO_DMX_START_CODE = 0x00
 const DMX_KING_ULTRA_DMX_PRO_START_OF_MSG = 0x7e
@@ -7,7 +7,7 @@ const DMX_KING_ULTRA_DMX_PRO_SEND_DMX_RQ = 0x06
 const DMX_KING_ULTRA_DMX_PRO_SEND_DMX_A_RQ = 0x64
 const DMX_KING_ULTRA_DMX_PRO_SEND_DMX_B_RQ = 0x65
 
-export default class DMXKingUltraDMXProDriver extends SerialDriver {
+export class DMXKingUltraDMXProDriver extends SerialDriver {
   constructor(options = {}) {
     super(options)
 

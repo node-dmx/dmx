@@ -1,3 +1,3 @@
-export default class EntTecUsbDMXProDriver extends SerialDriver {
+export class EntTecUsbDMXProDriver extends SerialDriver {
 }
-import SerialDriver from './SerialDriver.js';
+import { SerialDriver } from './SerialDriver.js';

@@ -1,10 +1,10 @@
 import * as dgram from 'node:dgram'
-import Driver from './index.js'
+import { AbstractDriver } from './index.js'
 
 const HOST = '127.0.0.1'
 const PORT = 6454
 
-export default class ArtNetDriver extends Driver {
+export class ArtNetDriver extends AbstractDriver {
   constructor(options = {}) {
     super()
     this.header = Buffer.from([ 65, 114, 116, 45, 78, 101, 116, 0, 0, 80, 0, 14 ])

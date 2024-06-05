@@ -1,9 +1,9 @@
 import { default as io } from 'socket.io-client'
-import Driver from './index.js'
+import { AbstractDriver } from './index.js'
 
 export const PORT = 18909
 
-export default class SocketDriver extends Driver {
+export class SocketDriver extends AbstractDriver {
   constructor(options = {}) {
     super(options)
 

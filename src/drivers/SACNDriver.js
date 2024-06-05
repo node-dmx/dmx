@@ -1,7 +1,7 @@
 import { Sender } from 'sacn'
-import Driver from './index.js'
+import { AbstractDriver } from './index.js'
 
-export default class SACNDriver extends Driver {
+export class SACNDriver extends AbstractDriver {
   constructor(options = {}) {
     super(options)
 
@@ -20,7 +20,7 @@ export default class SACNDriver extends Driver {
    * @param {Record<number, number>} values
    */
   update(values) {
-    Driver.prototype.update.call(this, values)
+    AbstractDriver.prototype.update.call(this, values)
 
     this.send().then()
   }
@@ -36,7 +36,7 @@ export default class SACNDriver extends Driver {
    * @param {number} value
    */
   updateAll(value) {
-    Driver.prototype.updateAll.call(this, value)
+    AbstractDriver.prototype.updateAll.call(this, value)
 
     this.send().then()
   }

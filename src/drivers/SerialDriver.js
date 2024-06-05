@@ -1,5 +1,5 @@
 import { SerialPort } from 'serialport'
-import Driver, { EVENT_STOP } from './index.js'
+import { AbstractDriver, EVENT_STOP } from './index.js'
 
 export const BAUD_RATE = 250000
 export const DATA_BITS = 8
@@ -7,7 +7,7 @@ export const STOP_BITS = 2
 
 export const EVENT_CLOSE = 'close'
 
-export default class SerialDriver extends Driver {
+export class SerialDriver extends AbstractDriver {
   constructor(options = {}) {
     super(options)
 

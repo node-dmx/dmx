@@ -2,13 +2,13 @@
 export const DRIVERS: import("@vk/dmx-types").SerialDriver;
 export default class DMX extends EventEmitter<[never]> {
     constructor();
-    protected universes: Map<string, DriverInstance>;
+    protected universes: Map<string, InstanceType<Driver>>;
     drivers: Map<string, Driver>;
     registerDriver(name: string, constructor: Driver): void;
-    addUniverse(id: string, driver: string, options?: {}): DriverInstance;
+    addUniverse(id: string, driver: string, options?: {}): InstanceType<Driver>;
     deleteUniverse(id: string): void;
     deleteAllUniverses(): void;
-    getUniverse(id: string): DriverInstance;
+    getUniverse(id: string): InstanceType<Driver>;
     getUniverses(): string[];
     getValue(id: string, address: number): number;
     getValues(id: string, begin?: number, end?: number): number[];
@@ -17,8 +17,6 @@ export default class DMX extends EventEmitter<[never]> {
     fill(id: string, value: number, begin?: number, end?: number): void;
     updateAll(id: string, value: number): void;
 }
-export type Serial = import('@vk/dmx-types').Serial;
 export type SerialDriver = import('@vk/dmx-types').SerialDriver;
-export type Driver = typeof import('./drivers/index.js').default;
-export type DriverInstance = InstanceType<Driver>;
+export type Driver = typeof import('./drivers/index.js').AbstractDriver;
 import { EventEmitter } from 'events';

@@ -3,8 +3,8 @@ export const INTERVAL: 50;
 export const EVENT_START: "start";
 export const EVENT_STOP: "stop";
 export const EVENT_READY: "ready";
-export default class Driver extends EventEmitter<[never]> {
-    constructor(options?: {});
+export class AbstractDriver extends EventEmitter<[never]> {
+    constructor(options?: object);
     protected universe: Buffer;
     protected interval: number;
     protected timeout: NodeJS.Timeout;

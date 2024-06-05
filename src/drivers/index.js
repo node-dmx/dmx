@@ -6,7 +6,14 @@ export const EVENT_START = 'start'
 export const EVENT_STOP = 'stop'
 export const EVENT_READY = 'ready'
 
-export default class Driver extends EventEmitter {
+/**
+ * @class AbstractDriver
+ */
+export class AbstractDriver extends EventEmitter {
+  /**
+   * @param {object} [options]
+   * @constructor
+   */
   constructor(options = {}) {
     super(options)
 

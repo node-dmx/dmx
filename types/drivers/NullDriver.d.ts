@@ -1,3 +1,4 @@
-export default class NullDriver extends Driver {
+export class NullDriver extends AbstractDriver {
+    constructor(options?: {});
 }
-import Driver from './index.js';
+import { AbstractDriver } from './index.js';

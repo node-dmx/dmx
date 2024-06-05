@@ -1,10 +1,10 @@
 import * as dgram from 'node:dgram'
-import Driver, { DMX_MAX_CHANNELS } from './index.js'
+import { AbstractDriver, DMX_MAX_CHANNELS } from './index.js'
 
 const HOST = '127.0.0.1'
 const PORT = 9930
 
-export default class BBDMXDriver extends Driver {
+export class BBDMXDriver extends AbstractDriver {
   constructor(options = {}) {
     super(options)
 

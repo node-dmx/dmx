@@ -1,23 +1,33 @@
-import esLint from '@eslint/js'
+import js from '@eslint/js'
 import globals from 'globals'
-import tsLint from 'typescript-eslint'
 
-export default tsLint.config({
-  ...esLint.configs.recommended,
+export default [
+  {
+    ...js.configs.recommended,
 
-  extends: tsLint.configs['flat/recommended'],
+    languageOptions: {
+      globals: {
+        ...globals.node
+      },
 
-  files: [ 'src/**/*.js' ],
-
-  languageOptions: {
-    parser: tsLint.parser,
-    globals: {
-      ...globals.node,
-    },
-
-    parserOptions: {
-      project: true,
-      tsconfigRootDir: import.meta.dirname,
+      parserOptions: {
+        project: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
   },
-})
+
+  {
+    files: [ 'src/**/*.js' ],
+  },
+
+  {
+    files: [ 'test/**/*.js' ],
+
+    languageOptions: {
+      globals: {
+        ...globals.jest
+      },
+    },
+  },
+]
