@@ -9,8 +9,8 @@ export default class Animation {
     loops: any;
     currentLoop: number;
     filter: any;
-    add(to: any, duration?: number, options?: {}): this;
-    delay(duration: any): this;
+    add(to: object, duration?: number, options?: object): Animation;
+    delay(duration?: number): Animation;
     stop(): void;
     reset(startTime?: number): void;
     runNextLoop(universe: any, onFinish: any): this;

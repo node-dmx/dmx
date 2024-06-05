@@ -1,6 +1,8 @@
 /**
- * @typedef {import('./drivers/index.js').default} Driver
+ * @typedef {import('@vk/dmx-types').Serial} Serial
  * @typedef {import('@vk/dmx-types').SerialDriver} SerialDriver
+ * @typedef {typeof import('./drivers/index.js').default} Driver
+ * @typedef { InstanceType<Driver> } DriverInstance
  */
 
 import { EventEmitter } from 'events'
@@ -13,9 +15,6 @@ import EntTecUSBDMXProDriver from './drivers/EntTecUsbDMXProDriver.js'
 import NullDriver from './drivers/NullDriver.js'
 import SACNDriver from './drivers/SACNDriver.js'
 import SocketDriver from './drivers/SocketDriver.js'
-
-export * from './Animation.js'
-export * from './drivers/index.js'
 
 /**
  *
@@ -39,10 +38,15 @@ export default class DMX extends EventEmitter {
 
     /**
      *
-     * @type {Map<string, Driver>}
+     * @type {Map<string, DriverInstance>}
      * @protected
      */
     this.universes = new Map()
+
+    /**
+     *
+     * @type {Map<string, Driver>}
+     */
     this.drivers = new Map()
 
     this.registerDriver('null', NullDriver)
@@ -59,7 +63,7 @@ export default class DMX extends EventEmitter {
   /**
    *
    * @param {string} name
-   * @param constructor
+   * @param { Driver } constructor
    */
   registerDriver(name, constructor) {
     this.drivers.set(name, constructor)
@@ -70,7 +74,7 @@ export default class DMX extends EventEmitter {
    * @param {string} id
    * @param  {string} driver
    * @param options
-   * @returns {Driver}
+   * @returns {DriverInstance}
    */
   addUniverse(id, driver, options = {}) {
     if (this.universes.has(id)) {
@@ -114,7 +118,7 @@ export default class DMX extends EventEmitter {
   /**
    *
    * @param {string} id
-   * @returns {Driver}
+   * @returns {DriverInstance}
    */
   getUniverse(id) {
     if (!this.universes.has(id)) {

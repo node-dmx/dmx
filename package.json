@@ -14,7 +14,7 @@
   "description": "A nodejs DMX library",
   "devDependencies": {
     "@types/eslint__js": "^8.42.3",
-    "@vk/dmx-types": "github:vs-kurkin/dmx-types#0.0.13",
+    "@vk/dmx-types": "github:vs-kurkin/dmx-types#0.0.14",
     "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
     "eslint-plugin-jest": "^28.5.0",
@@ -53,5 +53,5 @@
   },
   "type": "module",
   "types": "./types/index.d.ts",
-  "version": "0.11.0"
+  "version": "0.12.0"
 }

@@ -13,7 +13,7 @@ export default class SerialDriver extends Driver {
 
     this.ready = true
 
-    this.on(EVENT_STOP, this.close)
+    this.on(EVENT_STOP, this.stop)
 
     this.serial = new SerialPort({
       path: options.path,
@@ -24,7 +24,7 @@ export default class SerialDriver extends Driver {
     }, this.init.bind(this))
   }
 
-  close() {
+  stop() {
     this.serial.close((error) => {
       this.emit(EVENT_CLOSE, error)
     })

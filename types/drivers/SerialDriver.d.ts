@@ -5,7 +5,6 @@ export const EVENT_CLOSE: "close";
 export default class SerialDriver extends Driver {
     ready: boolean;
     serial: SerialPort<import("@serialport/bindings-cpp").AutoDetectTypes>;
-    close(): void;
 }
 import Driver from './index.js';
 import { SerialPort } from 'serialport';

@@ -1,34 +1,23 @@
-// @ts-check
+import esLint from '@eslint/js'
 import globals from 'globals'
+import tsLint from 'typescript-eslint'
 
-import tsESLint from 'typescript-eslint'
+export default tsLint.config({
+  ...esLint.configs.recommended,
 
-export default tsESLint.config(
-  {
-    ...tsESLint.configs['flat/recommended'],
-    ...tsESLint.configs['flat/next'],
+  extends: tsLint.configs['flat/recommended'],
 
-    plugins: {
-      '@typescript-eslint': tsESLint.plugin,
+  files: [ 'src/**/*.js' ],
+
+  languageOptions: {
+    parser: tsLint.parser,
+    globals: {
+      ...globals.node,
     },
 
-    files: [ 'src/**/*.js' ],
-
-    rules: {
-
+    parserOptions: {
+      project: true,
+      tsconfigRootDir: import.meta.dirname,
     },
-
-    languageOptions: {
-      sourceType: "module",
-      parser: tsESLint.parser,
-      globals: {
-        ...globals.node,
-        ...globals.jest,
-      },
-
-      parserOptions: {
-        project: true,
-        tsconfigRootDir: import.meta.dirname
-      },
-    },
-  })
+  },
+})

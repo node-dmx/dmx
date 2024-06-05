@@ -13,6 +13,13 @@ export default class Animation {
     this.filter = options.filter
   }
 
+  /**
+   *
+   * @param {object} to
+   * @param {number} [duration]
+   * @param {object} [options]
+   * @return {Animation}
+   */
   add(to, duration = 0, options = {}) {
     options.easing = options.easing || 'linear'
 
@@ -28,6 +35,11 @@ export default class Animation {
     return this
   }
 
+  /**
+   *
+   * @param {number} [duration]
+   * @return {Animation}
+   */
   delay(duration) {
     this.add({}, duration)
 

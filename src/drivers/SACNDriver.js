@@ -11,7 +11,7 @@ export default class SACNDriver extends Driver {
     })
   }
 
-  close() {
+  stop() {
     this.SACNServer.close()
   }
 
