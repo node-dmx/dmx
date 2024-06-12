@@ -1,5 +1,5 @@
 /// <reference types="@vk/dmx-types" />
-export const DRIVERS: import("@vk/dmx-types").SerialDriver;
+export const DRIVERS: ['null', ...import("@vk/dmx-types").SerialDriver];
 export default class DMX extends EventEmitter<[never]> {
     constructor();
     protected universes: Map<string, InstanceType<Driver>>;

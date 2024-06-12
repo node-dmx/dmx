@@ -8,17 +8,19 @@
     "emitDeclarationOnly": true,
     "esModuleInterop": false,
     "module": "NodeNext",
+    "isolatedModules": true,
     "moduleResolution": "NodeNext",
     "noImplicitAny": false,
     "pretty": true,
     "removeComments": true,
+    "allowImportingTsExtensions": true,
     "rootDir": "./src",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "target": "ESNext",
     "useUnknownInCatchVariables": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
   },
-  "include": [ "src" ],
-  "exclude": [ "node_modules", "demo", "test", "types" ]
+  "exclude": [ "node_modules", "demo", "test", "types" ],
+  "include": [ "src" ]
 }

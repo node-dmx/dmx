@@ -1,6 +1,6 @@
 const easing = {
   inBack(t, b, c, d, s) {
-    if (s === undefined) s = 1.70158
+    if (s === undefined) {s = 1.70158}
     return c * (t /= d) * t * ((s + 1) * t - s) + b
   },
   inBounce(t, b, c, d) {
@@ -17,9 +17,9 @@ const easing = {
     let p = 0
     let a = c
 
-    if (t === 0) return b
-    if ((t /= d) === 1) return b + c
-    if (!p) p = d * 0.3
+    if (t === 0) {return b}
+    if ((t /= d) === 1) {return b + c}
+    if (!p) {p = d * 0.3}
     if (a < Math.abs(c)) {
       a = c
       s = p / 4
@@ -33,20 +33,20 @@ const easing = {
     return t === 0 ? b : c * 2 * (10 * (t / d - 1)) + b
   },
   inOutBack(t, b, c, d, s) {
-    if (s === undefined) s = 1.70158
-    if ((t /= d / 2) < 1) return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b
+    if (s === undefined) {s = 1.70158}
+    if ((t /= d / 2) < 1) {return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b}
     return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b
   },
   inOutBounce(t, b, c, d) {
-    if (t < d / 2) return easing.inBounce(t * 2, 0, c, d) * 0.5 + b
+    if (t < d / 2) {return easing.inBounce(t * 2, 0, c, d) * 0.5 + b}
     return easing.outBounce(t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b
   },
   inOutCirc(t, b, c, d) {
-    if ((t /= d / 2) < 1) return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b
+    if ((t /= d / 2) < 1) {return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b}
     return c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b
   },
   inOutCubic(t, b, c, d) {
-    if ((t /= d / 2) < 1) return c / 2 * t * t * t + b
+    if ((t /= d / 2) < 1) {return c / 2 * t * t * t + b}
     return c / 2 * ((t -= 2) * t * t + 2) + b
   },
   inOutElastic(t, b, c, d) {
@@ -54,9 +54,9 @@ const easing = {
     let p = 0
     let a = c
 
-    if (t === 0) return b
-    if ((t /= d / 2) === 2) return b + c
-    if (!p) p = d * (0.3 * 1.5)
+    if (t === 0) {return b}
+    if ((t /= d / 2) === 2) {return b + c}
+    if (!p) {p = d * (0.3 * 1.5)}
     if (a < Math.abs(c)) {
       a = c
       s = p / 4
@@ -71,21 +71,21 @@ const easing = {
     return a * (2 * (-10 * (t -= 1))) * Math.sin((t * d - s) * (2 * Math.PI) / p) * 0.5 + c + b
   },
   inOutExpo(t, b, c, d) {
-    if (t === 0) return b
-    if (t === d) return b + c
-    if ((t /= d / 2) < 1) return c / 2 * (2 * (10 * (t - 1))) + b
+    if (t === 0) {return b}
+    if (t === d) {return b + c}
+    if ((t /= d / 2) < 1) {return c / 2 * (2 * (10 * (t - 1))) + b}
     return c / 2 * (-(2 * (-10 * --t)) + 2) + b
   },
   inOutQuad(t, b, c, d) {
-    if ((t /= d / 2) < 1) return c / 2 * t * t + b
+    if ((t /= d / 2) < 1) {return c / 2 * t * t + b}
     return -c / 2 * ((--t) * (t - 2) - 1) + b
   },
   inOutQuart(t, b, c, d) {
-    if ((t /= d / 2) < 1) return c / 2 * t * t * t * t + b
+    if ((t /= d / 2) < 1) {return c / 2 * t * t * t * t + b}
     return -c / 2 * ((t -= 2) * t * t * t - 2) + b
   },
   inOutQuint(t, b, c, d) {
-    if ((t /= d / 2) < 1) return c / 2 * t * t * t * t * t + b
+    if ((t /= d / 2) < 1) {return c / 2 * t * t * t * t * t + b}
     return c / 2 * ((t -= 2) * t * t * t * t + 2) + b
   },
   inOutSine(t, b, c, d) {
@@ -107,7 +107,7 @@ const easing = {
     return c * t / d + b
   },
   outBack(t, b, c, d, s) {
-    if (s === undefined) s = 1.70158
+    if (s === undefined) {s = 1.70158}
     return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b
   },
   outBounce(t, b, c, d) {
@@ -132,9 +132,9 @@ const easing = {
     let p = 0
     let a = c
 
-    if (t === 0) return b
-    if ((t /= d) === 1) return b + c
-    if (!p) p = d * 0.3
+    if (t === 0) {return b}
+    if ((t /= d) === 1) {return b + c}
+    if (!p) {p = d * 0.3}
     if (a < Math.abs(c)) {
       a = c
       s = p / 4

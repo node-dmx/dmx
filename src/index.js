@@ -16,11 +16,11 @@ import { SocketDriver } from './drivers/SocketDriver.js'
 
 /**
  *
- * @type {SerialDriver}
+ * @type {['null', ...SerialDriver]}
  * @constant
  */
 export const DRIVERS = [
-  // 'null',
+  'null',
   'socketio',
   'dmx4all',
   'enttec-usb-dmx-pro',

@@ -1,4 +1,5 @@
 import DMX from '#'
+import { expect, jest, test } from '@jest/globals'
 
 const dmx = new DMX()
 const universe = dmx.addUniverse('test', 'null', 'test')
