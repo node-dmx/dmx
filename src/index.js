@@ -1,5 +1,4 @@
 /**
- * @typedef {import('@vk/dmx-types').SerialDriver} SerialDriver
  * @typedef {typeof import('./drivers/index.js').AbstractDriver} Driver
  */
 
@@ -16,7 +15,6 @@ import { SocketDriver } from './drivers/SocketDriver.js'
 
 /**
  *
- * @type {['null', ...SerialDriver]}
  * @constant
  */
 export const DRIVERS = [

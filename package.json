@@ -16,7 +16,7 @@
     "@jest/globals": "^29.7.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0-alpha.30",
     "@typescript-eslint/parser": "^8.0.0-alpha.30",
-    "@vk/dmx-types": "github:vs-kurkin/dmx-types#0.0.19",
+    "@vk/dmx-types": "github:vs-kurkin/dmx-types#0.0.20",
     "concurrently": "^8.2.2",
     "eslint": "^9.4.0",
     "globals": "^15.4.0",
@@ -40,17 +40,17 @@
   "scripts": {
     "audit": "npm audit fix",
     "build": "npx tsc",
-    "check": "npm install && npm run build && npm run lint",
     "doctor": "npm doctor",
     "format": "npm run lint -- --fix",
     "lint": "npx eslint .",
-    "prerelease": "npm run check && git commit -m \"Release %npm_package_version%\" -a",
-    "release": "git tag -a %npm_package_version% -f -m \"Release %npm_package_version%\" && git push && git push --tags",
+    "postrelease": "git push && git push --tags",
+    "prerelease": "npm run build && git commit -m \"Release %npm_package_version%\" -a",
+    "release": "git tag -a %npm_package_version% -f -m \"Release %npm_package_version%\"",
     "test": "npx concurrently 'npm run lint' 'npm run unit'",
     "unit": "npx jest",
     "update": "npm update --save"
   },
   "type": "module",
   "types": "./types/index.d.ts",
-  "version": "0.15.0"
+  "version": "0.17.0"
 }
