@@ -4,9 +4,10 @@ import tsLintParser from '@typescript-eslint/parser'
 import globals from 'globals'
 
 export default [
+  js.configs.recommended,
+
   {
     files: [ 'src/**/*.js' ],
-    ...js.configs.recommended,
     ...tsLintPlugin.configs.recommendedTypeCheckedOnly,
     ...tsLintPlugin.configs.stylecticTypeCheckedOnly,
     languageOptions: {
