@@ -16,10 +16,10 @@
     "@jest/globals": "^29.7.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0-alpha.30",
     "@typescript-eslint/parser": "^8.0.0-alpha.30",
-    "@vk/dmx-types": "github:vs-kurkin/dmx-types#0.0.21",
+    "@vk/dmx-types": "github:vs-kurkin/dmx-types#0.0.34",
     "concurrently": "^8.2.2",
     "eslint": "^9.5.0",
-    "globals": "^15.4.0",
+    "globals": "^15.6.0",
     "jest": "^29.7.0",
     "typescript": "^5.4.5"
   },
@@ -52,5 +52,5 @@
   },
   "type": "module",
   "types": "./types/index.d.ts",
-  "version": "0.18.0"
+  "version": "0.19.0"
 }

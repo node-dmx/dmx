@@ -7,13 +7,19 @@ export default [
   js.configs.recommended,
 
   {
-    files: [ 'src/**/*.js' ],
     ...tsLintPlugin.configs.recommendedTypeCheckedOnly,
     ...tsLintPlugin.configs.stylecticTypeCheckedOnly,
-    languageOptions: {
-      globals: {
-        ...globals.node,
+    languageOptions:
+      {
+        globals: {
+          ...globals.node,
+        },
       },
+  },
+
+  {
+    files: [ 'src/**/*' ],
+    languageOptions: {
       parser: tsLintParser,
       parserOptions: {
         project: true,
@@ -31,11 +37,10 @@ export default [
   },
 
   {
-    files: [ 'test/**/*.js' ],
+    files: [ 'test/**/*' ],
     languageOptions: {
       globals: {
         ...globals.jest,
-        ...globals.node,
       },
     },
   },
