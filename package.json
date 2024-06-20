@@ -13,10 +13,10 @@
   },
   "description": "A NodeJS DMX realtime control library",
   "devDependencies": {
+    "@dmx-cloud/dmx-types": "^0.0.40",
     "@jest/globals": "^29.7.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0-alpha.30",
     "@typescript-eslint/parser": "^8.0.0-alpha.30",
-    "@dmx-cloud/dmx-types": "^0.0.39",
     "concurrently": "^8.2.2",
     "eslint": "^9.5.0",
     "globals": "^15.6.0",
@@ -43,15 +43,15 @@
     "doctor": "npm doctor",
     "format": "npm run lint -- --fix",
     "lint": "npx eslint .",
+    "npm:publish": "npm publish --access public",
     "postrelease": "git push && git push --tags && npm run npm:publish",
     "prerelease": "npm run build && git commit -m \"Release %npm_package_version%\" -a",
     "release": "git tag -a %npm_package_version% -f -m \"Release %npm_package_version%\"",
     "test": "npx concurrently 'npm run lint' 'npm run unit'",
     "unit": "npx jest",
-    "update": "npm update --save",
-    "npm:publish": "npm publish --access public"
+    "update": "npm update --save"
   },
   "type": "module",
   "types": "./types/index.d.ts",
-  "version": "0.27.0"
+  "version": "0.28.0"
 }

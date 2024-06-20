@@ -8,7 +8,7 @@ DMX-512 controller library for node.js
 
 ## Library API
 ```javascript
-import DMX from '@vk/dmx'
+import DMX from '@dmx-cloud/dmx'
 ```
 
 ### Class DMX
