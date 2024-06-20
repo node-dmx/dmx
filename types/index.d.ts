@@ -16,5 +16,5 @@ export default class DMX extends EventEmitter<[never]> {
     fill(id: string, value: number, begin?: number, end?: number): void;
     updateAll(id: string, value: number): void;
 }
-export type Driver = typeof import('./drivers/index.js').AbstractDriver;
+export type Driver = typeof import("./drivers/index.js").AbstractDriver;
 import { EventEmitter } from 'events';

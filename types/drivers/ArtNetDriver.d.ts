@@ -1,4 +1,3 @@
-/// <reference types="node" resolution-mode="require"/>
 export class ArtNetDriver extends AbstractDriver {
     constructor(options?: {});
     header: Buffer;

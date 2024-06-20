@@ -1,4 +1,3 @@
-/// <reference types="node" resolution-mode="require"/>
 export class BBDMXDriver extends AbstractDriver {
     constructor(options?: {});
     host: any;
