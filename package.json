@@ -16,7 +16,7 @@
     "@jest/globals": "^29.7.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0-alpha.30",
     "@typescript-eslint/parser": "^8.0.0-alpha.30",
-    "@vk/dmx-types": "github:vs-kurkin/dmx-types#0.0.37",
+    "@dmx-cloud/dmx-types": "^0.0.39",
     "concurrently": "^8.2.2",
     "eslint": "^9.5.0",
     "globals": "^15.6.0",
@@ -54,5 +54,5 @@
   },
   "type": "module",
   "types": "./types/index.d.ts",
-  "version": "0.25.0"
+  "version": "0.26.0"
 }
