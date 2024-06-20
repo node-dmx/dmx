@@ -48,11 +48,9 @@
     "release": "git tag -a %npm_package_version% -f -m \"Release %npm_package_version%\"",
     "test": "npx concurrently 'npm run lint' 'npm run unit'",
     "unit": "npx jest",
-    "update": "npm update --save",
-    "prepublish": "npm run release",
-    "publish": "npm publish --access public"
+    "update": "npm update --save"
   },
   "type": "module",
   "types": "./types/index.d.ts",
-  "version": "0.22.0"
+  "version": "0.23.0"
 }
