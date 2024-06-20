@@ -36,7 +36,7 @@
   ],
   "license": "MIT",
   "main": "./src/index.js",
-  "name": "@vk/dmx",
+  "name": "@dmx-cloud/dmx",
   "scripts": {
     "audit": "npm audit fix",
     "build": "npx tsc",
@@ -54,5 +54,5 @@
   },
   "type": "module",
   "types": "./types/index.d.ts",
-  "version": "0.21.0"
+  "version": "0.22.0"
 }
