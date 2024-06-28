@@ -1,4 +1,4 @@
-export const DRIVERS: string[];
+export const DRIVERS: SerialDrivers;
 export default class DMX extends EventEmitter<[never]> {
     constructor();
     protected universes: Map<string, InstanceType<Driver>>;
@@ -17,4 +17,5 @@ export default class DMX extends EventEmitter<[never]> {
     updateAll(id: string, value: number): void;
 }
 export type Driver = typeof import("./drivers/index.js").AbstractDriver;
+export type SerialDrivers = import("@dmx-cloud/dmx-types").SerialDrivers;
 import { EventEmitter } from 'events';

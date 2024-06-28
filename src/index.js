@@ -1,5 +1,6 @@
 /**
  * @typedef {typeof import('./drivers/index.js').AbstractDriver} Driver
+ * @typedef {import('@dmx-cloud/dmx-types').SerialDrivers} SerialDrivers
  */
 
 import { EventEmitter } from 'events'
@@ -16,6 +17,7 @@ import { SocketDriver } from './drivers/SocketDriver.js'
 /**
  *
  * @constant
+ * @type {SerialDrivers}
  */
 export const DRIVERS = [
   'null',
