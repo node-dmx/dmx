@@ -43,7 +43,7 @@
     "ci:publish": "npm publish --access public",
     "ci:release": "npm version minor -m \"Release %s\"",
     "dev:format": "npm run lint -- --fix",
-    "dev:push": "npm run build && npm run ci:release && git push && git push --tags",
+    "dev:push": "npm run ci:release && git push && git push --tags",
     "dev:update": "npm update --save",
     "lint": "npx eslint .",
     "preversion": "git clean -f",
@@ -52,5 +52,5 @@
   },
   "type": "module",
   "types": "./types/index.d.ts",
-  "version": "0.37.0"
+  "version": "0.36.0"
 }
