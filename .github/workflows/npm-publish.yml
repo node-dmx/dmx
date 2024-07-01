@@ -16,6 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm run ci:publish
+      - run: npm publish
         env:
           NPM_TOKEN: ${{secrets.npm_token}}
