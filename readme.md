@@ -1,4 +1,5 @@
 # node-dmx
+[![Publish to NPM](https://github.com/vs-kurkin/dmx/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/vs-kurkin/dmx/actions/workflows/npm-publish.yml)
 
 DMX-512 controller library for node.js
 
@@ -167,11 +168,3 @@ setTimeout(() => {
 This event is emitted whenever <code>update</code> is called either by the integrating application or by an animation step.
 
 If triggered by an animation step, <code>extraData.origin</code> will be the string <code>'animation'</code>.
-
-## Webinterface
-
-Versions prior to 0.2 included a Webinterface. This has since been moved into its own repository at <https://github.com/node-dmx/dmx-web>
-
-## Community
-
-We're happy to help. Chat with us on IRC in #dmx on libera.chat.
