@@ -7,16 +7,16 @@
     }
   ],
   "dependencies": {
-    "sacn": "^4.5.0",
+    "sacn": "^4.6.0",
     "serialport": "^12.0.0",
     "socket.io-client": "^4.7.5"
   },
   "description": "A NodeJS DMX realtime control library",
   "devDependencies": {
-    "@dmx-cloud/dmx-types": "^0.10.0",
+    "@dmx-cloud/dmx-types": "^0.11.0",
     "@jest/globals": "^29.7.0",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.1",
+    "@typescript-eslint/parser": "^8.0.1",
     "concurrently": "^8.2.2",
     "eslint": "^9.8.0",
     "globals": "^15.9.0",
