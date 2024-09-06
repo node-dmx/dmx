@@ -13,7 +13,7 @@
   },
   "description": "A NodeJS DMX realtime control library",
   "devDependencies": {
-    "@dmx-cloud/dmx-types": "^0.13.0",
+    "@dmx-cloud/dmx-types": "^0.14.0",
     "@jest/globals": "^29.7.0",
     "@typescript-eslint/eslint-plugin": "^8.4.0",
     "@typescript-eslint/parser": "^8.4.0",
