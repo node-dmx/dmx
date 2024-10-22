@@ -15,7 +15,7 @@ import { SACNDriver } from './drivers/SACNDriver.js'
 import { SocketDriver } from './drivers/SocketDriver.js'
 
 /**
- *
+ * Available driver names.
  * @constant
  * @type {SerialDrivers}
  */
@@ -31,60 +31,54 @@ export const DRIVERS = [
   'sacn',
 ]
 
+const DRIVER_CLASSES = {
+  'null': NullDriver,
+  'socketio': SocketDriver,
+  'dmx4all': DMX4AllDriver,
+  'enttec-usb-dmx-pro': EntTecUsbDMXProDriver,
+  'enttec-open-usb-dmx': EntTecOpenUsbDMXDriver,
+  'dmxking-ultra-dmx-pro': DMXKingUltraDMXProDriver,
+  'artnet': ArtNetDriver,
+  'bbdmx': BBDMXDriver,
+  'sacn': SACNDriver,
+}
+
 export default class DMX extends EventEmitter {
+  /**
+   * Construct a new DMX instance.
+   *
+   * The constructor registers all available drivers.
+   */
   constructor() {
     super()
-
-    /**
-     *
-     * @link Driver
-     * @type {Map<string, InstanceType<Driver>>}
-     * @protected
-     */
     this.universes = new Map()
-
-    /**
-     *
-     * @link Driver
-     * @type {Map<string, Driver>}
-     */
     this.drivers = new Map()
 
-    this.registerDriver('null', NullDriver)
-    this.registerDriver('socketio', SocketDriver)
-    this.registerDriver('dmx4all', DMX4AllDriver)
-    this.registerDriver('enttec-usb-dmx-pro', EntTecUsbDMXProDriver)
-    this.registerDriver('enttec-open-usb-dmx', EntTecOpenUsbDMXDriver)
-    this.registerDriver('dmxking-ultra-dmx-pro', DMXKingUltraDMXProDriver)
-    this.registerDriver('artnet', ArtNetDriver)
-    this.registerDriver('bbdmx', BBDMXDriver)
-    this.registerDriver('sacn', SACNDriver)
+    // Register all drivers
+    Object.entries(DRIVER_CLASSES).forEach(([name, driver]) => {
+      this.registerDriver(name, driver)
+    })
   }
 
   /**
-   *
-   * @param {string} name
-   * @param { Driver } constructor
+   * Registers a new driver.
+   * @param {string} name Driver name.
+   * @param {Driver} constructor Driver constructor.
    */
   registerDriver(name, constructor) {
     this.drivers.set(name, constructor)
   }
 
   /**
-   *
-   * @param {string} id
-   * @param  {string} driver
-   * @param options
-   * @returns {InstanceType<Driver>}
+   * Adds a new universe.
+   * @param {string} id Universe ID.
+   * @param {string} driver Driver name.
+   * @param {object} [options={}] Driver options.
+   * @returns {InstanceType<Driver>} Universe instance.
    */
   addUniverse(id, driver, options = {}) {
-    if (this.universes.has(id)) {
-      throw new Error(`Universe ${id} already exists`)
-    }
-
-    if (!this.drivers.has(driver)) {
-      throw new Error(`Driver ${driver} does not exist`)
-    }
+    this._ensureUniverseDoesNotExist(id)
+    this._ensureDriverExists(driver)
 
     const Driver = this.drivers.get(driver)
     const instance = new Driver(options)
@@ -95,14 +89,11 @@ export default class DMX extends EventEmitter {
   }
 
   /**
-   *
-   * @param {string} id
+   * Deletes a universe.
+   * @param {string} id Universe ID.
    */
   deleteUniverse(id) {
-    if (!this.universes.has(id)) {
-      throw new Error(`Universe ${id} does not exist`)
-    }
-
+    this._ensureUniverseExists(id)
     const instance = this.universes.get(id)
 
     instance.stop()
@@ -110,90 +101,118 @@ export default class DMX extends EventEmitter {
     this.universes.delete(id)
   }
 
+  /**
+   * Deletes all universes.
+   */
   deleteAllUniverses() {
-    Array
-    .from(this.universes.keys())
-    .forEach(name => this.deleteUniverse(name))
+    [...this.universes.keys()].forEach(id => this.deleteUniverse(id))
   }
 
   /**
-   *
-   * @param {string} id
-   * @returns {InstanceType<Driver>}
+   * Retrieves a universe.
+   * @param {string} id Universe ID.
+   * @returns {InstanceType<Driver>} Universe instance.
    */
   getUniverse(id) {
-    if (!this.universes.has(id)) {
-      throw new Error(`Universe ${id} does not exist`)
-    }
+    this._ensureUniverseExists(id)
 
     return this.universes.get(id)
   }
 
   /**
-   *
-   * @returns {string[]}
+   * Retrieves all universe IDs.
+   * @returns {string[]} Universe IDs.
    */
   getUniverses() {
-    return Array.from(this.universes.keys())
+    return [...this.universes.keys()]
   }
 
   /**
-   *
-   * @param {string} id
-   * @param {number} address
-   * @return {number}
+   * Gets a value from a universe.
+   * @param {string} id Universe ID.
+   * @param {number} address Address.
+   * @returns {number} Value.
    */
   getValue(id, address) {
     return this.getUniverse(id).get(address)
   }
 
   /**
-   *
-   * @param {string} id
-   * @param {number} [begin]
-   * @param {number} [end]
-   * @returns {number[]}
+   * Gets values from a universe.
+   * @param {string} id Universe ID.
+   * @param {number} [begin] Start address.
+   * @param {number} [end] End address.
+   * @returns {number[]} Values.
    */
   getValues(id, begin, end) {
     return this.getUniverse(id).toArray(begin, end)
   }
 
   /**
-   *
-   * @param {string} id
-   * @param {number} address
-   * @param {number} value
+   * Sets a value in a universe.
+   * @param {string} id Universe ID.
+   * @param {number} address Address.
+   * @param {number} value Value.
    */
   setValue(id, address, value) {
     this.getUniverse(id).set(address, value)
   }
 
   /**
-   *
-   * @param {string} id
-   * @param {Record<number, number>} channels
+   * Updates channels in a universe.
+   * @param {string} id Universe ID.
+   * @param {Record<number, number>} channels Channels.
    */
   update(id, channels) {
     this.getUniverse(id).update(channels)
   }
 
   /**
-   *
-   * @param {string} id
-   * @param {number} value
-   * @param {number} [begin]
-   * @param {number} [end]
+   * Fills a universe with a value.
+   * @param {string} id Universe ID.
+   * @param {number} value Value.
+   * @param {number} [begin] Start address.
+   * @param {number} [end] End address.
    */
   fill(id, value, begin, end) {
     this.getUniverse(id).fill(value, begin, end)
   }
 
   /**
-   *
-   * @param {string} id
-   * @param {number} value
+   * Updates all channels in a universe.
+   * @param {string} id Universe ID.
+   * @param {number} value Value.
    */
   updateAll(id, value) {
     this.fill(id, value)
+  }
+
+  // Private helper methods
+
+  /**
+     * @param {string} id
+     */
+  _ensureUniverseExists(id) {
+    if (!this.universes.has(id)) {
+      throw new Error(`Universe ${id} does not exist`)
+    }
+  }
+
+  /**
+     * @param {string} id
+     */
+  _ensureUniverseDoesNotExist(id) {
+    if (this.universes.has(id)) {
+      throw new Error(`Universe ${id} already exists`)
+    }
+  }
+
+  /**
+     * @param {string} driver
+     */
+  _ensureDriverExists(driver) {
+    if (!this.drivers.has(driver)) {
+      throw new Error(`Driver ${driver} does not exist`)
+    }
   }
 }

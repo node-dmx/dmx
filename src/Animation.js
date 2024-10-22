@@ -1,6 +1,18 @@
 import ease from './easing.js'
 
+/**
+ * @typedef {typeof import('./drivers/index.js').AbstractDriver} Driver
+ */
+
 export default class Animation {
+  /**
+   * Construct an Animation instance.
+   *
+   * @param {object} [options] an object with options.
+   * @param {number} [options.frameDelay=1] the delay between each frame in milliseconds.
+   * @param {number} [options.loop=1] the number of times to loop.
+   * @param {function} [options.filter] a function to call after all animations have completed a loop.
+   */
   constructor(options = {}) {
     this.frameDelay = 1
     this.animations = []
@@ -14,14 +26,15 @@ export default class Animation {
   }
 
   /**
+   * Add an animation to the list of animations to run.
    *
-   * @param {object} to
-   * @param {number} [duration]
-   * @param {object} [options]
-   * @return {Animation}
+   * @param {object} to the object with the properties to animate.
+   * @param {number} [duration=0] the duration of the animation in milliseconds.
+   * @param {object} [options] an object with options.
+   * @param {function} [options.easing=ease.linear] the easing function to use.
    */
   add(to, duration = 0, options = {}) {
-    options.easing = options.easing || 'linear'
+    options.easing = options.easing || ease.linear
 
     this.animations.push({
       to,
@@ -46,17 +59,36 @@ export default class Animation {
     return this
   }
 
+  /**
+   * Stop the animation.
+   *
+   * Clears the timeout so that the animation won't run again.
+   */
   stop() {
     if (this.timeout != null) {
       clearTimeout(this.timeout)
     }
   }
 
+  /**
+   * Resets the animation to the start.
+   *
+   * Resets the animation to the start so that it can be run again.
+   *
+   * @param {number} [startTime] the start time to use. Defaults to the current time.
+   */
   reset(startTime = new Date().getTime()) {
     this.startTime = startTime
     this.lastAnimation = 0
   }
 
+  /**
+   * Runs the next animation in the loop.
+   *
+   * @param {InstanceType<Driver>} universe the universe to run the animation on
+   * @param {function} [onFinish] called when the animation is complete
+   * @return {Animation}
+   */
   runNextLoop(universe, onFinish) {
     const now = new Date().getTime()
     const elapsedTime = now - (this.startTime ?? 0)
@@ -95,7 +127,7 @@ export default class Animation {
         this.filter(completedAnimationStatesToSet)
       }
 
-      universe.update(completedAnimationStatesToSet, { origin: 'animation' })
+      universe.update(completedAnimationStatesToSet)
     }
 
     this.lastAnimation = currentAnimation
@@ -126,7 +158,7 @@ export default class Animation {
         animation.from = {}
 
         for (const k in animation.to) {
-          animation.from[k] = universe.get(k)
+          animation.from[k] = universe.get(Number(k))
         }
 
         if (animation.options.from) {
@@ -163,17 +195,28 @@ export default class Animation {
     return this
   }
 
+  /**
+   * Runs the animation.
+   *
+   * If the universe has an interval, animation updates will run at
+   * double the rate of driver updates using Nyquist's theorem.
+   *
+   * @param {InstanceType<Driver>} universe The universe to run the animation on.
+   * @param {Function} [onFinish] The function to call when the animation has finished all its loops.
+   */
   run(universe, onFinish) {
-    if (universe.interval) {
-      // Optimisation to run animation updates at double the rate of driver updates using Nyquist's theorem
-      this.frameDelay = universe.interval / 2
-    }
-
     this.reset()
     this.currentLoop = 0
     this.runNextLoop(universe, onFinish)
   }
 
+  /**
+   * Runs the animation in a loop.
+   *
+   * @param {InstanceType<Driver>} universe The universe to run the animation on.
+   * @param {Function} [onFinish] The function to call when the animation has finished all its loops.
+   * @param {number} [loops=Infinity] The number of times the animation should loop.
+   */
   runLoop(universe, onFinish, loops = Infinity) {
     this.loops = loops
     this.run(universe, onFinish)

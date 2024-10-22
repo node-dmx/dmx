@@ -1,19 +1,26 @@
 export default class Animation {
-    constructor(options?: {});
+    constructor(options?: {
+        frameDelay?: number;
+        loop?: number;
+        filter?: Function;
+    });
     frameDelay: number;
     animations: any[];
     lastAnimation: number;
     timeout: NodeJS.Timeout;
     duration: number;
     startTime: number;
-    loops: any;
+    loops: number;
     currentLoop: number;
-    filter: any;
-    add(to: object, duration?: number, options?: object): Animation;
+    filter: Function;
+    add(to: object, duration?: number, options?: {
+        easing?: Function;
+    }): this;
     delay(duration?: number): Animation;
     stop(): void;
     reset(startTime?: number): void;
-    runNextLoop(universe: any, onFinish: any): this;
-    run(universe: any, onFinish: any): void;
-    runLoop(universe: any, onFinish: any, loops?: number): this;
+    runNextLoop(universe: InstanceType<Driver>, onFinish?: Function): Animation;
+    run(universe: InstanceType<Driver>, onFinish?: Function): void;
+    runLoop(universe: InstanceType<Driver>, onFinish?: Function, loops?: number): this;
 }
+export type Driver = typeof import("./drivers/index.js").AbstractDriver;

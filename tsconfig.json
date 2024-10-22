@@ -1,25 +1,26 @@
 {
   "compilerOptions": {
-    "allowImportingTsExtensions": true,
     "allowJs": true,
+    "allowSyntheticDefaultImports": false,
     "baseUrl": "./src",
     "checkJs": true,
     "declaration": true,
     "declarationDir": "types",
     "emitDeclarationOnly": true,
     "esModuleInterop": false,
+    "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "noImplicitAny": false,
+    "outDir": "dist",
     "pretty": true,
     "removeComments": true,
     "rootDir": "./src",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "target": "ESNext",
-    "useUnknownInCatchVariables": true,
-    "verbatimModuleSyntax": true
+    "strict": false,
+    "target": "ESNext"
   },
   "exclude": [ "node_modules", "demo", "test", "types" ],
   "include": [ "src" ]
