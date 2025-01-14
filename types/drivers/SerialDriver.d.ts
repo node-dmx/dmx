@@ -7,5 +7,6 @@ export class SerialDriver extends AbstractDriver {
     ready: boolean;
     serial: SerialPort<import("@serialport/bindings-cpp").AutoDetectTypes>;
 }
-import { AbstractDriver } from './index.js';
-import { SerialPort } from 'serialport';
+
+import {AbstractDriver} from './index.js';
+import {SerialPort} from 'serialport';

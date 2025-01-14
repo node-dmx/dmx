@@ -3,4 +3,5 @@ export class SocketDriver extends AbstractDriver {
     constructor(options?: {});
     socket: import("socket.io-client").Socket<import("@socket.io/component-emitter").DefaultEventsMap, import("@socket.io/component-emitter").DefaultEventsMap>;
 }
-import { AbstractDriver } from './index.js';
+
+import {AbstractDriver} from './index.js';

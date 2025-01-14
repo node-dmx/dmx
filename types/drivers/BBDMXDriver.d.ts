@@ -5,5 +5,6 @@ export class BBDMXDriver extends AbstractDriver {
     serial: dgram.Socket;
     ready: boolean;
 }
-import { AbstractDriver } from './index.js';
+
+import {AbstractDriver} from './index.js';
 import * as dgram from 'node:dgram';

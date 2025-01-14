@@ -4,5 +4,6 @@ export class SACNDriver extends AbstractDriver {
     update(values: Record<number, number>): void;
     send(): Promise<void>;
 }
-import { AbstractDriver } from './index.js';
-import { Sender } from 'sacn';
+
+import {AbstractDriver} from './index.js';
+import {Sender} from 'sacn';

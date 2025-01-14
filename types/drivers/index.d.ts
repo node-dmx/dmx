@@ -20,4 +20,5 @@ export class AbstractDriver extends EventEmitter<[never]> {
     updateAll(value: number): void;
     send(): void;
 }
-import { EventEmitter } from 'events';
+
+import {EventEmitter} from 'events';

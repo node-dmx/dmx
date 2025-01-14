@@ -21,4 +21,4 @@ export default class DMX extends EventEmitter<[never]> {
 }
 export type Driver = typeof import("./drivers/index.js").AbstractDriver;
 export type SerialDrivers = import("@dmx-cloud/dmx-types").SerialDrivers;
-import { EventEmitter } from 'events';
+import {EventEmitter} from 'events';
