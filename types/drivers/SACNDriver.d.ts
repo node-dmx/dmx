@@ -5,5 +5,5 @@ export class SACNDriver extends AbstractDriver {
     send(): Promise<void>;
 }
 
-import {AbstractDriver} from './index.js';
-import {Sender} from 'sacn';
+import {Sender} from 'sacn'
+import {AbstractDriver} from './index.js'

@@ -6,5 +6,5 @@ export class BBDMXDriver extends AbstractDriver {
     ready: boolean;
 }
 
-import {AbstractDriver} from './index.js';
-import * as dgram from 'node:dgram';
+import * as dgram from 'node:dgram'
+import {AbstractDriver} from './index.js'
