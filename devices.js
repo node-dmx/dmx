@@ -139,6 +139,22 @@ module.exports = {
       },
     },
   },
+  'lixada-par12-led-v3': {
+    channels: ['dimmer', 'strobe', 'ctrl', 'speed', 'red', 'green', 'blue', 'white'],
+    ranges: {
+      'ctrl': {
+        'type': 'option',
+        'options': [
+          { 'value': 0, 'label': 'Manual' },
+          { 'value': 51, 'label': 'A' },
+          { 'value': 101, 'label': 'Blinky RGBW' },
+          { 'value': 151, 'label': 'Fade A' },
+          { 'value': 201, 'label': 'Fade B' },
+          { 'value': 251, 'label': 'Off' },
+        ],
+      },
+    },
+  },
   'eurolite-led-tha-120PC': {
     channels: ['red', 'green', 'blue', 'white', 'dimmer', 'strobe', 'effect'],
   },
