@@ -4,11 +4,6 @@
   "author": "Sebastian Wiedenroth <wiedi@frubar.net>",
   "description": "A nodejs DMX library",
   "url": "https://github.com/node-dmx/dmx",
-  "scripts": {
-    "test": "concurrently 'npm run eslint' 'npm run jest'",
-    "eslint": "node_modules/eslint/bin/eslint.js -c .eslintrc .",
-    "jest": "jest"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/node-dmx/dmx.git"
@@ -19,14 +14,8 @@
   ],
   "dependencies": {
     "sacn": "^3.2.1",
-    "serialport": "^8.0.5",
-    "socket.io": "^2.3.0"
-  },
-  "devDependencies": {
-    "babel-eslint": "^10.0.1",
-    "concurrently": "^4.1.0",
-    "eslint": "^5.0.1",
-    "jest": "^24.1.0"
+    "serialport": "^11.0.1",
+    "socket.io": "^4.8.1"
   },
   "license": "MIT",
   "engines": {

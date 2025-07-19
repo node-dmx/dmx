@@ -5,11 +5,11 @@ function SocketioDriver(deviceId, options) {
   options = options || {};
 
   const self = this;
-  const io = require('socket.io');
+  const { Server } = require("socket.io");
   const port = options.port || 18909;
   const debug = options.debug || false;
 
-  this.server = io.listen(port);
+  this.server = new Server(port);
   this.server.on('connection', (socket) => {
     if (debug) console.info(`Client connected [id=${socket.id}]`);
     socket.on('disconnect', () => {

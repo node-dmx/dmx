@@ -1,4 +1,4 @@
-const SerialPort = require('serialport');
+const { SerialPort } = require('serialport');
 const util = require('util');
 const EventEmitter = require('events').EventEmitter;
 
@@ -7,7 +7,8 @@ function EnttecOpenUsbDMX(deviceId, options = {}) {
   this.readyToWrite = true;
   this.interval = options.dmx_speed ? (1000 / options.dmx_speed) : 46;
 
-  this.dev = new SerialPort(deviceId, {
+  this.dev = new SerialPort({
+    'path': deviceId,
     'baudRate': 250000,
     'dataBits': 8,
     'stopBits': 2,
