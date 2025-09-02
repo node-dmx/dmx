@@ -22,7 +22,7 @@ BBDMX.prototype.sendUniverse = function () {
     let channel;
     let messageBuffer = Buffer.from(UNIVERSE_LEN.toString());
 
-    for (const i = 1; i <= UNIVERSE_LEN; i++) {
+    for (let i = 1; i <= UNIVERSE_LEN; i++) {
       channel = Buffer.from(' ' + this.universe[i]);
       messageBuffer = Buffer.concat([messageBuffer, channel]);
     }
@@ -55,7 +55,7 @@ BBDMX.prototype.update = function (u, extraData) {
 };
 
 BBDMX.prototype.updateAll = function (v) {
-  for (const i = 1; i <= UNIVERSE_LEN; i++) {
+  for (let i = 1; i <= UNIVERSE_LEN; i++) {
     this.universe[i] = v;
   }
 };
