@@ -18,6 +18,7 @@ NullDriver.prototype.stop = function () {
 };
 
 NullDriver.prototype.close = cb => {
+  this.stop();
   cb(null);
 };
 
